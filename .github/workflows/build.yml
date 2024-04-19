@@ -2,9 +2,9 @@ name: build windows
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -14,8 +14,7 @@ jobs:
         configuration: [Debug, Release]
     runs-on: windows-latest
     env:
-      Solution_Name: virtlib.sln
-      Test_Project_Path: VirtLib.Windows.Tests\VirtLib.Windows.Tests.csproj
+      Solution_Name: common.sln
     steps:
     - name: Checkout
       uses: actions/checkout@v4

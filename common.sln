@@ -45,6 +45,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{0AF14E
 		version.json = version.json
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{84E50BA3-181F-4614-80C7-50647A02D279}"
+	ProjectSection(SolutionItems) = preProject
+		.github\PULL_REQUEST_TEMPLATE.md = .github\PULL_REQUEST_TEMPLATE.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F2ADF825-B79C-4623-9850-B0F143E68C8D}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +78,7 @@ Global
 		{7EE87671-E419-4F09-AA88-77BDB08A8F3C} = {119F08F1-38DE-426D-B787-A24890409F3B}
 		{324622CA-82D9-41DD-A191-177C4B81B503} = {119F08F1-38DE-426D-B787-A24890409F3B}
 		{790472AB-4C77-4ADD-A71D-1104AD6B9C1A} = {119F08F1-38DE-426D-B787-A24890409F3B}
+		{F2ADF825-B79C-4623-9850-B0F143E68C8D} = {84E50BA3-181F-4614-80C7-50647A02D279}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{11F2E80D-8BB2-41B6-A1B2-0829B7F8E55C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
