@@ -11,8 +11,8 @@
 #pragma warning disable CA2243
 
 [assembly: System.Reflection.AssemblyVersionAttribute("0.2.0.0")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("0.2.1")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.2.1.0")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("0.2.1.3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.2.1.3+bf33cc1aa5")]
 #if NETSTANDARD || NETFRAMEWORK || NETCOREAPP
 [System.CodeDom.Compiler.GeneratedCode("Nerdbank.GitVersioning.Tasks","3.6.133.12845")]
 #endif
@@ -21,12 +21,14 @@
 #endif
 internal static partial class ThisAssembly {
     internal const string AssemblyConfiguration = "Debug";
-    internal const string AssemblyFileVersion = "0.2.1";
-    internal const string AssemblyInformationalVersion = "0.2.1.0";
+    internal const string AssemblyFileVersion = "0.2.1.3";
+    internal const string AssemblyInformationalVersion = "0.2.1.3+bf33cc1aa5";
     internal const string AssemblyName = "Microsoft.AzureStack.Virtlib.Common.Cache";
     internal const string AssemblyTitle = "Microsoft.AzureStack.Virtlib.Common.Cache";
     internal const string AssemblyVersion = "0.2.0.0";
+    internal static readonly System.DateTime GitCommitDate = new System.DateTime(638491558930000000L, System.DateTimeKind.Utc);
+    internal const string GitCommitId = "bf33cc1aa54bb7659a87164492474cef69a9a4c2";
     internal const bool IsPrerelease = false;
-    internal const bool IsPublicRelease = false;
+    internal const bool IsPublicRelease = true;
     internal const string RootNamespace = "Common.Cache";
 }
