@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="StyleCop ruleset" Description="StyleCop ruleset" ToolsVersion="14.0">
+    <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+
+        <!-- Reasonable Ommisions -->
+        <!-- Disable "FileHeaderCompanyNameTextMustMatch" as IDE0073 Roslyn used is set -->
+        <Rule Id="SA1641" Action="None" />
+        <!-- Disable "UseTrailingCommasInMultiLineInitializers" -->
+        <Rule Id="SA1413" Action="None" />
+        <!-- Disable "Do Not Use Regions" -->
+        <Rule Id="SA1124" Action="None" />
+        <!-- Enable "XmlCommentAnalysisDisabled" -->
+        <Rule Id="SA0001" Action="Warning" />
+        <!-- Disable "Parameter should begin with lower-case letter" -->
+        <Rule Id="SA1313" Action="None" />
+        <!-- Disable "Put constructor initializers on their own line" -->
+        <Rule Id="SA1128" Action="None" />
+        <!-- Disable "Do not use default value type constructor" -->
+        <Rule Id="SA1129" Action="None" />
+        <!-- Disable "Using directive for namespace should be qualified" -->
+        <Rule Id="SA1135" Action="None" />
+        <!-- Disable "Use literal suffix notation instead of casting" -->
+        <Rule Id="SA1139" Action="None" />
+        <!-- Disable "Single line comment should begin with a space" -->
+        <Rule Id="SA1005" Action="None" />
+        <!-- Documentation text should end with a '.'" -->
+        <Rule Id="SA1629" Action="None" />
+
+        <!-- Things to consider fixing -->
+        <!-- Only suggestions for "Elements should be documented" -->
+        <Rule Id="SA1600" Action="Info" />
+        <!-- Only suggestions for "Element documentation must have summary text" -->
+        <Rule Id="SA1606" Action="Info" />
+        <!-- Only suggestions for "Property documentation must have value text" -->
+        <Rule Id="SA1610" Action="Info" />
+        <!-- Only suggestions for "Element parameters must be documented" -->
+        <Rule Id="SA1611" Action="Info" />
+        <!-- Only suggestions for "Element parameter documentation must have text" -->
+        <Rule Id="SA1614" Action="Info" />
+        <!-- Only suggestions for "Element return value must be documented" -->
+        <Rule Id="SA1615" Action="Info" />
+        <!-- Disable "The file header XML is invalid" -->
+        <Rule Id="SA1633" Action="None" />
+        <!--Disable "There should not be trailing whitespace characters" -->
+        <Rule Id="SA1028" Action="None" />
+        <!--Disable "Elements should have the same indentation" -->
+        <Rule Id="SA1137" Action="None" />
+        <!--Disable "Multiple whitespace characters in a row -->
+        <Rule Id="SA1025" Action="None" />
+        <!-- Disable "Generic type constraints should be on their own line" -->
+        <Rule Id="SA1127" Action="None" />
+        <!-- Disable "Prefix local calls with this" -->
+        <Rule Id="SA1101" Action="None" />
+        <!-- Disable "Constant values should appear on the right-hand side of comparisons" -->
+        <Rule Id="SA1131" Action="None" />
+        <!-- Disable "Field should be private" -->
+        <Rule Id="SA1401" Action="None" />
+        <!-- Disable "Tuple element names should use correct casing" -->
+        <Rule Id="SA1316" Action="None" />
+        <!-- Disable "Statement should not use unnecessary parenthesis" -->
+        <Rule Id="SA1119" Action="None" />
+        <!-- Disable "Use lambda syntax" -->
+        <Rule Id="SA1130" Action="None" />
+        <!-- Disable "Single-line comments should not be followed by blank line" -->
+        <Rule Id="SA1512" Action="None" />
+        <!-- Disable "Code should not contain multiple statements on one line" -->
+        <Rule Id="SA1107" Action="None" />
+        <!-- Disable "Operator '(IHttpActionResult)' should not appear at the end of a line" -->
+        <Rule Id="SA1003" Action="None" />
+
+        <!-- XML documentation suppressions since SA0001 is a Warning -->
+        <!-- https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA0001.md -->
+        <Rule Id="CS1573" Action="Hidden" />
+        <Rule Id="CS1587" Action="Hidden" />
+        <Rule Id="CS1591" Action="Hidden" />
+        <Rule Id="CS1712" Action="Hidden" />
+
+        <!-- Malformed XML docstrings. Treating as Suggestions for now -->
+        <!-- TODO: Remove from this ruleset so that they are enforced as Warnings/Errors and fix them all -->
+        <!-- Suggestion for "Ambiguous reference in cref attribute" -->
+        <Rule Id="CS0419" Action="Info" />
+        <!-- Suggestion for "XML comment has badly formated XML" -->
+        <Rule Id="CS1570" Action="Info" />
+        <!-- Suggestion for "XML comment has a param tag for <X>, but there is no parameter by that name" -->
+        <Rule Id="CS1572" Action="Info" />
+        <!-- Suggestion for "XML comment has a cref attribute <X> that could not be resolved" -->
+        <Rule Id="CS1574" Action="Info" />
+        <!-- Suggestion for "XML comment has syntactically incorrect cref attribute" -->
+        <Rule Id="CS1584" Action="Info" />
+        <!-- Suggestion for "inheritdoc should be used with inheriting class" -->
+        <Rule Id="SA1648" Action="Info" />
+        <!-- Suggestion for "Type parameter declaration must be an identifier not a type" -->
+        <Rule Id="CS1658" Action="Info" />
+        <!-- Suggestion for "XML comment on 'param' has cref attribute 'attribute' that refers to a type parameter" -->
+        <Rule Id="CS1723" Action="Info" />
+    </Rules>
+</RuleSet>

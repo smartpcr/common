@@ -1,0 +1,52 @@
+# Remove the line below if you want to inherit .editorconfig settings from higher directories
+root = true
+
+[*]
+
+indent_size = 4
+indent_style = space
+tab_width = 4
+end_of_line = crlf
+insert_final_newline = false
+trim_trailing_whitespace = true
+
+# Organize using statements
+dotnet_separate_import_directive_groups = false
+dotnet_sort_system_directives_first = true
+csharp_using_directive_placement = inside_namespace:suggestion
+
+# spellcheck settings
+spelling_languages = en-us
+spelling_checkable_types = strings,identifiers,comments
+spelling_error_severity = information
+spelling_exclusion_path = spellchecking_exclusions.dic
+
+# file header
+file_header_template = -----------------------------------------------------------------------\n<copyright file="{fileName}" company="Microsoft Corp.">\n    Copyright (c) Microsoft Corp. All rights reserved.\n</copyright>\n-----------------------------------------------------------------------
+
+[*.{appxmanifest,axml,build,config,csproj,dbml,discomap,dtd,json,jsproj,lsproj,njsproj,nuspec,proj,props,resjson,resw,resx,StyleCop,targets,tasks,vbproj,yml,xml,xsd}]
+indent_size = 2
+tab_width = 2
+
+# this. and Me. preferences
+dotnet_style_qualification_for_event = false:warning
+dotnet_style_qualification_for_field = false:warning
+dotnet_style_qualification_for_method = false:warning
+dotnet_style_qualification_for_property = false:warning
+
+# var preferences
+csharp_style_var_elsewhere = true:suggestion
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+
+[*.cs]
+dotnet_naming_rule.private_members_with_underscore.symbols  = private_fields
+dotnet_naming_rule.private_members_with_underscore.style    = prefix_underscore
+dotnet_naming_rule.private_members_with_underscore.severity = none
+
+dotnet_naming_symbols.private_fields.applicable_kinds           = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_fields.required_modifiers         = readonly
+
+dotnet_naming_style.prefix_underscore.capitalization = camel_case
+dotnet_naming_style.prefix_underscore.required_prefix =

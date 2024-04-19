@@ -1,0 +1,12 @@
+E:\work\github\virt\virtlib\Common\Common.Settings\bin\Release\net8.0\Microsoft.AzureStack.Virtlib.Common.Settings.deps.json
+E:\work\github\virt\virtlib\Common\Common.Settings\bin\Release\net8.0\Microsoft.AzureStack.Virtlib.Common.Settings.dll
+E:\work\github\virt\virtlib\Common\Common.Settings\bin\Release\net8.0\Microsoft.AzureStack.Virtlib.Common.Settings.pdb
+E:\work\github\virt\virtlib\Common\Common.Settings\obj\Release\net8.0\Common.Settings.csproj.AssemblyReference.cache
+E:\work\github\virt\virtlib\Common\Common.Settings\obj\Release\net8.0\Common.Settings.GeneratedMSBuildEditorConfig.editorconfig
+E:\work\github\virt\virtlib\Common\Common.Settings\obj\Release\net8.0\Common.Settings.AssemblyInfoInputs.cache
+E:\work\github\virt\virtlib\Common\Common.Settings\obj\Release\net8.0\Common.Settings.AssemblyInfo.cs
+E:\work\github\virt\virtlib\Common\Common.Settings\obj\Release\net8.0\Common.Settings.csproj.CoreCompileInputs.cache
+E:\work\github\virt\virtlib\Common\Common.Settings\obj\Release\net8.0\Microsoft.AzureStack.Virtlib.Common.Settings.dll
+E:\work\github\virt\virtlib\Common\Common.Settings\obj\Release\net8.0\refint\Microsoft.AzureStack.Virtlib.Common.Settings.dll
+E:\work\github\virt\virtlib\Common\Common.Settings\obj\Release\net8.0\Microsoft.AzureStack.Virtlib.Common.Settings.pdb
+E:\work\github\virt\virtlib\Common\Common.Settings\obj\Release\net8.0\ref\Microsoft.AzureStack.Virtlib.Common.Settings.dll

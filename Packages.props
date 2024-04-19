@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ExtensionVersion>8.0.0</ExtensionVersion>
+    <R9Release>8.1.0</R9Release>
+    <OpenTelemetryVersion>1.7.0</OpenTelemetryVersion>
+    <MSTestVersion>3.0.4</MSTestVersion>
+    <SpecflowVersion>3.9.57</SpecflowVersion>
+    <KustoVersion>12.0.1</KustoVersion>
+    <AspNetCoreVersion>2.2.0</AspNetCoreVersion>
+  </PropertyGroup>
+
+  <ItemGroup Label="Extensions">
+    <PackageReference Update="Microsoft.Extensions.AmbientMetadata.Application" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Caching.Abstractions" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Caching.Memory" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Compliance.Redaction" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Compliance.Testing" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Configuration" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Configuration.Abstractions" version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Configuration.Binder" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Configuration.CommandLine" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Configuration.Json" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.DependencyInjection" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Http" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Http.Polly" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Http.Resilience" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Options" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Options.DataAnnotations" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Hosting" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Hosting.WindowsServices" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Logging" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Logging.Abstractions" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Logging.Configuration" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Logging.Console" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Options" Version="$(ExtensionVersion)" />
+  </ItemGroup>
+
+  <ItemGroup Label="Serilog">
+    <PackageReference Update="Serilog" Version="3.1.1" />
+    <PackageReference Update="Serilog.Extensions.Logging" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Update="Serilog.Sinks.Console" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Label="OpenTelemetry">
+    <PackageReference Update="Azure.Monitor.OpenTelemetry.Exporter" Version="1.1.0" />
+    <PackageReference Update="OpenTelemetry" Version="$(OpenTelemetryVersion)" />
+    <PackageReference Update="OpenTelemetry.Api" Version="$(OpenTelemetryVersion)" />
+    <PackageReference Update="OpenTelemetry.Exporter.Console" Version="$(OpenTelemetryVersion)" />
+    <PackageReference Update="OpenTelemetry.Exporter.Geneva" Version="$(OpenTelemetryVersion)" />
+    <PackageReference Update="OpenTelemetry.Exporter.Jaeger" Version="1.5.1" />
+    <PackageReference Update="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="$(OpenTelemetryVersion)" />
+    <PackageReference Update="OpenTelemetry.Exporter.Prometheus" Version="1.3.0-rc.2" />
+    <PackageReference Update="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.7.0-rc.1" />
+    <PackageReference Update="OpenTelemetry.Exporter.Prometheus.HttpListener" Version="1.7.0-rc.1" />
+    <PackageReference Update="OpenTelemetry.Exporter.Zipkin" Version="$(OpenTelemetryVersion)" />
+    <PackageReference Update="OpenTelemetry.Extensions.Hosting" Version="1.8.0" />
+    <PackageReference Update="OpenTelemetry.Instrumentation.AspNetCore" Version="1.8.1" />
+    <PackageReference Update="OpenTelemetry.Instrumentation.Http" Version="1.8.0" />
+    <PackageReference Update="OpenTelemetry.Instrumentation.Runtime" Version="1.8.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Function">
+    <PackageReference Update="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
+    <PackageReference Update="Microsoft.Azure.WebJobs.Extensions" Version="5.0.0" />
+    <PackageReference Update="Microsoft.NET.Sdk.Functions" Version="4.2.0"/>
+  </ItemGroup>
+
+  <ItemGroup Label="R9">
+    <PackageReference Update="Microsoft.R9.Extensions.Authentication.Azure.Development" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Authentication.Msal" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Compliance.Redaction.xxHash" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Configuration.Secrets.AzureKeyVault" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Enrichment.CorrelationVector" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Enrichment.Service" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Enrichment.Process" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Hosting.Development" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.HttpClient.Logging" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.HttpClient.Metering" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.HttpClient.Tracing" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Logging" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Logging.Abstractions" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Logging.Exporters.Console" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Logging.Exporters.Geneva" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Metering" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Metering.Collectors.EventCounters" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Metering.Geneva" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Telemetry" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Tracing.Http" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Service.Middleware.HttpMetering" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.StaticAnalysis" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.StaticAnalysis.Style" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Caching.Testing" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Compliance.Testing" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.Extensions.Testing" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.StaticAnalysis.Testing" Version="$(R9Release)" />
+    <PackageReference Update="Microsoft.R9.StaticAnalysis.Style.Testing" Version="$(R9Release)" />
+  </ItemGroup>
+
+  <ItemGroup Label="Azure">
+    <PackageReference Update="Azure.Identity" Version="1.11.1" />
+    <PackageReference Update="Azure.Security.KeyVault.Certificates" Version="4.5.0" />
+    <PackageReference Update="Azure.Security.KeyVault.Secrets" Version="4.5.0" />
+    <PackageReference Update="Azure.Security.KeyVault.Keys" Version="4.5.0" />
+    <PackageReference Update="Azure.Storage.Blobs" Version="12.16.0" />
+    <PackageReference Update="Azure.Storage.Queues" Version="12.14.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Microsoft">
+    <PackageReference Update="Microsoft.ApplicationInsights" Version="2.22.0" />
+    <PackageReference Update="Microsoft.AspNetCore.Authentication" Version="$(AspNetCoreVersion)" />
+    <PackageReference Update="Microsoft.AspNetCore.Authentication.Certificate" Version="6.0.26" />
+    <PackageReference Update="Microsoft.AspNetCore.Authentication.Cookies" Version="$(AspNetCoreVersion)" />
+    <PackageReference Update="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.26" />
+    <PackageReference Update="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.26" />
+    <PackageReference Update="Microsoft.Azure.Cosmos" Version="3.37.1" />
+    <PackageReference Update="Microsoft.Azure.KeyVault" Version="3.0.5" /> <!-- this deprecated package is only used for testing -->
+    <PackageReference Update="Microsoft.Bcl.TimeProvider" Version="8.0.0" />
+    <PackageReference Update="Microsoft.Identity.Client" Version="4.60.3" />
+    <PackageReference Update="Microsoft.Azure.Kusto.Data" Version="$(KustoVersion)" />
+    <PackageReference Update="Microsoft.Azure.Kusto.Ingest" Version="$(KustoVersion)" />
+    <PackageReference Update="System.Management" Version="8.0.0" />
+    <PackageReference Update="System.Management.Automation" Version="7.4.1" />
+  </ItemGroup>
+
+  <ItemGroup Label="Misc">
+    <PackageReference Update="AsyncEnumerator" Version="4.0.2" />
+    <PackageReference Update="Ensure.That" Version="10.1.0" />
+    <PackageReference Update="FluentScheduler" Version="5.5.1" />
+    <PackageReference Update="Nerdbank.GitVersioning" Version="3.6.133" />
+    <PackageReference Update="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Update="NCrontab" Version="3.3.3" />
+    <PackageReference Update="Polly" Version="8.2.1" />
+    <PackageReference Update="Quartz" Version="3.8.0" />
+    <PackageReference Update="Quartz.Extensions.DependencyInjection" Version="3.8.0" />
+    <PackageReference Update="StackExchange.Redis" Version="2.7.17" />
+    <PackageReference Update="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="UnitTests">
+    <PackageReference Update="coverlet.collector" Version="6.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Update="FluentAssertions" Version="6.12.0" />
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.6.0"/>
+    <PackageReference Update="MSTest.TestAdapter" Version="$(MSTestVersion)"/>
+    <PackageReference Update="MSTest.TestFramework" Version="$(MSTestVersion)"/>
+    <PackageReference Update="SpecFlow.MsTest" Version="$(SpecflowVersion)" />
+    <PackageReference Update="SpecFlow.xUnit" Version="3.9.74" />
+    <PackageReference Update="SpecFlow.Tools.MsBuild.Generation" Version="$(SpecflowVersion)" />
+    <PackageReference Update="SpecFlow.Plus.LivingDocPlugin" Version="$(SpecflowVersion)" />
+    <PackageReference Update="xunit" Version="2.6.6" />
+    <PackageReference Update="xunit.runner.visualstudio" Version="2.4.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

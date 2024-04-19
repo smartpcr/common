@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);R9EXPDEV</NoWarn>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ensure.That" />
+    <PackageReference Include="Microsoft.Extensions.Compliance.Redaction" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" />
+    <PackageReference Include="Microsoft.R9.Extensions.Compliance.Redaction.xxHash" />
+    <PackageReference Include="Microsoft.R9.Extensions.HttpClient.Logging" />
+    <PackageReference Include="Microsoft.R9.Extensions.HttpClient.Metering" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="OpenTelemetry" />
+    <PackageReference Include="Polly" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common.Auth\Common.Auth.csproj" />
+    <ProjectReference Include="..\Common.Config\Common.Config.csproj" />
+    <ProjectReference Include="..\Common.Settings\Common.Settings.csproj" />
+  </ItemGroup>
+</Project>

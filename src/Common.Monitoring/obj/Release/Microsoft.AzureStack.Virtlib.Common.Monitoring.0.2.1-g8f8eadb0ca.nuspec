@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.AzureStack.Virtlib.Common.Monitoring</id>
+    <version>0.2.1-g8f8eadb0ca</version>
+    <authors>xiaodong li</authors>
+    <description>Package Description</description>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <repository url="https://github.com/smartpcr/virtlib" />
+    <dependencies>
+      <group targetFramework="net8.0">
+        <dependency id="Microsoft.AzureStack.Virtlib.Common.Config" version="0.2.1-g8f8eadb0ca" exclude="Build,Analyzers" />
+        <dependency id="Azure.Identity" version="1.10.4" exclude="Build,Analyzers" />
+        <dependency id="Azure.Monitor.OpenTelemetry.Exporter" version="1.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.ApplicationInsights" version="2.22.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Bcl.TimeProvider" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.AmbientMetadata.Application" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Hosting" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Http" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Logging" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Logging.Configuration" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.R9.Extensions.Compliance.Redaction.xxHash" version="8.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.R9.Extensions.Enrichment.CorrelationVector" version="8.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.R9.Extensions.Enrichment.Process" version="8.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.R9.Extensions.Enrichment.Service" version="8.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.R9.Extensions.HttpClient.Logging" version="8.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.R9.Extensions.HttpClient.Metering" version="8.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.R9.Extensions.HttpClient.Tracing" version="8.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.R9.Extensions.Logging" version="8.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.R9.Extensions.Logging.Exporters.Console" version="8.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.R9.Extensions.Logging.Exporters.Geneva" version="8.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.R9.Extensions.Metering" version="8.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.R9.Extensions.Metering.Collectors.EventCounters" version="8.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.R9.Extensions.Metering.Geneva" version="8.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.R9.Service.Middleware.HttpMetering" version="8.1.0" exclude="Build,Analyzers" />
+        <dependency id="Newtonsoft.Json" version="13.0.1" exclude="Build,Analyzers" />
+        <dependency id="OpenTelemetry.Exporter.Console" version="1.7.0" exclude="Build,Analyzers" />
+        <dependency id="OpenTelemetry.Exporter.Geneva" version="1.7.0" exclude="Build,Analyzers" />
+        <dependency id="OpenTelemetry.Exporter.Jaeger" version="1.5.1" exclude="Build,Analyzers" />
+        <dependency id="OpenTelemetry.Exporter.OpenTelemetryProtocol" version="1.7.0" exclude="Build,Analyzers" />
+        <dependency id="OpenTelemetry.Exporter.Prometheus" version="1.3.0-rc.2" exclude="Build,Analyzers" />
+        <dependency id="OpenTelemetry.Exporter.Prometheus.AspNetCore" version="1.7.0-rc.1" exclude="Build,Analyzers" />
+        <dependency id="OpenTelemetry.Exporter.Prometheus.HttpListener" version="1.7.0-rc.1" exclude="Build,Analyzers" />
+        <dependency id="OpenTelemetry.Exporter.Zipkin" version="1.7.0" exclude="Build,Analyzers" />
+        <dependency id="OpenTelemetry.Extensions.Hosting" version="1.7.0" exclude="Build,Analyzers" />
+        <dependency id="OpenTelemetry.Instrumentation.AspNetCore" version="1.7.0" exclude="Build,Analyzers" />
+        <dependency id="OpenTelemetry.Instrumentation.Runtime" version="1.7.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="E:\work\github\virt\virtlib\Common\Common.Monitoring\bin\Release\net8.0\Microsoft.AzureStack.Virtlib.Common.Monitoring.dll" target="lib\net8.0\Microsoft.AzureStack.Virtlib.Common.Monitoring.dll" />
+  </files>
+</package>

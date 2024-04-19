@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <RestoreSuccess Condition=" '$(RestoreSuccess)' == '' ">True</RestoreSuccess>
+    <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
+    <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
+    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">E:\nupkg_cache</NuGetPackageRoot>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">E:\nupkg_cache</NuGetPackageFolders>
+    <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.9.2</NuGetToolVersion>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <SourceRoot Include="E:\nupkg_cache\" />
+  </ItemGroup>
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)\nerdbank.gitversioning\3.6.133\build\Nerdbank.GitVersioning.props" Condition="Exists('$(NuGetPackageRoot)\nerdbank.gitversioning\3.6.133\build\Nerdbank.GitVersioning.props')" />
+    <Import Project="$(NuGetPackageRoot)\microsoft.r9.staticanalysis.style\8.1.0\build\Microsoft.R9.StaticAnalysis.Style.props" Condition="Exists('$(NuGetPackageRoot)\microsoft.r9.staticanalysis.style\8.1.0\build\Microsoft.R9.StaticAnalysis.Style.props')" />
+    <Import Project="$(NuGetPackageRoot)\microsoft.r9.analyzers\8.1.0\buildTransitive\Microsoft.R9.Analyzers.props" Condition="Exists('$(NuGetPackageRoot)\microsoft.r9.analyzers\8.1.0\buildTransitive\Microsoft.R9.Analyzers.props')" />
+    <Import Project="$(NuGetPackageRoot)\microsoft.r9.staticanalysis\8.1.0\build\Microsoft.R9.StaticAnalysis.props" Condition="Exists('$(NuGetPackageRoot)\microsoft.r9.staticanalysis\8.1.0\build\Microsoft.R9.StaticAnalysis.props')" />
+    <Import Project="$(NuGetPackageRoot)\microsoft.r9.extensions.metering.abstractions\8.1.0\buildTransitive\Microsoft.R9.Extensions.Metering.Abstractions.props" Condition="Exists('$(NuGetPackageRoot)\microsoft.r9.extensions.metering.abstractions\8.1.0\buildTransitive\Microsoft.R9.Extensions.Metering.Abstractions.props')" />
+    <Import Project="$(NuGetPackageRoot)\microsoft.extensions.telemetry.abstractions\8.0.0\buildTransitive\net6.0\Microsoft.Extensions.Telemetry.Abstractions.props" Condition="Exists('$(NuGetPackageRoot)\microsoft.extensions.telemetry.abstractions\8.0.0\buildTransitive\net6.0\Microsoft.Extensions.Telemetry.Abstractions.props')" />
+    <Import Project="$(NuGetPackageRoot)\microsoft.r9.extensions.enumstrings\8.1.0\buildTransitive\Microsoft.R9.Extensions.EnumStrings.props" Condition="Exists('$(NuGetPackageRoot)\microsoft.r9.extensions.enumstrings\8.1.0\buildTransitive\Microsoft.R9.Extensions.EnumStrings.props')" />
+    <Import Project="$(NuGetPackageRoot)\microsoft.r9.extensions.logging.abstractions\8.1.0\buildTransitive\Microsoft.R9.Extensions.Logging.Abstractions.props" Condition="Exists('$(NuGetPackageRoot)\microsoft.r9.extensions.logging.abstractions\8.1.0\buildTransitive\Microsoft.R9.Extensions.Logging.Abstractions.props')" />
+    <Import Project="$(NuGetPackageRoot)\microsoft.extensions.configuration.usersecrets\8.0.0\buildTransitive\net6.0\Microsoft.Extensions.Configuration.UserSecrets.props" Condition="Exists('$(NuGetPackageRoot)\microsoft.extensions.configuration.usersecrets\8.0.0\buildTransitive\net6.0\Microsoft.Extensions.Configuration.UserSecrets.props')" />
+  </ImportGroup>
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgStyleCop_Analyzers_Unstable Condition=" '$(PkgStyleCop_Analyzers_Unstable)' == '' ">E:\nupkg_cache\stylecop.analyzers.unstable\1.2.0.435</PkgStyleCop_Analyzers_Unstable>
+    <PkgSonarAnalyzer_CSharp Condition=" '$(PkgSonarAnalyzer_CSharp)' == '' ">E:\nupkg_cache\sonaranalyzer.csharp\9.12.0.78982</PkgSonarAnalyzer_CSharp>
+    <PkgMicrosoft_VisualStudio_Threading_Analyzers Condition=" '$(PkgMicrosoft_VisualStudio_Threading_Analyzers)' == '' ">E:\nupkg_cache\microsoft.visualstudio.threading.analyzers\17.7.30</PkgMicrosoft_VisualStudio_Threading_Analyzers>
+    <PkgMicrosoft_SourceLink_Common Condition=" '$(PkgMicrosoft_SourceLink_Common)' == '' ">E:\nupkg_cache\microsoft.sourcelink.common\1.1.1</PkgMicrosoft_SourceLink_Common>
+    <PkgMicrosoft_Build_Tasks_Git Condition=" '$(PkgMicrosoft_Build_Tasks_Git)' == '' ">E:\nupkg_cache\microsoft.build.tasks.git\1.1.1</PkgMicrosoft_Build_Tasks_Git>
+    <PkgMicrosoft_SourceLink_AzureRepos_Git Condition=" '$(PkgMicrosoft_SourceLink_AzureRepos_Git)' == '' ">E:\nupkg_cache\microsoft.sourcelink.azurerepos.git\1.1.1</PkgMicrosoft_SourceLink_AzureRepos_Git>
+    <PkgMicrosoft_Internal_Analyzers Condition=" '$(PkgMicrosoft_Internal_Analyzers)' == '' ">E:\nupkg_cache\microsoft.internal.analyzers\2.6.9</PkgMicrosoft_Internal_Analyzers>
+    <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">E:\nupkg_cache\microsoft.codeanalysis.analyzers\3.3.3</PkgMicrosoft_CodeAnalysis_Analyzers>
+    <PkgMicrosoft_CPR_VisualStudio_Analyzers2019 Condition=" '$(PkgMicrosoft_CPR_VisualStudio_Analyzers2019)' == '' ">E:\nupkg_cache\microsoft.cpr.visualstudio.analyzers2019\308.22.705.1</PkgMicrosoft_CPR_VisualStudio_Analyzers2019>
+  </PropertyGroup>
+</Project>

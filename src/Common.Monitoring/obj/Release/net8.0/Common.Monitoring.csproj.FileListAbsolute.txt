@@ -1,0 +1,15 @@
+E:\work\github\virt\virtlib\Common\Common.Monitoring\bin\Release\net8.0\Microsoft.AzureStack.Virtlib.Common.Monitoring.deps.json
+E:\work\github\virt\virtlib\Common\Common.Monitoring\bin\Release\net8.0\Microsoft.AzureStack.Virtlib.Common.Monitoring.dll
+E:\work\github\virt\virtlib\Common\Common.Monitoring\bin\Release\net8.0\Microsoft.AzureStack.Virtlib.Common.Monitoring.pdb
+E:\work\github\virt\virtlib\Common\Common.Monitoring\bin\Release\net8.0\Microsoft.AzureStack.Virtlib.Common.Config.dll
+E:\work\github\virt\virtlib\Common\Common.Monitoring\bin\Release\net8.0\Microsoft.AzureStack.Virtlib.Common.Config.pdb
+E:\work\github\virt\virtlib\Common\Common.Monitoring\obj\Release\net8.0\Common.Monitoring.csproj.AssemblyReference.cache
+E:\work\github\virt\virtlib\Common\Common.Monitoring\obj\Release\net8.0\Common.Monitoring.GeneratedMSBuildEditorConfig.editorconfig
+E:\work\github\virt\virtlib\Common\Common.Monitoring\obj\Release\net8.0\Common.Monitoring.AssemblyInfoInputs.cache
+E:\work\github\virt\virtlib\Common\Common.Monitoring\obj\Release\net8.0\Common.Monitoring.AssemblyInfo.cs
+E:\work\github\virt\virtlib\Common\Common.Monitoring\obj\Release\net8.0\Common.Monitoring.csproj.CoreCompileInputs.cache
+E:\work\github\virt\virtlib\Common\Common.Monitoring\obj\Release\net8.0\Common.M.D6843F6A.Up2Date
+E:\work\github\virt\virtlib\Common\Common.Monitoring\obj\Release\net8.0\Microsoft.AzureStack.Virtlib.Common.Monitoring.dll
+E:\work\github\virt\virtlib\Common\Common.Monitoring\obj\Release\net8.0\refint\Microsoft.AzureStack.Virtlib.Common.Monitoring.dll
+E:\work\github\virt\virtlib\Common\Common.Monitoring\obj\Release\net8.0\Microsoft.AzureStack.Virtlib.Common.Monitoring.pdb
+E:\work\github\virt\virtlib\Common\Common.Monitoring\obj\Release\net8.0\ref\Microsoft.AzureStack.Virtlib.Common.Monitoring.dll

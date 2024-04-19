@@ -1,0 +1,1 @@
+This project only contains POCO classes for the settings. The settings objects are stored in appsettings.json file for strong typed configuration.
