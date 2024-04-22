@@ -38,8 +38,8 @@
   ******************************************************************************
   -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.R9.StaticAnalysis" TreatAsUsed="true" PrivateAssets="all" IncludeAssets="build; analyzers; buildTransitive" />
-    <PackageReference Include="Microsoft.R9.StaticAnalysis.Style" TreatAsUsed="true" PrivateAssets="all" IncludeAssets="build; analyzers; buildTransitive" />
+<!--    <PackageReference Include="Microsoft.R9.StaticAnalysis" TreatAsUsed="true" PrivateAssets="all" IncludeAssets="build; analyzers; buildTransitive" />-->
+<!--    <PackageReference Include="Microsoft.R9.StaticAnalysis.Style" TreatAsUsed="true" PrivateAssets="all" IncludeAssets="build; analyzers; buildTransitive" />-->
   </ItemGroup>
 
   <!-- git version -->

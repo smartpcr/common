@@ -55,6 +55,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\build.yml = .github\workflows\build.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Storage.Tests", "src\Common.Storage.Tests\Common.Storage.Tests.csproj", "{00AE5CA5-6040-46FC-A861-49AABC2E8E2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,7 @@ Global
 		{324622CA-82D9-41DD-A191-177C4B81B503} = {119F08F1-38DE-426D-B787-A24890409F3B}
 		{790472AB-4C77-4ADD-A71D-1104AD6B9C1A} = {119F08F1-38DE-426D-B787-A24890409F3B}
 		{F2ADF825-B79C-4623-9850-B0F143E68C8D} = {84E50BA3-181F-4614-80C7-50647A02D279}
+		{00AE5CA5-6040-46FC-A861-49AABC2E8E2E} = {119F08F1-38DE-426D-B787-A24890409F3B}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{11F2E80D-8BB2-41B6-A1B2-0829B7F8E55C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -137,5 +140,9 @@ Global
 		{790472AB-4C77-4ADD-A71D-1104AD6B9C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{790472AB-4C77-4ADD-A71D-1104AD6B9C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{790472AB-4C77-4ADD-A71D-1104AD6B9C1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00AE5CA5-6040-46FC-A861-49AABC2E8E2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00AE5CA5-6040-46FC-A861-49AABC2E8E2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00AE5CA5-6040-46FC-A861-49AABC2E8E2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00AE5CA5-6040-46FC-A861-49AABC2E8E2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
