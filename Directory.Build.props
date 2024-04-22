@@ -9,7 +9,7 @@
     <RepositoryUrl>https://github.com/smartpcr/virtlib</RepositoryUrl>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>$(MSBuildProjectName)</RootNamespace>
-    <AssemblyName>Microsoft.AzureStack.Virtlib.$(RootNamespace)</AssemblyName>
+    <AssemblyName>Microsoft.AzureStack.$(RootNamespace)</AssemblyName>
     <DebugType>Full</DebugType>
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
