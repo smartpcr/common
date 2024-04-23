@@ -174,12 +174,14 @@ namespace Common.Config.Tests.Features
         [Xunit.TraitAttribute("FeatureTitle", "appsettings")]
         [Xunit.TraitAttribute("Description", "Get strong typed config setting")]
         [Xunit.TraitAttribute("Category", "unit_test")]
+        [Xunit.TraitAttribute("Category", "prod")]
         [Xunit.TraitAttribute("Category", "strong_type")]
         [Xunit.TraitAttribute("Category", "default")]
         public async System.Threading.Tasks.Task GetStrongTypedConfigSetting()
         {
             string[] tagsOfScenario = new string[] {
                     "unit_test",
+                    "prod",
                     "strong_type",
                     "default"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();

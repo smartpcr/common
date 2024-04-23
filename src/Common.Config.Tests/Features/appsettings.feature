@@ -16,7 +16,7 @@ Feature: appsettings
           | Key                      | Value |
           | Logging:LogLevel:Default | Debug |
 
-    @unit_test @strong_type @default
+    @unit_test @prod @strong_type @default
     Scenario: Get strong typed config setting
         Given setting file containing "KeyVaultSettings"
         When I get the appsettings
