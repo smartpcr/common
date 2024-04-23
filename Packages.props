@@ -5,7 +5,7 @@
     <R9Release>8.1.0</R9Release>
     <OpenTelemetryVersion>1.7.0</OpenTelemetryVersion>
     <MSTestVersion>3.0.4</MSTestVersion>
-    <SpecflowVersion>3.9.57</SpecflowVersion>
+    <ReqnrollVersion>1.0.1</ReqnrollVersion>
     <KustoVersion>12.0.1</KustoVersion>
     <AspNetCoreVersion>2.2.0</AspNetCoreVersion>
   </PropertyGroup>
@@ -151,10 +151,10 @@
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.6.0"/>
     <PackageReference Update="MSTest.TestAdapter" Version="$(MSTestVersion)"/>
     <PackageReference Update="MSTest.TestFramework" Version="$(MSTestVersion)"/>
-    <PackageReference Update="SpecFlow.MsTest" Version="$(SpecflowVersion)" />
-    <PackageReference Update="SpecFlow.xUnit" Version="3.9.74" />
-    <PackageReference Update="SpecFlow.Tools.MsBuild.Generation" Version="$(SpecflowVersion)" />
-    <PackageReference Update="SpecFlow.Plus.LivingDocPlugin" Version="$(SpecflowVersion)" />
+    <PackageReference Update="Reqnroll.MsTest" Version="$(ReqnrollVersion)" />
+    <PackageReference Update="Reqnroll.xUnit" Version="$(ReqnrollVersion)" />
+    <PackageReference Update="Reqnroll.Tools.MsBuild.Generation" Version="$(ReqnrollVersion)" />
+    <PackageReference Update="Reqnroll.SpecFlowCompatibility" Version="$(ReqnrollVersion)" />
     <PackageReference Update="xunit" Version="2.6.6" />
     <PackageReference Update="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

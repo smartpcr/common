@@ -51,12 +51,12 @@ internal static partial class MetricsTestStepsLogger
     [LoggerMessage(
         3,
         LogLevel.Error,
-        "port {port} is NOT listening: {ex}" +
+        "port {port} is NOT listening: {error}" +
         ", \n\tcalled from {memberName}, in file {callerFile}, at line {lineNumber}")]
     public static partial void PortNotListening(
         this ILogger logger,
         int port,
-        Exception ex,
+        string error,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string callerFile = "",
         [CallerLineNumber] int lineNumber = 0);
@@ -91,14 +91,14 @@ internal static partial class MetricsTestStepsLogger
     [LoggerMessage(
         6,
         LogLevel.Error,
-        "API call to {url} failed in {elapsed} ms. error: {ex}" +
+        "API call to {url} failed in {elapsed} ms. error: {error}" +
         ", \n\tcalled from {memberName}, in file {callerFile}")]
     public static partial void ApiCallFailed(
         this ILogger logger,
         DateTime startTime,
         string? url,
         double elapsed,
-        Exception ex,
+        string error,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string callerFile = "");
 

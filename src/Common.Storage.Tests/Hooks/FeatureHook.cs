@@ -7,7 +7,7 @@ using System.Management.Automation;
 using System.Reflection;
 using System.Threading.Tasks;
 using FluentAssertions;
-using TechTalk.SpecFlow;
+using Reqnroll;
 using Xunit;
 
 [Binding]

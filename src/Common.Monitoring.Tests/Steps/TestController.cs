@@ -45,7 +45,7 @@ public class TestController : ControllerBase
         if (hasError)
         {
             _totalFailures.Add(1);
-            _logger.ApiCallFailed(DateTime.Now, Request.Path.Value, watch.ElapsedMilliseconds, new InvalidOperationException("Simulated error"));
+            _logger.ApiCallFailed(DateTime.Now, Request.Path.Value, watch.ElapsedMilliseconds, "Simulated error");
             throw new InvalidOperationException("Simulated error");
         }
 

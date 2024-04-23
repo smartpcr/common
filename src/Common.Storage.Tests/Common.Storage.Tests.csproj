@@ -22,4 +22,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Features\BlockBlobTests.feature" />
+  </ItemGroup>
+
 </Project>

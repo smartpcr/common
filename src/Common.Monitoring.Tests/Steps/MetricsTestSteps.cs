@@ -16,7 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Settings;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 [Binding]
 public class MetricsTestSteps
@@ -45,7 +45,7 @@ public class MetricsTestSteps
         }
         catch (Exception ex)
         {
-            _logger.PortNotListening(port, ex);
+            _logger.PortNotListening(port, ex.Message);
             _scenarioContext.StepContext.Status = ScenarioExecutionStatus.TestError;
             throw;
         }

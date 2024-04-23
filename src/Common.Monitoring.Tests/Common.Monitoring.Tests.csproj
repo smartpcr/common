@@ -33,4 +33,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Features\MetricsTest.feature" />
+  </ItemGroup>
+
 </Project>

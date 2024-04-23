@@ -1,6 +1,4 @@
-﻿using TechTalk.SpecFlow;
-
-namespace Common.KeyVault.Tests.Hooks;
+﻿namespace Common.KeyVault.Tests.Hooks;
 
 using System;
 using Config;
@@ -10,15 +8,15 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Monitoring;
 using Settings;
-using TechTalk.SpecFlow.Infrastructure;
+using Reqnroll;
 
 [Binding]
 public sealed class SetupKeyVault
 {
     private readonly ScenarioContext context;
-    private readonly ISpecFlowOutputHelper outputHelper;
+    private readonly IReqnrollOutputHelper outputHelper;
 
-    public SetupKeyVault(ScenarioContext scenarioContext, ISpecFlowOutputHelper outputHelper)
+    public SetupKeyVault(ScenarioContext scenarioContext, IReqnrollOutputHelper outputHelper)
     {
         this.context = scenarioContext;
         this.outputHelper = outputHelper;
