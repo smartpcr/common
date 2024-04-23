@@ -6,7 +6,7 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IsPackable>false</IsPackable>
     <IsTestProject>false</IsTestProject>
-    <RepositoryUrl>https://github.com/smartpcr/virtlib</RepositoryUrl>
+    <RepositoryUrl>https://github.com/smartpcr/common</RepositoryUrl>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>$(MSBuildProjectName)</RootNamespace>
     <AssemblyName>Microsoft.AzureStack.$(RootNamespace)</AssemblyName>
@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Product>virtlib</Product>
+    <Product>common</Product>
     <Authors>xiaodong li</Authors>
     <Company>Microsoft</Company>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
