@@ -1,4 +1,4 @@
-name: build windows
+name: cross-platform build
 
 on:
   push:
@@ -12,7 +12,8 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug, Release]
-    runs-on: windows-latest
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     env:
       Solution_Name: common.sln
     steps:
