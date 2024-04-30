@@ -66,6 +66,7 @@
     <PackageId>$(AssemblyName)</PackageId>
     <PackageVersion>$(NuGetPackageVersion)</PackageVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/smartpcr/common</PackageProjectUrl>
     <Copyright>Copyright 2024</Copyright>
     <RequireLicenseAcceptance>False</RequireLicenseAcceptance>
     <NoPackageAnalysis>True</NoPackageAnalysis>

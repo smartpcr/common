@@ -16,8 +16,6 @@ using Microsoft.Extensions.AmbientMetadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.R9.Extensions.Compliance.Redaction;
-using Microsoft.R9.Extensions.Data.Compliance.MicrosoftEnterprise;
 using Microsoft.R9.Extensions.HttpClient.Logging;
 using Microsoft.R9.Extensions.HttpClient.Metering;
 using Polly;
@@ -58,7 +56,6 @@ public static class RestApiClientBuilder
         {
             var httpClientLoggingConfig = OptionsBuilder.LoadAdditionalConfigurationFile(HttpClientLoggingSettingFile);
             clientBuilder.AddHttpClientLogging(httpClientLoggingConfig.GetSection(HttpClientLoggingSectionName));
-            services.AddRedaction(b => b.SetXXHashRedactor(httpClientLoggingConfig.GetSection(HashRedactorSectionName), MicrosoftEnterpriseTaxonomy.EUII));
         }
 
         if (serviceSettings.AuthMode != HttpClientAuthMode.None)

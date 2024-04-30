@@ -11,5 +11,8 @@ build: restore
 test: build
 	dotnet test --filter Category=unit_test
 
+pack: build
+	dotnet pack -c Release -o ./packages
+
 clean:
 	dotnet clean
