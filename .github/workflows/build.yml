@@ -46,17 +46,17 @@ jobs:
 #      env:
 #        Configuration: ${{ matrix.configuration }}
     - name: Package
-      if: matrix.configuration == 'Release'
+      if: matrix.configuration == 'Release' && matrix.os == 'windows-latest'
       run: dotnet pack --configuration ${{ matrix.configuration }} -o ./packages
       env:
         Configuration: ${{ matrix.configuration }}
     - name: List packages
-      if: matrix.configuration == 'Release'
+      if: matrix.configuration == 'Release' && matrix.os == 'windows-latest'
       run: |
         Get-ChildItem ./packages/*.nupkg
       shell: pwsh
     - name: Publish
-      if: matrix.configuration == 'Release'
+      if: matrix.configuration == 'Release' && matrix.os == 'windows-latest'
       run: |
         Get-ChildItem ./packages/*.nupkg | ForEach-Object {
           dotnet nuget push $_.FullName --source GitHub --api-key ${{ secrets.NUGET_AUTH_TOKEN }}
