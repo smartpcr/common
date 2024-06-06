@@ -59,7 +59,7 @@ jobs:
       if: matrix.configuration == 'Release' && matrix.os == 'windows-latest'
       run: |
         Get-ChildItem ./packages/*.nupkg | ForEach-Object {
-          dotnet nuget push $_.FullName --source GitHub --api-key ${{ secrets.NUGET_AUTH_TOKEN }}
+          dotnet nuget push $_.FullName --source GitHub --api-key ${{ secrets.NUGET_AUTH_TOKEN }} --skip-duplicate
         }
       shell: pwsh
       env:
