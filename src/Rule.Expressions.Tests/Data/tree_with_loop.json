@@ -1,0 +1,18 @@
+﻿{
+  "id": "A",
+  "parent": {
+    "id": "B",
+    "parent": {
+      "id": "C",
+      "parent": {
+        "id": "A",
+        "parent": {
+          "id": "G",
+          "parent": {
+            "id": "B"
+          }
+        }
+      }
+    }
+  }
+}

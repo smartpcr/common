@@ -1,0 +1,20 @@
+﻿{
+  "contextType": "PowerDevice",
+  "contextProvider": null,
+  "whenExpression": "{\"allOf\":[{\"left\":\"Children\",\"operator\":\"isEmpty\",\"right\":\"true\",\"rightSideIsExpression\":false,\"operatorArgs\":null}]}",
+  "ifExpression": "{\"allOf\":[{\"left\":\"Traverse(PrimaryParentDevice, DeviceName).Last()\",\"operator\":\"equals\",\"right\":\"!!\",\"rightSideIsExpression\":false,\"operatorArgs\":null}]}",
+  "trueScore": 1,
+  "falseScore": 0,
+  "weight": 1,
+  "name": "hierarchy loop check",
+  "ruleSetId": "c87c2442-a4d3-45bd-95c0-95d44cc412c7",
+  "deviceTypes": [],
+  "hierarchies": [],
+  "dataCenters": [],
+  "deviceStates": [],
+  "createdBy": "Xiaodong Li",
+  "creationTime": "2020-06-09T20:45:11.546Z",
+  "modifiedBy": "Xiaodong Li",
+  "modificationTime": "2020-06-09T20:45:11.546Z",
+  "id": "3aff39f7-4a4b-4892-8c9e-6f6142f7a96f"
+}

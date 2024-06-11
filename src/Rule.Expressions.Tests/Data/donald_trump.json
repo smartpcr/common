@@ -1,0 +1,40 @@
+﻿{
+  "FirstName": "Donald",
+  "LastName": "Trump",
+  "BirthDate": "1946-06-14T00:00:00-07:00",
+  "Age": 74,
+  "Race":  "White",
+  "Spouse": {
+    "FirstName": "Melania",
+    "LastName": "Trump"
+  },
+  "Hobbies": [
+    "Golf",
+    "Tweeter"
+  ],
+  "Children": [
+    {
+      "FirstName": "Tiffany",
+      "LastName": "Trump",
+      "Age": 26,
+      "Hobbies": [
+        "Arts",
+        "Music",
+        "Dancing"
+      ]
+    },
+    {
+      "FirstName": "Barron",
+      "LastName": "Trump",
+      "Age": 14,
+      "Hobbies": [
+        "Soccer",
+        "Dancing"
+      ]
+    }
+  ],
+  "Titles": [
+    "President",
+    "Entrepreneur"
+  ]
+}

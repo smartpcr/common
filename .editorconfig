@@ -24,7 +24,7 @@ spelling_exclusion_path = spellchecking_exclusions.dic
 # file header
 file_header_template = -----------------------------------------------------------------------\n<copyright file="{fileName}" company="Microsoft Corp.">\n    Copyright (c) Microsoft Corp. All rights reserved.\n</copyright>\n-----------------------------------------------------------------------
 
-[*.{appxmanifest,axml,build,config,csproj,dbml,discomap,dtd,json,jsproj,lsproj,njsproj,nuspec,proj,props,resjson,resw,resx,StyleCop,targets,tasks,vbproj,yml,xml,xsd}]
+[*.{appxmanifest,axml,build,config,csproj,dbml,discomap,dtd,json,jsproj,lsproj,njsproj,nuspec,proj,props,resjson,resw,resx,StyleCop,targets,tasks,vbproj,yml,xml,xsd,feature}]
 indent_size = 2
 tab_width = 2
 
