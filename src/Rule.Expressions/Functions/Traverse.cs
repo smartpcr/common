@@ -56,7 +56,7 @@ namespace Rule.Expressions.Functions
         }
 
         [SuppressMessage("Microsoft.Design", "SA1115:ListsAreStrongTyped", Justification = "as design")]
-        public override Expression? Build()
+        public override Expression Build()
         {
             ParameterExpression parentParam = Expression.Parameter(Target.Type, "parent");
             ParameterExpression pathVar = Expression.Variable(typeof(List<string>), "path");

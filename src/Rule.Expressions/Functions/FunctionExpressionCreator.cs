@@ -11,7 +11,7 @@ namespace Rule.Expressions.Functions
 
     public class FunctionExpressionCreator
     {
-        public FunctionExpression Create(Expression? target, FunctionName funcName, params string?[] args)
+        public FunctionExpression Create(Expression target, FunctionName funcName, params string?[] args)
         {
             switch (funcName)
             {
@@ -21,13 +21,13 @@ namespace Rule.Expressions.Functions
                 case FunctionName.Max:
                 case FunctionName.Min:
                 case FunctionName.Sum:
-                    return new Aggregate(target!, funcName, args);
+                    return new Aggregate(target, funcName, args);
                 case FunctionName.Select:
-                    return new Select(target!, args);
+                    return new Select(target, args);
                 case FunctionName.SelectMany:
-                    return new SelectMany(target!, args);
+                    return new SelectMany(target, args);
                 case FunctionName.Ago:
-                    return new Ago(target!, args);
+                    return new Ago(target, args);
                 case FunctionName.Where:
                     return new Where(target, args);
                 case FunctionName.First:

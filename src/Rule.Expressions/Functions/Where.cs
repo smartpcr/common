@@ -31,7 +31,7 @@ namespace Rule.Expressions.Functions
             op = (Operator) Enum.Parse(typeof(Operator), args[1], true);
             fieldValue = args[2];
             fieldValue = fieldValue.Trim('\'', '"').Trim();
-            if (IsValueStaticFunction(fieldValue, out var valueFunc))
+            if (IsValueStaticFunction(target, fieldValue, out var valueFunc))
             {
                 valueExpression = valueFunc!;
             }
@@ -54,13 +54,14 @@ namespace Rule.Expressions.Functions
         {
             var argParameter = Expression.Parameter(argType, "s");
             var propNames = fieldName.Split(new[] {'.'});
-            Expression? propExpression = argParameter;
+            Expression propExpression = argParameter;
             foreach (var propName in propNames)
             {
                 var prop = propExpression.Type.GetMappedProperty(propName);
                 propExpression = Expression.Property(propExpression, prop);
             }
-            Expression? valueExpr = this.valueExpression;
+
+            Expression valueExpr = this.valueExpression ?? Expression.Constant(fieldValue);
             if (valueExpr.Type != propExpression.Type)
             {
                 if ((valueExpr.Type == typeof(string) && propExpression.Type == typeof(int)) || propExpression.Type == typeof(int?))
@@ -122,7 +123,7 @@ namespace Rule.Expressions.Functions
                 predicateExpr);
         }
 
-        private bool IsValueStaticFunction(string value, out Expression? valueFunction)
+        private bool IsValueStaticFunction(Expression target, string value, out Expression? valueFunction)
         {
             valueFunction = null;
             var functionRegexPatterns = FunctionNameExtension.GetFunctionNameRegexPatterns();
@@ -136,7 +137,7 @@ namespace Rule.Expressions.Functions
                     var functionArg = match.Groups[2].Value;
                     var args = functionArg.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(a => a.Trim()).ToArray();
                     var funcName = (FunctionName)Enum.Parse(typeof(FunctionName), functionName, true);
-                    var funcExpr = new FunctionExpressionCreator().Create(null, funcName, args);
+                    var funcExpr = new FunctionExpressionCreator().Create(target, funcName, args);
                     valueFunction = funcExpr.Build();
                     return true;
                 }

@@ -9,7 +9,6 @@ namespace Rule.Expressions
     using System;
     using System.Linq;
     using System.Linq.Expressions;
-    using Macros;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
     using Operators;
@@ -145,46 +144,6 @@ namespace Rule.Expressions
                 case Operator.NotIsEmpty:
                     generatedExpression = Expression.Not(new IsEmpty(leftExpression, rightExpression).Create());
                     break;
-                case Operator.AllInRangePct:
-                    generatedExpression = new AllInRange(leftExpression, rightExpression, OperatorArgs).Create();
-                    break;
-                case Operator.ChannelNameEquals:
-                case Operator.ChannelNameNotEquals:
-                case Operator.ChannelNameContains:
-                case Operator.ChannelNameNotContains:
-                case Operator.ChannelNameStartsWith:
-                case Operator.ChannelNameNotStartsWith:
-                case Operator.QualityEquals:
-                case Operator.QualityNotEquals:
-                case Operator.InGoodQuality:
-                case Operator.NotInMaintenance:
-                case Operator.DataPointValueGreaterThanRatingPct:
-                case Operator.IsNotStale:
-                case Operator.CheckStaleness:
-                case Operator.StaledAmpsChannels:
-                case Operator.StaledS1AmpsChannels:
-                case Operator.AllAmpsChannelsAreNotStale:
-                case Operator.AllS1AmpsChannelsAreNotStale:
-                case Operator.StaledVoltChannels:
-                case Operator.StaledS1VoltChannels:
-                case Operator.AllVoltChannelsAreNotStale:
-                case Operator.AllS1VoltChannelsAreNotStale:
-                case Operator.MaxChannelVoltGreaterThanRating:
-                case Operator.MaxS1ChannelVoltGreaterThanRating:
-                case Operator.AtOrBelowHierarchy:
-                case Operator.BelowHierarchy:
-                case Operator.AtOrAboveHierarchy:
-                case Operator.AboveHierarchy:
-                    var methodName = Operator.ToString();
-                    var extensionMethod = leftExpression.Type.GetExtensionMethods().First(m => m.Name == methodName);
-                    if (extensionMethod == null)
-                    {
-                        throw new InvalidOperationException($"operator not mapped to extension method: {methodName}");
-                    }
-
-                    var macroExpression = new MacroExpressionCreator(leftExpression, extensionMethod, OperatorArgs).CreateMacroExpression();
-                    generatedExpression = Expression.Equal(macroExpression, rightExpression);
-                    break;
                 default:
                     throw new NotSupportedException($"operation {Operator} is not supported");
             }
@@ -227,43 +186,6 @@ namespace Rule.Expressions
                 case Operator.IsEmpty:
                 case Operator.NotIsEmpty:
                     return Expression.Constant(null, typeof(object));
-                case Operator.AllInRangePct:
-                    var decimalArray = Right.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(s => s.Trim()).Select(decimal.Parse).ToArray();
-                    var min = decimalArray.MinValue();
-                    var max = decimalArray.MaxValue();
-                    return Expression.Constant(new[] { min, max }, typeof(decimal[]));
-                case Operator.ChannelNameEquals:
-                case Operator.ChannelNameNotEquals:
-                case Operator.ChannelNameContains:
-                case Operator.ChannelNameNotContains:
-                case Operator.ChannelNameStartsWith:
-                case Operator.ChannelNameNotStartsWith:
-                case Operator.QualityEquals:
-                case Operator.QualityNotEquals:
-                case Operator.DataPointValueGreaterThanRatingPct:
-                case Operator.IsNotStale:
-                case Operator.CheckStaleness:
-                case Operator.StaledAmpsChannels:
-                case Operator.StaledS1AmpsChannels:
-                case Operator.AllAmpsChannelsAreNotStale:
-                case Operator.AllS1AmpsChannelsAreNotStale:
-                case Operator.StaledVoltChannels:
-                case Operator.StaledS1VoltChannels:
-                case Operator.AllVoltChannelsAreNotStale:
-                case Operator.AllS1VoltChannelsAreNotStale:
-                case Operator.MaxChannelVoltGreaterThanRating:
-                case Operator.MaxS1ChannelVoltGreaterThanRating:
-                case Operator.AtOrBelowHierarchy:
-                case Operator.BelowHierarchy:
-                case Operator.AtOrAboveHierarchy:
-                case Operator.AboveHierarchy:
-                    if (!bool.TryParse(Right, out var boolValue))
-                    {
-                        boolValue = true;
-                    }
-
-                    return Expression.Constant(boolValue, typeof(bool));
                 default:
                     return Expression.Constant(leftSideType.ConvertValue(Right));
             }

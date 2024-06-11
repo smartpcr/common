@@ -10,7 +10,8 @@
     <Folder Include="Hooks\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Features\Evaluator.feature" />
+    <Content Include="Features\Functions.feature" />
+    <Content Include="Features\Operators.feature" />
     <Content Include="Features\Person.feature" />
   </ItemGroup>
   <ItemGroup>

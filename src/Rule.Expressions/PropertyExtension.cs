@@ -13,7 +13,7 @@ namespace Rule.Expressions
 
     public static class PropertyExtension
     {
-        public static PropertyInfo GetMappedProperty(this Type? type, string fieldName)
+        public static PropertyInfo GetMappedProperty(this Type type, string fieldName)
         {
             var properties = type.GetProperties(
                 BindingFlags.Public |

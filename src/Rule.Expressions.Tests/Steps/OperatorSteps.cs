@@ -10,11 +10,11 @@ namespace Rule.Expressions.Tests.Steps
     using Reqnroll;
 
     [Binding]
-    public class EvaluatorSteps
+    public class OperatorSteps
     {
         private readonly ScenarioContext scenarioContext;
 
-        public EvaluatorSteps(ScenarioContext scenarioContext)
+        public OperatorSteps(ScenarioContext scenarioContext)
         {
             this.scenarioContext = scenarioContext;
         }

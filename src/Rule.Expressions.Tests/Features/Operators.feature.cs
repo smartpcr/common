@@ -19,7 +19,7 @@ namespace Rule.Expressions.Tests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "1.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class EvaluationFeature : object, Xunit.IClassFixture<EvaluationFeature.FixtureData>, Xunit.IAsyncLifetime
+    public partial class OperatorEvaluationFeature : object, Xunit.IClassFixture<OperatorEvaluationFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private static Reqnroll.ITestRunner testRunner;
@@ -28,10 +28,10 @@ namespace Rule.Expressions.Tests.Features
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "Evaluator.feature"
+#line 1 "Operators.feature"
 #line hidden
         
-        public EvaluationFeature(EvaluationFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public OperatorEvaluationFeature(OperatorEvaluationFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
         }
@@ -39,8 +39,8 @@ namespace Rule.Expressions.Tests.Features
         public static async System.Threading.Tasks.Task FeatureSetupAsync()
         {
             testRunner = Reqnroll.TestRunnerManager.GetTestRunnerForAssembly(null, Reqnroll.xUnit.ReqnrollPlugin.XUnitParallelWorkerTracker.Instance.GetWorkerId());
-            Reqnroll.FeatureInfo featureInfo = new Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Evaluation", "  In order to rules\r\n  As a developer\r\n  I want to be able to evaluate rule expre" +
-                    "ssion against a strongly typed object", ProgrammingLanguage.CSharp, featureTags);
+            Reqnroll.FeatureInfo featureInfo = new Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Operator Evaluation", "  In order to evaluate rules\r\n  As a developer\r\n  I want to be able to compile ru" +
+                    "le expression against a strongly typed object", ProgrammingLanguage.CSharp, featureTags);
             await testRunner.OnFeatureStartAsync(featureInfo);
         }
         
@@ -88,7 +88,7 @@ namespace Rule.Expressions.Tests.Features
         }
         
         [Xunit.SkippableFactAttribute(DisplayName="Verify context with equal filter returns true")]
-        [Xunit.TraitAttribute("FeatureTitle", "Evaluation")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
         [Xunit.TraitAttribute("Description", "Verify context with equal filter returns true")]
         public async System.Threading.Tasks.Task VerifyContextWithEqualFilterReturnsTrue()
         {
@@ -127,7 +127,7 @@ namespace Rule.Expressions.Tests.Features
         }
         
         [Xunit.SkippableFactAttribute(DisplayName="Verify context with number filter returns true")]
-        [Xunit.TraitAttribute("FeatureTitle", "Evaluation")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
         [Xunit.TraitAttribute("Description", "Verify context with number filter returns true")]
         public async System.Threading.Tasks.Task VerifyContextWithNumberFilterReturnsTrue()
         {
@@ -166,7 +166,7 @@ namespace Rule.Expressions.Tests.Features
         }
         
         [Xunit.SkippableFactAttribute(DisplayName="Verify context with number filter returns false")]
-        [Xunit.TraitAttribute("FeatureTitle", "Evaluation")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
         [Xunit.TraitAttribute("Description", "Verify context with number filter returns false")]
         public async System.Threading.Tasks.Task VerifyContextWithNumberFilterReturnsFalse()
         {
@@ -205,7 +205,7 @@ namespace Rule.Expressions.Tests.Features
         }
         
         [Xunit.SkippableFactAttribute(DisplayName="Verify context with in filter returns true")]
-        [Xunit.TraitAttribute("FeatureTitle", "Evaluation")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
         [Xunit.TraitAttribute("Description", "Verify context with in filter returns true")]
         public async System.Threading.Tasks.Task VerifyContextWithInFilterReturnsTrue()
         {
@@ -244,7 +244,7 @@ namespace Rule.Expressions.Tests.Features
         }
         
         [Xunit.SkippableFactAttribute(DisplayName="Verify context with in filter trim white spaces returns true")]
-        [Xunit.TraitAttribute("FeatureTitle", "Evaluation")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
         [Xunit.TraitAttribute("Description", "Verify context with in filter trim white spaces returns true")]
         public async System.Threading.Tasks.Task VerifyContextWithInFilterTrimWhiteSpacesReturnsTrue()
         {
@@ -283,7 +283,7 @@ namespace Rule.Expressions.Tests.Features
         }
         
         [Xunit.SkippableFactAttribute(DisplayName="Verify context with in filter returns false")]
-        [Xunit.TraitAttribute("FeatureTitle", "Evaluation")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
         [Xunit.TraitAttribute("Description", "Verify context with in filter returns false")]
         public async System.Threading.Tasks.Task VerifyContextWithInFilterReturnsFalse()
         {
@@ -322,7 +322,7 @@ namespace Rule.Expressions.Tests.Features
         }
         
         [Xunit.SkippableFactAttribute(DisplayName="Verify context with allin filter returns true")]
-        [Xunit.TraitAttribute("FeatureTitle", "Evaluation")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
         [Xunit.TraitAttribute("Description", "Verify context with allin filter returns true")]
         public async System.Threading.Tasks.Task VerifyContextWithAllinFilterReturnsTrue()
         {
@@ -361,7 +361,7 @@ namespace Rule.Expressions.Tests.Features
         }
         
         [Xunit.SkippableFactAttribute(DisplayName="Verify context with null field filter returns false")]
-        [Xunit.TraitAttribute("FeatureTitle", "Evaluation")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
         [Xunit.TraitAttribute("Description", "Verify context with null field filter returns false")]
         public async System.Threading.Tasks.Task VerifyContextWithNullFieldFilterReturnsFalse()
         {
@@ -400,7 +400,7 @@ namespace Rule.Expressions.Tests.Features
         }
         
         [Xunit.SkippableFactAttribute(DisplayName="Verify context with contains filter returns true")]
-        [Xunit.TraitAttribute("FeatureTitle", "Evaluation")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
         [Xunit.TraitAttribute("Description", "Verify context with contains filter returns true")]
         public async System.Threading.Tasks.Task VerifyContextWithContainsFilterReturnsTrue()
         {
@@ -439,7 +439,7 @@ namespace Rule.Expressions.Tests.Features
         }
         
         [Xunit.SkippableFactAttribute(DisplayName="Verify context with startswith filter returns true")]
-        [Xunit.TraitAttribute("FeatureTitle", "Evaluation")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
         [Xunit.TraitAttribute("Description", "Verify context with startswith filter returns true")]
         public async System.Threading.Tasks.Task VerifyContextWithStartswithFilterReturnsTrue()
         {
@@ -478,7 +478,7 @@ namespace Rule.Expressions.Tests.Features
         }
         
         [Xunit.SkippableFactAttribute(DisplayName="Verify context with composite filter returns true")]
-        [Xunit.TraitAttribute("FeatureTitle", "Evaluation")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
         [Xunit.TraitAttribute("Description", "Verify context with composite filter returns true")]
         public async System.Threading.Tasks.Task VerifyContextWithCompositeFilterReturnsTrue()
         {
@@ -529,7 +529,7 @@ namespace Rule.Expressions.Tests.Features
         }
         
         [Xunit.SkippableFactAttribute(DisplayName="Verify context with nested filter returns true")]
-        [Xunit.TraitAttribute("FeatureTitle", "Evaluation")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
         [Xunit.TraitAttribute("Description", "Verify context with nested filter returns true")]
         public async System.Threading.Tasks.Task VerifyContextWithNestedFilterReturnsTrue()
         {
@@ -632,6 +632,339 @@ namespace Rule.Expressions.Tests.Features
             await this.ScenarioCleanupAsync();
         }
         
+        [Xunit.SkippableFactAttribute(DisplayName="Verify context with nested properties returns true")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
+        [Xunit.TraitAttribute("Description", "Verify context with nested properties returns true")]
+        public async System.Threading.Tasks.Task VerifyContextWithNestedPropertiesReturnsTrue()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with nested properties returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 179
+  this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 180
+    await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 181
+    await testRunner.WhenAsync("I evaluate context with JSON filter", @"{
+  ""allOf"": [
+    {
+      ""left"": ""FirstName"",
+      ""operator"": ""Equals"",
+      ""right"": ""Donald""
+    },
+    {
+      ""left"": ""LastName"",
+      ""operator"": ""Equals"",
+      ""right"": ""Trump""
+    },
+    {
+      ""left"": ""Spouse.FirstName"",
+      ""operator"": ""Equals"",
+      ""right"": ""Melania""
+    }
+  ]
+}", ((Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 203
+    await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify context with array contains filter returns true")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
+        [Xunit.TraitAttribute("Description", "Verify context with array contains filter returns true")]
+        public async System.Threading.Tasks.Task VerifyContextWithArrayContainsFilterReturnsTrue()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with array contains filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 205
+  this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 206
+    await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 207
+    await testRunner.WhenAsync("I evaluate context with JSON filter", @"{
+  ""allOf"": [
+    {
+      ""left"": ""FirstName"",
+      ""operator"": ""Equals"",
+      ""right"": ""Donald""
+    },
+    {
+      ""left"": ""Hobbies"",
+      ""operator"": ""Contains"",
+      ""right"": ""Golf""
+    },
+    {
+      ""left"": ""Spouse.FirstName"",
+      ""operator"": ""NotEquals"",
+      ""right"": ""Ivanka""
+    }
+  ]
+}", ((Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 229
+    await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify context with indexed array filter returns true")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
+        [Xunit.TraitAttribute("Description", "Verify context with indexed array filter returns true")]
+        public async System.Threading.Tasks.Task VerifyContextWithIndexedArrayFilterReturnsTrue()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with indexed array filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 231
+  this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 232
+    await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 233
+    await testRunner.WhenAsync("I evaluate context with JSON filter", @"{
+  ""allOf"": [
+    {
+      ""left"": ""FirstName"",
+      ""operator"": ""Equals"",
+      ""right"": ""Donald""
+    },
+    {
+      ""left"": ""Hobbies"",
+      ""operator"": ""Contains"",
+      ""right"": ""Golf""
+    },
+    {
+      ""left"": ""Spouse.FirstName"",
+      ""operator"": ""StartsWith"",
+      ""right"": ""Mel""
+    },
+    {
+      ""left"": ""Children[0].FirstName"",
+      ""operator"": ""Equals"",
+      ""right"": ""Tiffany""
+    },
+    {
+      ""left"": ""Titles[1]"",
+      ""operator"": ""NotEquals"",
+      ""right"": ""Scientist""
+    }
+  ]
+}", ((Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 265
+    await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify context with enum field in filter returns true")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
+        [Xunit.TraitAttribute("Description", "Verify context with enum field in filter returns true")]
+        public async System.Threading.Tasks.Task VerifyContextWithEnumFieldInFilterReturnsTrue()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with enum field in filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 267
+  this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 268
+    await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 269
+    await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"FirstName\",\r\n      \"operator\": \"Equals\",\r\n" +
+                        "      \"right\": \"Donald\"\r\n    },\r\n    {\r\n      \"left\": \"Race\",\r\n      \"operator\":" +
+                        " \"In\",\r\n      \"right\": \"Black,White\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 286
+    await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify context with date field filter returns true")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
+        [Xunit.TraitAttribute("Description", "Verify context with date field filter returns true")]
+        public async System.Threading.Tasks.Task VerifyContextWithDateFieldFilterReturnsTrue()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with date field filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 288
+  this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 289
+    await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 290
+    await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"FirstName\",\r\n      \"operator\": \"Equals\",\r\n" +
+                        "      \"right\": \"Donald\"\r\n    },\r\n    {\r\n      \"left\": \"BirthDate\",\r\n      \"opera" +
+                        "tor\": \"LessThan\",\r\n      \"right\": \"2020-04-07T15:47:54.760654-07:00\"\r\n    }\r\n  ]" +
+                        "\r\n}", ((Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 307
+    await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify context with expression on each side returns true")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
+        [Xunit.TraitAttribute("Description", "Verify context with expression on each side returns true")]
+        public async System.Threading.Tasks.Task VerifyContextWithExpressionOnEachSideReturnsTrue()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with expression on each side returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 309
+  this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 310
+    await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 311
+    await testRunner.WhenAsync("I evaluate context with JSON filter", @"{
+  ""allOf"": [
+    {
+      ""left"": ""Children[0].LastName"",
+      ""operator"": ""Equals"",
+      ""right"": ""Children[1].LastName"",
+      ""rightSideIsExpression"": true
+    },
+    {
+      ""left"": ""Children.Count()"",
+      ""operator"": ""Equals"",
+      ""right"": ""2""
+    }
+  ]
+}", ((Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 329
+    await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify context with match operator returns true")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
+        [Xunit.TraitAttribute("Description", "Verify context with match operator returns true")]
+        public async System.Threading.Tasks.Task VerifyContextWithMatchOperatorReturnsTrue()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with match operator returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 331
+  this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 332
+    await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 333
+    await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"FirstName\",\r\n      \"operator\": \"Matches\",\r" +
+                        "\n      \"right\": \"^do[\\\\w]+d$\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 345
+    await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Verify context with match operator returns false")]
+        [Xunit.TraitAttribute("FeatureTitle", "Operator Evaluation")]
+        [Xunit.TraitAttribute("Description", "Verify context with match operator returns false")]
+        public async System.Threading.Tasks.Task VerifyContextWithMatchOperatorReturnsFalse()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with match operator returns false", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 347
+  this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 348
+    await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 349
+    await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"LastName\",\r\n      \"operator\": \"Matches\",\r\n" +
+                        "      \"right\": \"^DO[\\\\w]+d$\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 361
+    await testRunner.ThenAsync("evaluation result should be \"false\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
         [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "1.0.0.0")]
         [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
         public class FixtureData : object, Xunit.IAsyncLifetime
@@ -639,12 +972,12 @@ namespace Rule.Expressions.Tests.Features
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.InitializeAsync()
             {
-                await EvaluationFeature.FeatureSetupAsync();
+                await OperatorEvaluationFeature.FeatureSetupAsync();
             }
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.DisposeAsync()
             {
-                await EvaluationFeature.FeatureTearDownAsync();
+                await OperatorEvaluationFeature.FeatureTearDownAsync();
             }
         }
     }

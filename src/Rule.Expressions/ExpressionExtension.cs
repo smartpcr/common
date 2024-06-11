@@ -16,10 +16,10 @@ namespace Rule.Expressions
 
     public static class ExpressionExtension
     {
-        public static Expression? EvaluateExpression(this ParameterExpression? contextExpression, string propPath, bool handleNullableType = true)
+        public static Expression EvaluateExpression(this ParameterExpression contextExpression, string propPath, bool handleNullableType = true)
         {
             var parts = SplitPropPath(propPath);
-            Expression? targetExpression = contextExpression;
+            Expression targetExpression = contextExpression;
             foreach (var part in parts)
             {
                 if (part.Equals("Self", StringComparison.OrdinalIgnoreCase))
@@ -43,7 +43,7 @@ namespace Rule.Expressions
             return targetExpression;
         }
 
-        public static Expression? AddEnumToStringConvert(this Expression? targetExpression)
+        public static Expression AddEnumToStringConvert(this Expression targetExpression)
         {
             var addToStringMethod = false;
             var isNullable = false;
@@ -86,7 +86,7 @@ namespace Rule.Expressions
             return targetExpression;
         }
 
-        public static Expression? AddValueWithNullableNumberType(this Expression? targetExpression)
+        public static Expression AddValueWithNullableNumberType(this Expression targetExpression)
         {
             var targetType = targetExpression.Type;
             var underlyingType = Nullable.GetUnderlyingType(targetType);
@@ -99,7 +99,7 @@ namespace Rule.Expressions
             return targetExpression;
         }
 
-        public static bool AddNotNullCheck(this Expression? targetExpression, out Expression? notNullCheckExpression)
+        public static bool AddNotNullCheck(this Expression targetExpression, out Expression? notNullCheckExpression)
         {
             notNullCheckExpression = null;
             var targetType = targetExpression.Type;
@@ -195,7 +195,7 @@ namespace Rule.Expressions
         }
 
         private static bool TryFindMacro(
-            this Expression? parentExpression,
+            this Expression parentExpression,
             string field,
             out Expression? macroExpression)
         {
@@ -254,7 +254,7 @@ namespace Rule.Expressions
         }
 
         private static bool TryFindIndexerField(
-            this Expression? parentExpression,
+            this Expression parentExpression,
             string field,
             out Expression? arrayExpression)
         {
@@ -307,23 +307,18 @@ namespace Rule.Expressions
         }
 
         private static bool TryFindProperty(
-            this Expression? parentExpression,
+            this Expression parentExpression,
             string field,
             out Expression? propExpression)
         {
             propExpression = null;
-            var prop = parentExpression?.Type.GetMappedProperty(field);
-            if (prop != null)
-            {
-                propExpression = Expression.Property(parentExpression, prop);
-                return true;
-            }
-
-            return false;
+            var prop = parentExpression.Type.GetMappedProperty(field);
+            propExpression = Expression.Property(parentExpression, prop);
+            return true;
         }
 
         private static bool HandleEnumExpression(
-            this Expression? parentExpression,
+            this Expression parentExpression,
             out Expression? enumExpression)
         {
             enumExpression = null;
@@ -355,7 +350,7 @@ namespace Rule.Expressions
         }
 
         private static bool HandleNullableType(
-            this Expression? parentExpression,
+            this Expression parentExpression,
             out Expression? valueExpression)
         {
             valueExpression = null;

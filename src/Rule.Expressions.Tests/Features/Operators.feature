@@ -1,7 +1,7 @@
-Feature: Evaluation
-  In order to rules
+Feature: Operator Evaluation
+  In order to evaluate rules
   As a developer
-  I want to be able to evaluate rule expression against a strongly typed object
+  I want to be able to compile rule expression against a strongly typed object
 
   Scenario: Verify context with equal filter returns true
     Given a context of type "Location" from json file "redmond.json"
@@ -175,3 +175,187 @@ Feature: Evaluation
     | Robert    |
     | William   |
     | David     |
+
+  Scenario: Verify context with nested properties returns true
+    Given a context of type "Person" from json file "donald_trump.json"
+    When I evaluate context with JSON filter
+      """
+      {
+        "allOf": [
+          {
+            "left": "FirstName",
+            "operator": "Equals",
+            "right": "Donald"
+          },
+          {
+            "left": "LastName",
+            "operator": "Equals",
+            "right": "Trump"
+          },
+          {
+            "left": "Spouse.FirstName",
+            "operator": "Equals",
+            "right": "Melania"
+          }
+        ]
+      }
+      """
+    Then evaluation result should be "true"
+
+  Scenario: Verify context with array contains filter returns true
+    Given a context of type "Person" from json file "donald_trump.json"
+    When I evaluate context with JSON filter
+    """
+    {
+      "allOf": [
+        {
+          "left": "FirstName",
+          "operator": "Equals",
+          "right": "Donald"
+        },
+        {
+          "left": "Hobbies",
+          "operator": "Contains",
+          "right": "Golf"
+        },
+        {
+          "left": "Spouse.FirstName",
+          "operator": "NotEquals",
+          "right": "Ivanka"
+        }
+      ]
+    }
+    """
+    Then evaluation result should be "true"
+
+  Scenario: Verify context with indexed array filter returns true
+    Given a context of type "Person" from json file "donald_trump.json"
+    When I evaluate context with JSON filter
+    """
+    {
+      "allOf": [
+        {
+          "left": "FirstName",
+          "operator": "Equals",
+          "right": "Donald"
+        },
+        {
+          "left": "Hobbies",
+          "operator": "Contains",
+          "right": "Golf"
+        },
+        {
+          "left": "Spouse.FirstName",
+          "operator": "StartsWith",
+          "right": "Mel"
+        },
+        {
+          "left": "Children[0].FirstName",
+          "operator": "Equals",
+          "right": "Tiffany"
+        },
+        {
+          "left": "Titles[1]",
+          "operator": "NotEquals",
+          "right": "Scientist"
+        }
+      ]
+    }
+    """
+    Then evaluation result should be "true"
+
+  Scenario: Verify context with enum field in filter returns true
+    Given a context of type "Person" from json file "donald_trump.json"
+    When I evaluate context with JSON filter
+    """
+    {
+      "allOf": [
+        {
+          "left": "FirstName",
+          "operator": "Equals",
+          "right": "Donald"
+        },
+        {
+          "left": "Race",
+          "operator": "In",
+          "right": "Black,White"
+        }
+      ]
+    }
+    """
+    Then evaluation result should be "true"
+
+  Scenario: Verify context with date field filter returns true
+    Given a context of type "Person" from json file "donald_trump.json"
+    When I evaluate context with JSON filter
+    """
+    {
+      "allOf": [
+        {
+          "left": "FirstName",
+          "operator": "Equals",
+          "right": "Donald"
+        },
+        {
+          "left": "BirthDate",
+          "operator": "LessThan",
+          "right": "2020-04-07T15:47:54.760654-07:00"
+        }
+      ]
+    }
+    """
+    Then evaluation result should be "true"
+
+  Scenario: Verify context with expression on each side returns true
+    Given a context of type "Person" from json file "donald_trump.json"
+    When I evaluate context with JSON filter
+    """
+    {
+      "allOf": [
+        {
+          "left": "Children[0].LastName",
+          "operator": "Equals",
+          "right": "Children[1].LastName",
+          "rightSideIsExpression": true
+        },
+        {
+          "left": "Children.Count()",
+          "operator": "Equals",
+          "right": "2"
+        }
+      ]
+    }
+    """
+    Then evaluation result should be "true"
+
+  Scenario: Verify context with match operator returns true
+    Given a context of type "Person" from json file "donald_trump.json"
+    When I evaluate context with JSON filter
+    """
+    {
+      "allOf": [
+        {
+          "left": "FirstName",
+          "operator": "Matches",
+          "right": "^do[\\w]+d$"
+        }
+      ]
+    }
+    """
+    Then evaluation result should be "true"
+
+  Scenario: Verify context with match operator returns false
+    Given a context of type "Person" from json file "donald_trump.json"
+    When I evaluate context with JSON filter
+    """
+    {
+      "allOf": [
+        {
+          "left": "LastName",
+          "operator": "Matches",
+          "right": "^DO[\\w]+d$"
+        }
+      ]
+    }
+    """
+    Then evaluation result should be "false"
