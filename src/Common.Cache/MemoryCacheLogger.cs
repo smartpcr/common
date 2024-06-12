@@ -24,7 +24,7 @@ internal static partial class MemoryCacheLogger
         [CallerLineNumber] int lineNumber = 0);
 
     [LoggerMessage(
-        1,
+        2,
         LogLevel.Information,
         "set cache folder to: {cacheFolder}" +
         ", \n\tcalled from {memberName}, in file {callerFile}, at line {lineNumber}")]
@@ -36,7 +36,7 @@ internal static partial class MemoryCacheLogger
         [CallerLineNumber] int lineNumber = 0);
 
     [LoggerMessage(
-        2,
+        3,
         LogLevel.Debug,
         "reading cache from memory: key={key}" +
         ", \n\tcalled from {memberName}, in file {callerFile}, at line {lineNumber}")]
@@ -48,7 +48,7 @@ internal static partial class MemoryCacheLogger
         [CallerLineNumber] int lineNumber = 0);
 
     [LoggerMessage(
-        3,
+        4,
         LogLevel.Information,
         "read cache from memory: key={key}" +
         ", \n\tcalled from {memberName}, in file {callerFile}, at line {lineNumber}")]
@@ -60,7 +60,7 @@ internal static partial class MemoryCacheLogger
         [CallerLineNumber] int lineNumber = 0);
 
     [LoggerMessage(
-        4,
+        5,
         LogLevel.Information,
         "writing cache in memory: key={key}, length={length}" +
         ", \n\tcalled from {memberName}, in file {callerFile}, at line {lineNumber}")]
@@ -73,7 +73,7 @@ internal static partial class MemoryCacheLogger
         [CallerLineNumber] int lineNumber = 0);
 
     [LoggerMessage(
-        4,
+        6,
         LogLevel.Information,
         "cache set in memory: key={key}, length={length}" +
         ", \n\tcalled from {memberName}, in file {callerFile}, at line {lineNumber}")]
@@ -86,7 +86,7 @@ internal static partial class MemoryCacheLogger
         [CallerLineNumber] int lineNumber = 0);
 
     [LoggerMessage(
-        5,
+        7,
         LogLevel.Error,
         "failed set cache in memory: key={key}, valueLength={valueLength}, error={error}" +
         ", \n\tcalled from {memberName}, in file {callerFile}, at line {lineNumber}")]
@@ -100,7 +100,7 @@ internal static partial class MemoryCacheLogger
         [CallerLineNumber] int lineNumber = 0);
 
     [LoggerMessage(
-        6,
+        8,
         LogLevel.Debug,
         "removing cache from memory: key={key}" +
         ", \n\tcalled from {memberName}, in file {callerFile}, at line {lineNumber}")]
@@ -112,7 +112,7 @@ internal static partial class MemoryCacheLogger
         [CallerLineNumber] int lineNumber = 0);
 
     [LoggerMessage(
-        7,
+        9,
         LogLevel.Error,
         "Failed to remove cache from memory: key={key}, error={error}" +
         ", \n\tcalled from {memberName}, in file {callerFile}, at line {lineNumber}")]
@@ -125,7 +125,7 @@ internal static partial class MemoryCacheLogger
         [CallerLineNumber] int lineNumber = 0);
 
     [LoggerMessage(
-        8,
+        10,
         LogLevel.Debug,
         "reading cache from file: key={key}" +
         ", \n\tcalled from {memberName}, in file {callerFile}, at line {lineNumber}")]
@@ -137,7 +137,7 @@ internal static partial class MemoryCacheLogger
         [CallerLineNumber] int lineNumber = 0);
 
     [LoggerMessage(
-        9,
+        11,
         LogLevel.Error,
         "failed to read cache key={key}, error={error}" +
         ", \n\tcalled from {memberName}, in file {callerFile}, at line {lineNumber}")]
