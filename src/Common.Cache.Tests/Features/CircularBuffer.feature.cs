@@ -19,12 +19,14 @@ namespace Common.Cache.Tests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "1.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [Xunit.TraitAttribute("Category", "unit_test")]
     public partial class CircularBufferFeature : object, Xunit.IClassFixture<CircularBufferFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private static Reqnroll.ITestRunner testRunner;
         
-        private static string[] featureTags = ((string[])(null));
+        private static string[] featureTags = new string[] {
+                "unit_test"};
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
@@ -96,7 +98,7 @@ namespace Common.Cache.Tests.Features
                     "circular-buffer"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("circular buffer should not exceed its capacity", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 4
+#line 5
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -106,16 +108,16 @@ namespace Common.Cache.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 5
+#line 6
     await testRunner.GivenAsync("capacity of 100", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 6
+#line 7
     await testRunner.WhenAsync("add 110 message", ((string)(null)), ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 7
+#line 8
     await testRunner.ThenAsync("buffer count should be 100", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 8
+#line 9
     await testRunner.AndAsync("dropped message count should be 10", ((string)(null)), ((Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -135,7 +137,7 @@ namespace Common.Cache.Tests.Features
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("circular buffer keeps the most recent message and drops most old message when pro" +
                     "ducer rate is higher", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 11
+#line 12
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -145,7 +147,7 @@ namespace Common.Cache.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 12
+#line 13
     await testRunner.GivenAsync("capacity of 100", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
                 Reqnroll.Table table1 = new Reqnroll.Table(new string[] {
@@ -203,10 +205,10 @@ namespace Common.Cache.Tests.Features
                             "50",
                             "30",
                             "ten"});
-#line 13
+#line 14
     await testRunner.WhenAsync("perform the following iterations", ((string)(null)), table1, "When ");
 #line hidden
-#line 25
+#line 26
     await testRunner.ThenAsync("buffer count should be 100", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
                 Reqnroll.Table table2 = new Reqnroll.Table(new string[] {
@@ -218,7 +220,7 @@ namespace Common.Cache.Tests.Features
                 table2.AddRow(new string[] {
                             "nine",
                             "50"});
-#line 26
+#line 27
     await testRunner.AndAsync("the messages in buffer should be", ((string)(null)), table2, "And ");
 #line hidden
             }

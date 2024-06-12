@@ -19,12 +19,14 @@ namespace Rule.Expressions.Tests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "1.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [Xunit.TraitAttribute("Category", "unit_test")]
     public partial class FunctionEvaluationFeature : object, Xunit.IClassFixture<FunctionEvaluationFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private static Reqnroll.ITestRunner testRunner;
         
-        private static string[] featureTags = ((string[])(null));
+        private static string[] featureTags = new string[] {
+                "unit_test"};
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
@@ -39,8 +41,8 @@ namespace Rule.Expressions.Tests.Features
         public static async System.Threading.Tasks.Task FeatureSetupAsync()
         {
             testRunner = Reqnroll.TestRunnerManager.GetTestRunnerForAssembly(null, Reqnroll.xUnit.ReqnrollPlugin.XUnitParallelWorkerTracker.Instance.GetWorkerId());
-            Reqnroll.FeatureInfo featureInfo = new Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Function Evaluation", "  In order to use function in rule expression\r\n  As a developer\r\n  I want to be a" +
-                    "ble to invoke built-in functions against a strongly typed object", ProgrammingLanguage.CSharp, featureTags);
+            Reqnroll.FeatureInfo featureInfo = new Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Function Evaluation", "In order to use function in rule expression\r\nAs a developer\r\nI want to be able to" +
+                    " invoke built-in functions against a strongly typed object", ProgrammingLanguage.CSharp, featureTags);
             await testRunner.OnFeatureStartAsync(featureInfo);
         }
         
@@ -95,8 +97,8 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Check enum field is null", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 6
-this.ScenarioInitialize(scenarioInfo);
+#line 7
+  this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
             {
@@ -105,15 +107,15 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 7
-  await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
-#line hidden
 #line 8
-  await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Gender\",\r\n      \"operator\": \"IsNull\"\r\n    " +
+    await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 9
+    await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Gender\",\r\n      \"operator\": \"IsNull\"\r\n    " +
                         "}\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 19
-  await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
+#line 20
+    await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -127,8 +129,8 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Check enum field is not null", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 21
-this.ScenarioInitialize(scenarioInfo);
+#line 22
+  this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
             {
@@ -137,15 +139,15 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 22
-  await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
-#line hidden
 #line 23
-  await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Gender\",\r\n      \"operator\": \"NotIsNull\",\r\n" +
+    await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 24
+    await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Gender\",\r\n      \"operator\": \"NotIsNull\",\r\n" +
                         "    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 34
-  await testRunner.ThenAsync("evaluation result should be \"false\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
+#line 35
+    await testRunner.ThenAsync("evaluation result should be \"false\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -159,7 +161,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Check date field is not null", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 36
+#line 37
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -169,15 +171,15 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 37
+#line 38
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 38
+#line 39
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"BirthDate\",\r\n      \"operator\": \"NotIsNull\"" +
                         "\r\n    },\r\n    {\r\n      \"left\": \"BirthDate\",\r\n      \"operator\": \"GreaterThan\",\r\n " +
                         "     \"right\": \"11/22/1943 10:52:28 PM\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 54
+#line 55
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -192,8 +194,8 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Check date field is null", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 56
-this.ScenarioInitialize(scenarioInfo);
+#line 57
+  this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
             {
@@ -202,14 +204,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 57
+#line 58
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 58
+#line 59
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Spouse.BirthDate\",\r\n      \"operator\": \"Not" +
                         "IsNull\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 69
+#line 70
     await testRunner.ThenAsync("evaluation result should be \"false\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -224,7 +226,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("get count of object array", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 71
+#line 72
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -234,14 +236,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 72
+#line 73
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 73
+#line 74
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Count()\",\r\n      \"operator\": \"Equ" +
                         "als\",\r\n      \"right\": \"2\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 85
+#line 86
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -256,7 +258,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("get count of string array", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 87
+#line 88
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -266,14 +268,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 88
+#line 89
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 89
+#line 90
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Titles.Count()\",\r\n      \"operator\": \"Equal" +
                         "s\",\r\n      \"right\": \"2\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 101
+#line 102
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -288,7 +290,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("get count of string list", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 103
+#line 104
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -298,14 +300,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 104
+#line 105
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 105
+#line 106
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Hobbies.Count()\",\r\n      \"operator\": \"Equa" +
                         "ls\",\r\n      \"right\": \"2\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 117
+#line 118
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -320,7 +322,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("get distinct count of string list", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 119
+#line 120
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -330,14 +332,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 120
+#line 121
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 121
+#line 122
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Titles.DistinctCount()\",\r\n      \"operator\"" +
                         ": \"Equals\",\r\n      \"right\": \"2\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 133
+#line 134
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -352,7 +354,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("select from object array", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 135
+#line 136
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -362,14 +364,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 136
+#line 137
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 137
+#line 138
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Select(FirstName)\",\r\n      \"opera" +
                         "tor\": \"AllIn\",\r\n      \"right\": \"Tiffany, Barron\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 149
+#line 150
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -384,7 +386,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("select many from object array", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 151
+#line 152
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -394,14 +396,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 152
+#line 153
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 153
+#line 154
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.SelectMany(Hobbies)\",\r\n      \"ope" +
                         "rator\": \"AllIn\",\r\n      \"right\": \"Arts, Music, Dancing, Soccer\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 165
+#line 166
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -416,7 +418,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("summarize from object array", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 167
+#line 168
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -426,14 +428,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 168
+#line 169
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 169
+#line 170
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Select(Age).Sum()\",\r\n      \"opera" +
                         "tor\": \"Equals\",\r\n      \"right\": \"40\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 181
+#line 182
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -448,7 +450,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("summarize field from object array", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 183
+#line 184
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -458,14 +460,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 184
+#line 185
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 185
+#line 186
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Sum(Age)\",\r\n      \"operator\": \"Eq" +
                         "uals\",\r\n      \"right\": \"40\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 197
+#line 198
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -480,7 +482,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("get average from array", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 199
+#line 200
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -490,14 +492,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 200
+#line 201
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 201
+#line 202
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Select(Age).Average()\",\r\n      \"o" +
                         "perator\": \"Equals\",\r\n      \"right\": \"20\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 213
+#line 214
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -512,7 +514,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("get average with arg from object array", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 215
+#line 216
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -522,14 +524,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 216
+#line 217
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 217
+#line 218
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Average(Age)\",\r\n      \"operator\":" +
                         " \"Equals\",\r\n      \"right\": \"20\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 229
+#line 230
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -544,7 +546,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("get max from array", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 231
+#line 232
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -554,14 +556,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 232
+#line 233
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 233
+#line 234
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Select(Age).Max()\",\r\n      \"opera" +
                         "tor\": \"Equals\",\r\n      \"right\": \"26\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 245
+#line 246
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -576,7 +578,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("get max with arg from object array", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 247
+#line 248
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -586,14 +588,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 248
+#line 249
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 249
+#line 250
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Max(Age)\",\r\n      \"operator\": \"Eq" +
                         "uals\",\r\n      \"right\": \"26\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 261
+#line 262
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -608,7 +610,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("get min from array", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 263
+#line 264
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -618,14 +620,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 264
+#line 265
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 265
+#line 266
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Select(Age).Min()\",\r\n      \"opera" +
                         "tor\": \"Equals\",\r\n      \"right\": \"14\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 277
+#line 278
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -640,7 +642,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("get min with arg from object array", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 279
+#line 280
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -650,14 +652,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 280
+#line 281
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 281
+#line 282
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Min(Age)\",\r\n      \"operator\": \"Eq" +
                         "uals\",\r\n      \"right\": \"14\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 293
+#line 294
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -672,7 +674,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("use expression on both sides", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 295
+#line 296
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -682,15 +684,15 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 296
+#line 297
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 297
+#line 298
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Select(Age).Sum()\",\r\n      \"opera" +
                         "tor\": \"LessThan\",\r\n      \"right\": \"Age\",\r\n      \"rightSideIsExpression\": true\r\n " +
                         "   }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 310
+#line 311
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -705,7 +707,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("select nested field", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 312
+#line 313
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -715,14 +717,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 313
+#line 314
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 314
+#line 315
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Select(FirstName)\",\r\n      \"opera" +
                         "tor\": \"AllIn\",\r\n      \"right\": \"Tiffany,Barron\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 326
+#line 327
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -737,7 +739,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("select nested field with function", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 328
+#line 329
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -747,15 +749,15 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 329
+#line 330
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 330
+#line 331
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Select(Hobbies.OrderByDesc().Firs" +
                         "t())\",\r\n      \"operator\": \"AllIn\",\r\n      \"right\": \"Music,Soccer\"\r\n    }\r\n  ]\r\n}" +
                         "", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 342
+#line 343
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -770,7 +772,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("invoke function ago", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 344
+#line 345
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -780,15 +782,15 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 345
+#line 346
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 346
+#line 347
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"BirthDate\",\r\n      \"operator\": \"GreaterTha" +
                         "n\",\r\n      \"right\": \"Ago(50000d)\",\r\n      \"rightSideIsExpression\": true\r\n    }\r\n" +
                         "  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 359
+#line 360
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -803,7 +805,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("invoke function where", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 361
+#line 362
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -813,14 +815,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 362
+#line 363
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 363
+#line 364
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Where(FirstName, Equals, Tiffany)" +
                         ".Count()\",\r\n      \"operator\": \"Equals\",\r\n      \"right\": \"1\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 375
+#line 376
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -835,7 +837,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("invoke function where with contains", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 377
+#line 378
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -845,15 +847,15 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 378
+#line 379
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 379
+#line 380
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Where(LastName, contains, \'ump\')." +
                         "Select(FirstName)\",\r\n      \"operator\": \"AllIn\",\r\n      \"right\": \"Tiffany,Barron\"" +
                         "\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 391
+#line 392
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -868,7 +870,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("invoke function first with arg", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 393
+#line 394
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -878,14 +880,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 394
+#line 395
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 395
+#line 396
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.First(FirstName, Equals, Tiffany)" +
                         ".Age\",\r\n      \"operator\": \"GreaterThan\",\r\n      \"right\": \"25\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 407
+#line 408
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -900,7 +902,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("invoke function first without arg", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 409
+#line 410
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -910,14 +912,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 410
+#line 411
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 411
+#line 412
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Hobbies.First()\",\r\n      \"operator\": \"Equa" +
                         "ls\",\r\n      \"right\": \"Golf\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 423
+#line 424
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -932,7 +934,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("invoke function last with arg", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 425
+#line 426
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -942,14 +944,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 426
+#line 427
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 427
+#line 428
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Last(FirstName, Equals, Tiffany)." +
                         "Age\",\r\n      \"operator\": \"GreaterThan\",\r\n      \"right\": \"14\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 439
+#line 440
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -964,7 +966,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("invoke function last without arg", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 441
+#line 442
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -974,14 +976,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 442
+#line 443
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 443
+#line 444
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Hobbies.Last()\",\r\n      \"operator\": \"In\",\r" +
                         "\n      \"right\": \"Golf,Tweeter\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 455
+#line 456
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -996,7 +998,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("invoke function order by", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 457
+#line 458
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1006,14 +1008,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 458
+#line 459
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 459
+#line 460
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.OrderBy(FirstName).First().FirstN" +
                         "ame\",\r\n      \"operator\": \"Equals\",\r\n      \"right\": \"Barron\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 471
+#line 472
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1028,7 +1030,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("invoke function order by desc", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 473
+#line 474
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1038,14 +1040,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 474
+#line 475
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 475
+#line 476
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.OrderByDesc(FirstName).First().Fi" +
                         "rstName\",\r\n      \"operator\": \"Equals\",\r\n      \"right\": \"Tiffany\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 487
+#line 488
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1060,7 +1062,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("invoke macro", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 489
+#line 490
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1070,14 +1072,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 490
+#line 491
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 491
+#line 492
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"IsPresident()\",\r\n      \"operator\": \"Equals" +
                         "\",\r\n      \"right\": \"true\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 503
+#line 504
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1092,7 +1094,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("invoke macro with args", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 505
+#line 506
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1102,14 +1104,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 506
+#line 507
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 507
+#line 508
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"IsAdult(18)\",\r\n      \"operator\": \"Equals\"," +
                         "\r\n      \"right\": \"true\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 519
+#line 520
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1124,7 +1126,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("invoke sum on empty collection", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 521
+#line 522
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1134,14 +1136,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 522
+#line 523
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 523
+#line 524
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Where(Age,lessThan,0).Select(Age)" +
                         ".Sum()\",\r\n      \"operator\": \"Equals\",\r\n      \"right\": \"0\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 535
+#line 536
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1156,7 +1158,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("invoke max on empty collection", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 537
+#line 538
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1166,14 +1168,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 538
+#line 539
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 539
+#line 540
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Where(FirstName,equals,helloworld" +
                         ").Max(Age)\",\r\n      \"operator\": \"Equals\",\r\n      \"right\": \"0\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 551
+#line 552
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1188,7 +1190,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("invoke count on empty collection", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 553
+#line 554
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1198,14 +1200,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 554
+#line 555
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 555
+#line 556
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"Children.Where(Age,lessThan,0).Count()\",\r\n" +
                         "      \"operator\": \"Equals\",\r\n      \"right\": \"0\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 567
+#line 568
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }

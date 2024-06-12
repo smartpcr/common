@@ -19,12 +19,14 @@ namespace Rule.Expressions.Tests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "1.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [Xunit.TraitAttribute("Category", "unit_test")]
     public partial class RuleEvaluatorFeature : object, Xunit.IClassFixture<RuleEvaluatorFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private static Reqnroll.ITestRunner testRunner;
         
-        private static string[] featureTags = ((string[])(null));
+        private static string[] featureTags = new string[] {
+                "unit_test"};
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
@@ -98,7 +100,7 @@ namespace Rule.Expressions.Tests.Features
                     "person"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("can evaluate simple property path", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 5
+#line 6
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -116,7 +118,7 @@ namespace Rule.Expressions.Tests.Features
                             "John",
                             "Doe",
                             "36"});
-#line 6
+#line 7
     await testRunner.GivenAsync("a person", ((string)(null)), table12, "Given ");
 #line hidden
                 Reqnroll.Table table13 = new Reqnroll.Table(new string[] {
@@ -127,7 +129,7 @@ namespace Rule.Expressions.Tests.Features
                             "Jen",
                             "Bush",
                             "30"});
-#line 9
+#line 10
     await testRunner.AndAsync("his wife", ((string)(null)), table13, "And ");
 #line hidden
                 Reqnroll.Table table14 = new Reqnroll.Table(new string[] {
@@ -142,13 +144,13 @@ namespace Rule.Expressions.Tests.Features
                             "Claire",
                             "Bush",
                             "8"});
-#line 12
+#line 13
     await testRunner.AndAsync("their children", ((string)(null)), table14, "And ");
 #line hidden
-#line 16
+#line 17
     await testRunner.WhenAsync("evaluate int value with following property path \"Age\"", ((string)(null)), ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 17
+#line 18
     await testRunner.ThenAsync("the result should be 36", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
                 Reqnroll.Table table15 = new Reqnroll.Table(new string[] {
@@ -159,7 +161,7 @@ namespace Rule.Expressions.Tests.Features
                             "John",
                             "Doe",
                             "36"});
-#line 18
+#line 19
     await testRunner.AndAsync("person should be", ((string)(null)), table15, "And ");
 #line hidden
             }
@@ -178,7 +180,7 @@ namespace Rule.Expressions.Tests.Features
                     "person"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("can evaluate compound property path", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 24
+#line 25
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -196,7 +198,7 @@ namespace Rule.Expressions.Tests.Features
                             "John",
                             "Doe",
                             "36"});
-#line 25
+#line 26
     await testRunner.GivenAsync("a person", ((string)(null)), table16, "Given ");
 #line hidden
                 Reqnroll.Table table17 = new Reqnroll.Table(new string[] {
@@ -207,7 +209,7 @@ namespace Rule.Expressions.Tests.Features
                             "Jen",
                             "Bush",
                             "30"});
-#line 28
+#line 29
     await testRunner.AndAsync("his wife", ((string)(null)), table17, "And ");
 #line hidden
                 Reqnroll.Table table18 = new Reqnroll.Table(new string[] {
@@ -222,13 +224,13 @@ namespace Rule.Expressions.Tests.Features
                             "Claire",
                             "Bush",
                             "8"});
-#line 31
+#line 32
     await testRunner.AndAsync("their children", ((string)(null)), table18, "And ");
 #line hidden
-#line 35
+#line 36
     await testRunner.WhenAsync("evaluate int value with following property path \"Spouse.Age\"", ((string)(null)), ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 36
+#line 37
     await testRunner.ThenAsync("the result should be 30", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -247,7 +249,7 @@ namespace Rule.Expressions.Tests.Features
                     "person"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("can evaluate array index property path", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 40
+#line 41
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -265,7 +267,7 @@ namespace Rule.Expressions.Tests.Features
                             "John",
                             "Doe",
                             "36"});
-#line 41
+#line 42
     await testRunner.GivenAsync("a person", ((string)(null)), table19, "Given ");
 #line hidden
                 Reqnroll.Table table20 = new Reqnroll.Table(new string[] {
@@ -276,7 +278,7 @@ namespace Rule.Expressions.Tests.Features
                             "Jen",
                             "Bush",
                             "30"});
-#line 44
+#line 45
     await testRunner.AndAsync("his wife", ((string)(null)), table20, "And ");
 #line hidden
                 Reqnroll.Table table21 = new Reqnroll.Table(new string[] {
@@ -291,13 +293,13 @@ namespace Rule.Expressions.Tests.Features
                             "Claire",
                             "Bush",
                             "8"});
-#line 47
+#line 48
     await testRunner.AndAsync("their children", ((string)(null)), table21, "And ");
 #line hidden
-#line 51
+#line 52
     await testRunner.WhenAsync("evaluate int value with following property path \"Children[0].Age\"", ((string)(null)), ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 52
+#line 53
     await testRunner.ThenAsync("the result should be 18", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }

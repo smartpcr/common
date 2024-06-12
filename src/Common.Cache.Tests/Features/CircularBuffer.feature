@@ -1,3 +1,4 @@
+@unit_test
 Feature: CircularBuffer
 
   @circular-buffer

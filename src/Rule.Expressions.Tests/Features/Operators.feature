@@ -1,3 +1,4 @@
+@unit_test
 Feature: Operator Evaluation
   In order to evaluate rules
   As a developer

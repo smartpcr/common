@@ -41,10 +41,18 @@ jobs:
       run: dotnet build --configuration ${{ matrix.configuration }}
       env:
         Configuration: ${{ matrix.configuration }}
-#    - name: Test
-#      run: dotnet test --configuration ${{ matrix.configuration }} --filter Category=unit_test
-#      env:
-#        Configuration: ${{ matrix.configuration }}
+    - name: Test
+      if: matrix.configuration == 'Release' && matrix.os == 'windows-latest'
+      run: dotnet test --configuration ${{ matrix.configuration }} --filter Category=unit_test --no-build --collect:"XPlat Code Coverage" --results-directory TestResults /p:CoverletOutputFormat=cobertura
+      env:
+        Configuration: ${{ matrix.configuration }}
+    - name: Publish code coverage
+      uses: codecov/codecov-action@v2
+      with:
+        files: ./TestResults/**/*.xml  # Adjust according to your coverage file path
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
     - name: Package
       if: matrix.configuration == 'Release' && matrix.os == 'windows-latest'
       run: dotnet pack --configuration ${{ matrix.configuration }} -o ./packages

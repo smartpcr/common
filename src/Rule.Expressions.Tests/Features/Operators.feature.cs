@@ -19,12 +19,14 @@ namespace Rule.Expressions.Tests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "1.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [Xunit.TraitAttribute("Category", "unit_test")]
     public partial class OperatorEvaluationFeature : object, Xunit.IClassFixture<OperatorEvaluationFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private static Reqnroll.ITestRunner testRunner;
         
-        private static string[] featureTags = ((string[])(null));
+        private static string[] featureTags = new string[] {
+                "unit_test"};
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
@@ -95,7 +97,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with equal filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 6
+#line 7
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -105,7 +107,7 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 7
+#line 8
     await testRunner.GivenAsync("a context of type \"Location\" from json file \"redmond.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
                 Reqnroll.Table table1 = new Reqnroll.Table(new string[] {
@@ -116,10 +118,10 @@ namespace Rule.Expressions.Tests.Features
                             "City",
                             "Equals",
                             "Redmond"});
-#line 8
+#line 9
     await testRunner.WhenAsync("I evaluate the rule expression", ((string)(null)), table1, "When ");
 #line hidden
-#line 11
+#line 12
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -134,7 +136,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with number filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 13
+#line 14
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -144,7 +146,7 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 14
+#line 15
     await testRunner.GivenAsync("a context of type \"Location\" from json file \"redmond.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
                 Reqnroll.Table table2 = new Reqnroll.Table(new string[] {
@@ -155,10 +157,10 @@ namespace Rule.Expressions.Tests.Features
                             "Population",
                             "GreaterThan",
                             "100000"});
-#line 15
+#line 16
     await testRunner.WhenAsync("I evaluate the rule expression", ((string)(null)), table2, "When ");
 #line hidden
-#line 18
+#line 19
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -173,7 +175,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with number filter returns false", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 20
+#line 21
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -183,7 +185,7 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 21
+#line 22
     await testRunner.GivenAsync("a context of type \"Location\" from json file \"redmond.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
                 Reqnroll.Table table3 = new Reqnroll.Table(new string[] {
@@ -194,10 +196,10 @@ namespace Rule.Expressions.Tests.Features
                             "AvgIncome",
                             "LessOrEqual",
                             "100000"});
-#line 22
+#line 23
     await testRunner.WhenAsync("I evaluate the rule expression", ((string)(null)), table3, "When ");
 #line hidden
-#line 25
+#line 26
     await testRunner.ThenAsync("evaluation result should be \"false\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -212,7 +214,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with in filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 27
+#line 28
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -222,7 +224,7 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 28
+#line 29
     await testRunner.GivenAsync("a context of type \"Location\" from json file \"redmond.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
                 Reqnroll.Table table4 = new Reqnroll.Table(new string[] {
@@ -233,10 +235,10 @@ namespace Rule.Expressions.Tests.Features
                             "State",
                             "In",
                             "CA,AZ,WA"});
-#line 29
+#line 30
     await testRunner.WhenAsync("I evaluate the rule expression", ((string)(null)), table4, "When ");
 #line hidden
-#line 32
+#line 33
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -251,7 +253,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with in filter trim white spaces returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 34
+#line 35
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -261,7 +263,7 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 35
+#line 36
     await testRunner.GivenAsync("a context of type \"Location\" from json file \"redmond.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
                 Reqnroll.Table table5 = new Reqnroll.Table(new string[] {
@@ -272,10 +274,10 @@ namespace Rule.Expressions.Tests.Features
                             "State",
                             "In",
                             "CA, AZ, WA, , DC"});
-#line 36
+#line 37
     await testRunner.WhenAsync("I evaluate the rule expression", ((string)(null)), table5, "When ");
 #line hidden
-#line 39
+#line 40
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -290,7 +292,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with in filter returns false", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 41
+#line 42
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -300,7 +302,7 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 42
+#line 43
     await testRunner.GivenAsync("a context of type \"Location\" from json file \"redmond.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
                 Reqnroll.Table table6 = new Reqnroll.Table(new string[] {
@@ -311,10 +313,10 @@ namespace Rule.Expressions.Tests.Features
                             "State",
                             "In",
                             "CA, AZ"});
-#line 43
+#line 44
     await testRunner.WhenAsync("I evaluate the rule expression", ((string)(null)), table6, "When ");
 #line hidden
-#line 46
+#line 47
     await testRunner.ThenAsync("evaluation result should be \"false\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -329,7 +331,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with allin filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 48
+#line 49
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -339,7 +341,7 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 49
+#line 50
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
                 Reqnroll.Table table7 = new Reqnroll.Table(new string[] {
@@ -350,10 +352,10 @@ namespace Rule.Expressions.Tests.Features
                             "Hobbies",
                             "AllIn",
                             "Golf, Tweeter"});
-#line 50
+#line 51
     await testRunner.WhenAsync("I evaluate the rule expression", ((string)(null)), table7, "When ");
 #line hidden
-#line 53
+#line 54
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -368,7 +370,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with null field filter returns false", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 55
+#line 56
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -378,7 +380,7 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 56
+#line 57
     await testRunner.GivenAsync("a context of type \"Location\" from json file \"redmond.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
                 Reqnroll.Table table8 = new Reqnroll.Table(new string[] {
@@ -389,10 +391,10 @@ namespace Rule.Expressions.Tests.Features
                             "Street",
                             "Contains",
                             "Main"});
-#line 57
+#line 58
     await testRunner.WhenAsync("I evaluate the rule expression", ((string)(null)), table8, "When ");
 #line hidden
-#line 60
+#line 61
     await testRunner.ThenAsync("evaluation result should be \"false\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -407,7 +409,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with contains filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 62
+#line 63
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -417,7 +419,7 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 63
+#line 64
     await testRunner.GivenAsync("a context of type \"Location\" from json file \"redmond.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
                 Reqnroll.Table table9 = new Reqnroll.Table(new string[] {
@@ -428,10 +430,10 @@ namespace Rule.Expressions.Tests.Features
                             "City",
                             "Contains",
                             "mond"});
-#line 64
+#line 65
     await testRunner.WhenAsync("I evaluate the rule expression", ((string)(null)), table9, "When ");
 #line hidden
-#line 67
+#line 68
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -446,7 +448,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with startswith filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 69
+#line 70
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -456,7 +458,7 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 70
+#line 71
     await testRunner.GivenAsync("a context of type \"Location\" from json file \"redmond.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
                 Reqnroll.Table table10 = new Reqnroll.Table(new string[] {
@@ -467,10 +469,10 @@ namespace Rule.Expressions.Tests.Features
                             "City",
                             "Contains",
                             "Red"});
-#line 71
+#line 72
     await testRunner.WhenAsync("I evaluate the rule expression", ((string)(null)), table10, "When ");
 #line hidden
-#line 74
+#line 75
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -485,7 +487,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with composite filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 76
+#line 77
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -495,10 +497,10 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 77
+#line 78
     await testRunner.GivenAsync("a context of type \"Location\" from json file \"redmond.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 78
+#line 79
     await testRunner.WhenAsync("I evaluate context with JSON filter", @"{
   ""allOf"": [
     {
@@ -521,7 +523,7 @@ namespace Rule.Expressions.Tests.Features
   ]
 }", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 102
+#line 103
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -536,7 +538,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with nested filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 104
+#line 105
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -546,10 +548,10 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 105
+#line 106
     await testRunner.GivenAsync("an array of type \"Person\" from json file \"big_family.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 106
+#line 107
     await testRunner.WhenAsync("I evaluate context with JSON filter", @"{
   ""allOf"": [
     {
@@ -625,7 +627,7 @@ namespace Rule.Expressions.Tests.Features
                             "William"});
                 table11.AddRow(new string[] {
                             "David"});
-#line 171
+#line 172
     await testRunner.ThenAsync("collection evaluation result should be", ((string)(null)), table11, "Then ");
 #line hidden
             }
@@ -640,7 +642,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with nested properties returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 179
+#line 180
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -650,10 +652,10 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 180
+#line 181
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 181
+#line 182
     await testRunner.WhenAsync("I evaluate context with JSON filter", @"{
   ""allOf"": [
     {
@@ -674,7 +676,7 @@ namespace Rule.Expressions.Tests.Features
   ]
 }", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 203
+#line 204
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -689,7 +691,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with array contains filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 205
+#line 206
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -699,10 +701,10 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 206
+#line 207
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 207
+#line 208
     await testRunner.WhenAsync("I evaluate context with JSON filter", @"{
   ""allOf"": [
     {
@@ -723,7 +725,7 @@ namespace Rule.Expressions.Tests.Features
   ]
 }", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 229
+#line 230
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -738,7 +740,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with indexed array filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 231
+#line 232
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -748,10 +750,10 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 232
+#line 233
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 233
+#line 234
     await testRunner.WhenAsync("I evaluate context with JSON filter", @"{
   ""allOf"": [
     {
@@ -782,7 +784,7 @@ namespace Rule.Expressions.Tests.Features
   ]
 }", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 265
+#line 266
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -797,7 +799,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with enum field in filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 267
+#line 268
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -807,15 +809,15 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 268
+#line 269
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 269
+#line 270
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"FirstName\",\r\n      \"operator\": \"Equals\",\r\n" +
                         "      \"right\": \"Donald\"\r\n    },\r\n    {\r\n      \"left\": \"Race\",\r\n      \"operator\":" +
                         " \"In\",\r\n      \"right\": \"Black,White\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 286
+#line 287
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -830,7 +832,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with date field filter returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 288
+#line 289
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -840,16 +842,16 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 289
+#line 290
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 290
+#line 291
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"FirstName\",\r\n      \"operator\": \"Equals\",\r\n" +
                         "      \"right\": \"Donald\"\r\n    },\r\n    {\r\n      \"left\": \"BirthDate\",\r\n      \"opera" +
                         "tor\": \"LessThan\",\r\n      \"right\": \"2020-04-07T15:47:54.760654-07:00\"\r\n    }\r\n  ]" +
                         "\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 307
+#line 308
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -864,7 +866,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with expression on each side returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 309
+#line 310
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -874,10 +876,10 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 310
+#line 311
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 311
+#line 312
     await testRunner.WhenAsync("I evaluate context with JSON filter", @"{
   ""allOf"": [
     {
@@ -894,7 +896,7 @@ namespace Rule.Expressions.Tests.Features
   ]
 }", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 329
+#line 330
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -909,7 +911,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with match operator returns true", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 331
+#line 332
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -919,14 +921,14 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 332
+#line 333
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 333
+#line 334
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"FirstName\",\r\n      \"operator\": \"Matches\",\r" +
                         "\n      \"right\": \"^do[\\\\w]+d$\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 345
+#line 346
     await testRunner.ThenAsync("evaluation result should be \"true\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -941,7 +943,7 @@ namespace Rule.Expressions.Tests.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("Verify context with match operator returns false", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 347
+#line 348
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -951,14 +953,14 @@ namespace Rule.Expressions.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 348
+#line 349
     await testRunner.GivenAsync("a context of type \"Person\" from json file \"donald_trump.json\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 349
+#line 350
     await testRunner.WhenAsync("I evaluate context with JSON filter", "{\r\n  \"allOf\": [\r\n    {\r\n      \"left\": \"LastName\",\r\n      \"operator\": \"Matches\",\r\n" +
                         "      \"right\": \"^DO[\\\\w]+d$\"\r\n    }\r\n  ]\r\n}", ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 361
+#line 362
     await testRunner.ThenAsync("evaluation result should be \"false\"", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }

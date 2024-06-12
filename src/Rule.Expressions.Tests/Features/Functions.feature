@@ -1,37 +1,38 @@
+@unit_test
 Feature: Function Evaluation
-  In order to use function in rule expression
-  As a developer
-  I want to be able to invoke built-in functions against a strongly typed object
+In order to use function in rule expression
+As a developer
+I want to be able to invoke built-in functions against a strongly typed object
 
-Scenario: Check enum field is null
-  Given a context of type "Person" from json file "donald_trump.json"
-  When I evaluate context with JSON filter
-  """
-  {
-    "allOf": [
-      {
-        "left": "Gender",
-        "operator": "IsNull"
-      }
-    ]
-  }
-  """
-  Then evaluation result should be "true"
+  Scenario: Check enum field is null
+    Given a context of type "Person" from json file "donald_trump.json"
+    When I evaluate context with JSON filter
+    """
+    {
+      "allOf": [
+        {
+          "left": "Gender",
+          "operator": "IsNull"
+        }
+      ]
+    }
+    """
+    Then evaluation result should be "true"
 
-Scenario: Check enum field is not null
-  Given a context of type "Person" from json file "donald_trump.json"
-  When I evaluate context with JSON filter
-  """
-  {
-    "allOf": [
-      {
-        "left": "Gender",
-        "operator": "NotIsNull",
-      }
-    ]
-  }
-  """
-  Then evaluation result should be "false"
+  Scenario: Check enum field is not null
+    Given a context of type "Person" from json file "donald_trump.json"
+    When I evaluate context with JSON filter
+    """
+    {
+      "allOf": [
+        {
+          "left": "Gender",
+          "operator": "NotIsNull",
+        }
+      ]
+    }
+    """
+    Then evaluation result should be "false"
 
   Scenario: Check date field is not null
     Given a context of type "Person" from json file "donald_trump.json"
@@ -53,7 +54,7 @@ Scenario: Check enum field is not null
     """
     Then evaluation result should be "true"
 
-Scenario: Check date field is null
+  Scenario: Check date field is null
     Given a context of type "Person" from json file "donald_trump.json"
     When I evaluate context with JSON filter
     """
