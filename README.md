@@ -1,3 +1,5 @@
+[![cross-platform build](https://github.com/smartpcr/common/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/smartpcr/common/actions/workflows/build.yml)
+
 ### Authentication
 
 #### Features
