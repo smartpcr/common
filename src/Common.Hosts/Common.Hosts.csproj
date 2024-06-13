@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common.Config\Common.Config.csproj" />
+    <ProjectReference Include="..\Common.KeyVault\Common.KeyVault.csproj" />
+    <ProjectReference Include="..\Common.Monitoring\Common.Monitoring.csproj" />
+    <ProjectReference Include="..\Common.Settings\Common.Settings.csproj" />
+  </ItemGroup>
+</Project>

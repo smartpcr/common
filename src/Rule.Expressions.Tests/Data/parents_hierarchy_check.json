@@ -1,0 +1,19 @@
+﻿{
+  "contextType": "PowerDevice",
+  "contextProvider": null,
+  "whenExpression": "{\"allOf\":[{\"left\":\"AllParents.Select(Hierarchy)\",\"operator\":\"notIsEmpty\",\"right\":\"True\",\"rightSideIsExpression\":false,\"operatorArgs\":null},{\"left\":\"Children\",\"operator\":\"isEmpty\",\"right\":\"True\",\"rightSideIsExpression\":false,\"operatorArgs\":null}]}",
+  "ifExpression": "{\"allOf\":[{\"left\":\"AllParents.Select(Hierarchy)\",\"operator\":\"anyIn\",\"right\":\"UTS-Campus,UTS-Facility,GEN\",\"rightSideIsExpression\":false,\"operatorArgs\":null}]}",
+  "trueScore": 1,
+  "falseScore": 0,
+  "weight": 1,
+  "name": "parents hierarchy check",
+  "ruleSetId": "c87c2442-a4d3-45bd-95c0-95d44cc412c7",
+  "deviceTypes": [],
+  "hierarchies": [],
+  "dataCenters": [],
+  "deviceStates": [],
+  "createdBy": "Xiaodong Li",
+  "creationTime": "2020-05-18T17:54:37.533Z",
+  "modifiedBy": "Xiaodong Li",
+  "modificationTime": "2020-06-15T07:58:06.219Z"
+}

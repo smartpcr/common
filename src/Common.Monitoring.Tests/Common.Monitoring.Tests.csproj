@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common.Config\Common.Config.csproj" />
+    <ProjectReference Include="..\Common.Monitoring\Common.Monitoring.csproj" />
+    <ProjectReference Include="..\Common.Settings\Common.Settings.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Common.Config.Tests\Hooks\EnvironmentHook.cs">
+      <Link>Hooks\EnvironmentHook.cs</Link>
+    </Compile>
+    <Compile Include="..\Common.Config.Tests\Hooks\ScenarioContextExtension.cs">
+      <Link>Hooks\ScenarioContextExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Common.Config.Tests\Mocks\MockedLogger.cs">
+      <Link>Mocks\MockedLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\Common.Config.Tests\Mocks\MockedLoggerFactory.cs">
+      <Link>Mocks\MockedLoggerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Common.Config.Tests\Mocks\MockedLogger_T.cs">
+      <Link>Mocks\MockedLogger_T.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Features\MetricsTest.feature" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,20 @@
+﻿{
+  "contextType": "PowerDevice",
+  "contextProvider": null,
+  "whenExpression": "{\n            \"allOf\": [{\n            \"left\": \"ReadingStats.Where(DataPoint, Equals, 'Pwr.kW tot')\",\n            \"operator\": \"notIsEmpty\",\n            \"right\": \"true\",\n            \"rightSideIsExpression\": false,\n            \"operatorArgs\": null\n        },{\n            \"left\": \"Children.SelectMany(ReadingStats).Where(DataPoint, Equals, 'Pwr.kW tot')\",\n            \"operator\": \"notIsEmpty\",\n            \"right\": \"true\",\n            \"rightSideIsExpression\": false,\n            \"operatorArgs\": null\n        }]\n        }",
+  "ifExpression": "{\n            \"allOf\": [{\n            \"left\": \"ReadingStats.Where(DataPoint, Equals, 'Pwr.kW tot').Sum(Avg)\",\n            \"operator\": \"diffWithinPct\",\n            \"right\": \"Children.SelectMany(ReadingStats).Where(DataPoint, Equals, 'Pwr.kW tot').Sum(Avg)\",\n            \"rightSideIsExpression\": true,\n            \"operatorArgs\": [\"10\"]\n        }]\n        }",
+  "trueScore": 1,
+  "falseScore": 0,
+  "weight": 1,
+  "name": "Power consumption check",
+  "ruleSetId": "c87c2442-a4d3-45bd-95c0-95d44cc412c7",
+  "deviceTypes": [],
+  "hierarchies": [],
+  "dataCenters": [],
+  "deviceStates": [],
+  "createdBy": "Xiaodong Li",
+  "creationTime": "2020-06-09T10:40:37.96Z",
+  "modifiedBy": "Xiaodong Li",
+  "modificationTime": "2020-06-15T07:58:39.22Z",
+  "id": "d5a9ec70-9e23-4588-bad3-9ce92d2a9a1e"
+ }

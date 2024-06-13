@@ -1,0 +1,200 @@
+﻿{
+  "deviceType": "Breaker",
+  "deviceState": "NormallyClosed",
+  "hierarchy": "LVS-Colo",
+  "coloName": "AZA",
+  "coloId": 0,
+  "devicePowerCapacity": null,
+  "ampRating": null,
+  "voltageRating": null,
+  "kwRating": null,
+  "kvaRating": null,
+  "xCoordination": 0,
+  "yCoordination": 0,
+  "primaryParent": "MWH02-AZA-CE1-MZA-LVS01-MB1",
+  "secondaryParent": "",
+  "maintenanceParent": "",
+  "redundantDeviceNames": "",
+  "powerFactor": 0.95,
+  "deRatingFactor": 1,
+  "panelName": "MWH02-AZA-CE1-MZA-LVS01",
+  "copaConfigType": "None",
+  "copaConfig": null,
+  "location": null,
+  "reservedTiles": null,
+  "consumedTiles": null,
+  "directUpstreamDeviceList": null,
+  "directDownstreamDeviceList": null,
+  "isMonitorable": true,
+  "tags": "None",
+  "amperage": 1800,
+  "voltage": 480,
+  "ratedCapacity": 1421.66730285253,
+  "deRatedCapacity": 1421.66730285253,
+  "dataType": "GE Trip microEntelliguard",
+  "configuredObjectType": "Input Register",
+  "driverName": "GE Trip microEntelliguard10",
+  "connectionName": "2-AZA-CE1-MZA-LVS01-FB1",
+  "ipAddress": "10.18.160.8",
+  "portNumber": "502",
+  "netAddress": "4",
+  "projectName": "MWH02",
+  "unitId": 2,
+  "deviceName": "MWH02-AZA-CE1-MZA-LVS01-FB1",
+  "dcName": "MWH02",
+  "dcCode": 74532382,
+  "onboardingMode": "Hierarchy",
+  "readingStats": [
+    {
+      "dataPoint": "Amps.Ia",
+      "Count": 171,
+      "Avg": 729.20,
+      "Max": 734,
+      "Min": 716
+    },
+    {
+      "dataPoint": "Amps.Ib",
+      "Count": 177,
+      "Avg": 717.39,
+      "Max": 723,
+      "Min": 705
+    },
+    {
+      "dataPoint": "Amps.Ic",
+      "Count": 160,
+      "Avg": 728.40,
+      "Max": 734,
+      "Min": 715
+    },
+    {
+      "dataPoint": "Energy.kWh",
+      "Count": 6,
+      "Avg": 52.70,
+      "Max": 52.70,
+      "Min": 52.70
+    },
+    {
+      "dataPoint": "Freq.Freq",
+      "Count": 6,
+      "Avg": 60,
+      "Max": 60,
+      "Min": 60
+    },
+    {
+      "dataPoint": "Pwr.kW tot",
+      "Count": 52,
+      "Avg": 598.93,
+      "Max": 601.5,
+      "Min": 590.5
+    },
+    {
+      "dataPoint": "Status.Close",
+      "Count": 6,
+      "Avg": 1,
+      "Max": 1,
+      "Min": 1
+    },
+    {
+      "dataPoint": "Status.Trip",
+      "Count": 6,
+      "Avg": 0,
+      "Max": 0,
+      "Min": 0
+    },
+    {
+      "dataPoint": "Volt.Vab",
+      "Count": 24,
+      "Avg": 475.42,
+      "Max": 476,
+      "Min": 474
+    },
+    {
+      "dataPoint": "Volt.Vbc",
+      "Count": 17,
+      "Avg": 472.18,
+      "Max": 473,
+      "Min": 471
+    },
+    {
+      "dataPoint": "Volt.Vca",
+      "Count": 21,
+      "Avg": 488.43,
+      "Max": 489,
+      "Min": 487
+    }
+  ],
+  "lastReadings": [
+    {
+      "dataPoint": "MWH02-AZB-CE3-MZB-CAHU3-ATS1.S2.Volt.Vab",
+      "eventTime": "2020-06-16 00:55:29.7696820",
+      "value": 483.9
+    },
+    {
+      "dataPoint": "MWH02-AZB-CE2-MZB-CAHU2-ATS1.S1.Freq.Freq",
+      "eventTime": "2020-06-16 00:55:29.7696820",
+      "value": 60.01
+    },
+    {
+      "dataPoint": "MWH02-AZB-CE2-MZA-PDU1-CB02.Pwr.kW tot",
+      "eventTime": "2020-06-16 00:56:32.6668748",
+      "value": 105.9
+    }
+  ],
+  "children": [
+    {
+      "readingStats": [
+        {
+          "dataPoint": "Pwr.kW tot",
+          "Count": 52,
+          "Avg": 100.93,
+          "Max": 601.5,
+          "Min": 590.5
+        }
+      ]
+    },
+    {
+      "readingStats": [
+        {
+          "dataPoint": "Pwr.kW tot",
+          "Count": 52,
+          "Avg": 98.93,
+          "Max": 601.5,
+          "Min": 590.5
+        }
+      ]
+    },
+    {
+      "readingStats": [
+        {
+          "dataPoint": "Pwr.kW tot",
+          "Count": 52,
+          "Avg": 125.93,
+          "Max": 601.5,
+          "Min": 590.5
+        }
+      ]
+    },
+    {
+      "readingStats": [
+        {
+          "dataPoint": "Pwr.kW tot",
+          "Count": 52,
+          "Avg": 135.93,
+          "Max": 601.5,
+          "Min": 590.5
+        }
+      ]
+    },
+    {
+      "readingStats": [
+        {
+          "dataPoint": "Pwr.kW tot",
+          "Count": 52,
+          "Avg": 150.93,
+          "Max": 601.5,
+          "Min": 590.5
+        }
+      ]
+    }
+  ]
+}

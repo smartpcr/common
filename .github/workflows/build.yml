@@ -1,0 +1,74 @@
+name: cross-platform build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      Solution_Name: common.sln
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2.0.0
+    - name: Configure NuGet to use GitHub Packages
+      run: |
+        dotnet nuget update source GitHub --username smartpcr --password ${{ secrets.NUGET_AUTH_TOKEN }} --store-password-in-clear-text
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.NUGET_AUTH_TOKEN }}
+    - name: Restore
+      run: dotnet restore
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.NUGET_AUTH_TOKEN }}
+        Configuration: ${{ matrix.configuration }}
+    - name: Build
+      run: dotnet build --configuration ${{ matrix.configuration }}
+      env:
+        Configuration: ${{ matrix.configuration }}
+    - name: Test
+      if: matrix.configuration == 'Debug' && matrix.os == 'windows-latest'
+      run: dotnet test --configuration ${{ matrix.configuration }} --filter Category=unit_test --no-build --collect:"XPlat Code Coverage" --results-directory TestResults /p:CoverletOutputFormat=cobertura
+      env:
+        Configuration: ${{ matrix.configuration }}
+    - name: Publish code coverage
+      if: matrix.configuration == 'Debug' && matrix.os == 'windows-latest'
+      uses: codecov/codecov-action@v2
+      with:
+        files: ./TestResults/**/*.xml  # Adjust according to your coverage file path
+        flags: unittests
+        name: codecov-umbrella
+    - name: Package
+      if: matrix.configuration == 'Release' && matrix.os == 'windows-latest'
+      run: dotnet pack --configuration ${{ matrix.configuration }} -o ./packages
+      env:
+        Configuration: ${{ matrix.configuration }}
+    - name: List packages
+      if: matrix.configuration == 'Release' && matrix.os == 'windows-latest'
+      run: |
+        Get-ChildItem ./packages/*.nupkg
+      shell: pwsh
+    - name: Publish
+      if: matrix.configuration == 'Release' && matrix.os == 'windows-latest'
+      run: |
+        Get-ChildItem ./packages/*.nupkg | ForEach-Object {
+          dotnet nuget push $_.FullName --source GitHub --api-key ${{ secrets.NUGET_AUTH_TOKEN }} --skip-duplicate
+        }
+      shell: pwsh
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.NUGET_AUTH_TOKEN }}
