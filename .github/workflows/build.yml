@@ -42,12 +42,12 @@ jobs:
       env:
         Configuration: ${{ matrix.configuration }}
     - name: Test
-      if: matrix.configuration == 'Debug' && matrix.os == 'windows-latest'
+      if: matrix.configuration == 'Debug' && matrix.os == 'ubuntu-latest'
       run: dotnet test --configuration ${{ matrix.configuration }} --filter Category=unit_test --no-build --collect:"XPlat Code Coverage" --results-directory TestResults /p:CoverletOutputFormat=cobertura
       env:
         Configuration: ${{ matrix.configuration }}
     - name: Code Coverage Summary
-      if: matrix.configuration == 'Debug' && matrix.os == 'windows-latest'
+      if: matrix.configuration == 'Debug' && matrix.os == 'ubuntu-latest'
       uses: irongut/CodeCoverageSummary@v1.3.0
       with:
         filename: ./TestResults/**/*.xml
@@ -60,30 +60,30 @@ jobs:
         output: both
         thresholds: 50 75
     - name: Add Coverage PR Comment
+      if: matrix.configuration == 'Debug' && matrix.os == 'ubuntu-latest' && github.event_name == 'pull_request'
       uses: marocchino/sticky-pull-request-comment@v2
-      if: github.event_name == 'pull_request'
       with:
         recreate: true
         path: code-coverage-results.md
     - name: Publish code coverage
-      if: matrix.configuration == 'Debug' && matrix.os == 'windows-latest'
+      if: matrix.configuration == 'Debug' && matrix.os == 'ubuntu-latest'
       uses: codecov/codecov-action@v2
       with:
         files: ./TestResults/**/*.xml  # Adjust according to your coverage file path
         flags: unittests
         name: codecov-umbrella
     - name: Package
-      if: matrix.configuration == 'Release' && matrix.os == 'windows-latest'
+      if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest'
       run: dotnet pack --configuration ${{ matrix.configuration }} -o ./packages
       env:
         Configuration: ${{ matrix.configuration }}
     - name: List packages
-      if: matrix.configuration == 'Release' && matrix.os == 'windows-latest'
+      if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest'
       run: |
         Get-ChildItem ./packages/*.nupkg
       shell: pwsh
     - name: Publish
-      if: matrix.configuration == 'Release' && matrix.os == 'windows-latest'
+      if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest'
       run: |
         Get-ChildItem ./packages/*.nupkg | ForEach-Object {
           dotnet nuget push $_.FullName --source GitHub --api-key ${{ secrets.NUGET_AUTH_TOKEN }} --skip-duplicate
