@@ -39,7 +39,7 @@ public static class RestApiClientBuilder
     public static IServiceCollection AddRestApiClient<TClient, TImplementation, TAuthHandler>(this IServiceCollection services, string apiClientSettingName)
         where TClient : class
         where TImplementation : class, TClient
-        where TAuthHandler : ServicePrincipalAuthenticationHandler
+        where TAuthHandler : AadAuthenticationHandler
     {
         services.TryAddTransient<TImplementation>();
         var serviceProvider = services.BuildServiceProvider();
