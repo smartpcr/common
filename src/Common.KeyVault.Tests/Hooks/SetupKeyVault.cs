@@ -1,22 +1,20 @@
 ﻿namespace Common.KeyVault.Tests.Hooks;
 
-using System;
 using Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using Monitoring;
 using Settings;
-using Reqnroll;
+using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Infrastructure;
 
 [Binding]
 public sealed class SetupKeyVault
 {
     private readonly ScenarioContext context;
-    private readonly IReqnrollOutputHelper outputHelper;
+    private readonly ISpecFlowOutputHelper outputHelper;
 
-    public SetupKeyVault(ScenarioContext scenarioContext, IReqnrollOutputHelper outputHelper)
+    public SetupKeyVault(ScenarioContext scenarioContext, ISpecFlowOutputHelper outputHelper)
     {
         this.context = scenarioContext;
         this.outputHelper = outputHelper;

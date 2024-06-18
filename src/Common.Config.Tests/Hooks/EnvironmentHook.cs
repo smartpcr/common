@@ -10,30 +10,31 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Mocks;
-using Reqnroll;
+using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Infrastructure;
 
 /// <summary>
 /// Make sure IConfiguration and ILoggerFactory are registered in ScenarioContext
 /// </summary>
-[Reqnroll.Binding]
+[Binding]
 public class EnvironmentHook
 {
     private readonly ScenarioContext context;
-    private readonly IReqnrollOutputHelper outputHelper;
+    private readonly ISpecFlowOutputHelper outputHelper;
 
-    public EnvironmentHook(ScenarioContext scenarioContext, IReqnrollOutputHelper outputHelper)
+    public EnvironmentHook(ScenarioContext scenarioContext, ISpecFlowOutputHelper outputHelper)
     {
         this.context = scenarioContext;
         this.outputHelper = outputHelper;
     }
 
-    [Reqnroll.BeforeScenario("dev")]
+    [BeforeScenario("dev")]
     public void SetupDevEnv()
     {
         SetupEnv("Development");
     }
 
-    [Reqnroll.BeforeScenario("prod")]
+    [BeforeScenario("prod")]
     public void SetupProdEnv()
     {
         SetupEnv("Production");

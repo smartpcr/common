@@ -6,6 +6,7 @@
     <OpenTelemetryVersion>1.7.0</OpenTelemetryVersion>
     <MSTestVersion>3.0.4</MSTestVersion>
     <ReqnrollVersion>1.0.1</ReqnrollVersion>
+    <SpecflowVersion>3.9.74</SpecflowVersion>
     <KustoVersion>12.0.1</KustoVersion>
     <AspNetCoreVersion>2.2.0</AspNetCoreVersion>
   </PropertyGroup>
@@ -152,6 +153,11 @@
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.6.0"/>
     <PackageReference Update="MSTest.TestAdapter" Version="$(MSTestVersion)"/>
     <PackageReference Update="MSTest.TestFramework" Version="$(MSTestVersion)"/>
+    <PackageReference Update="Specflow" Version="$(SpecflowVersion)" />
+    <PackageReference Update="Specflow.Tools.MsBuild.Generation" Version="$(SpecflowVersion)" />
+    <PackageReference Update="Specflow.xUnit" Version="$(SpecflowVersion)" />
+    <PackageReference Update="Specflow.Plus.LivingDocPlugin" Version="3.9.57" />
+    <PackageReference Update="Specflow.MsTest" Version="$(SpecflowVersion)" />
     <PackageReference Update="Reqnroll.MsTest" Version="$(ReqnrollVersion)" />
     <PackageReference Update="Reqnroll.xUnit" Version="$(ReqnrollVersion)" />
     <PackageReference Update="Reqnroll.Tools.MsBuild.Generation" Version="$(ReqnrollVersion)" />

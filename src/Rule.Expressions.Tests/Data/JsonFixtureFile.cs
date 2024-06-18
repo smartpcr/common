@@ -29,7 +29,7 @@ namespace Rule.Expressions.Tests.Data
         public JsonFixtureFile(string path)
         {
             this.path = Path.Combine(
-                path1: Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                path1: Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
                 path2: FileFixturesDirectoryName,
                 path3: path);
             if (!File.Exists(this.path))
@@ -46,6 +46,6 @@ namespace Rule.Expressions.Tests.Data
 
         public object JObjectOf(Type type) => JsonConvert.DeserializeObject(this.Text, type, serializerSettings)!;
 
-        public string PropertyValue(string name) => this.JToken[name].Value<string>();
+        public string PropertyValue(string name) => this.JToken[name]!.Value<string>()!;
     }
 }

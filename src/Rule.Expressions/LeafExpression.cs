@@ -40,7 +40,7 @@ namespace Rule.Expressions
             leftExpression = leftExpression.AddEnumToStringConvert();
 
             var leftSideType = leftExpression.Type;
-            Expression? rightExpression;
+            Expression rightExpression;
             if (RightSideIsExpression)
             {
                 rightExpression = ctxExpression.EvaluateExpression(Right);
@@ -160,7 +160,7 @@ namespace Rule.Expressions
 
         public bool IsEmpty => false;
 
-        private Expression? GetRightConstantExpression(Type leftSideType)
+        private Expression GetRightConstantExpression(Type leftSideType)
         {
             switch (Operator)
             {

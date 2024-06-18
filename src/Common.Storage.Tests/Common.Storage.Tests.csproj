@@ -7,7 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Common.Storage\Common.Storage.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Common" />
     <PackageReference Include="Microsoft.PowerShell.SDK" />
