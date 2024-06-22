@@ -1,7 +1,8 @@
-﻿Feature: MetricsTest
+﻿@integration_test
+Feature: MetricsTest
 	Should be able to create counter, histogram and gauge metrics
 
-    @integration_test @prod @counter
+    @prod @counter
     Scenario: Create a counter for total requests
 	    Given a web api is running on port 19001
         And monitoring settings are configured with metrics capability

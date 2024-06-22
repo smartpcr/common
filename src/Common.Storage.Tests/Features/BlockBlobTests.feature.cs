@@ -19,12 +19,14 @@ namespace Common.Storage.Tests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [Xunit.TraitAttribute("Category", "integration_test")]
     public partial class BlockBlobTestsFeature : object, Xunit.IClassFixture<BlockBlobTestsFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
-        private static string[] featureTags = ((string[])(null));
+        private static string[] featureTags = new string[] {
+                "integration_test"};
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
@@ -85,16 +87,14 @@ namespace Common.Storage.Tests.Features
         [Xunit.TraitAttribute("Description", "create block blob")]
         [Xunit.TraitAttribute("Category", "blockblob")]
         [Xunit.TraitAttribute("Category", "create")]
-        [Xunit.TraitAttribute("Category", "integration_test")]
         public void CreateBlockBlob()
         {
             string[] tagsOfScenario = new string[] {
                     "blockblob",
-                    "create",
-                    "integration_test"};
+                    "create"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("create block blob", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 5
+#line 6
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -104,25 +104,25 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 6
+#line 7
  testRunner.Given("a new blob with uri \"https://test.blob.core.windows.net/testcontainer/testblob\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 7
+#line 8
     testRunner.When("I create blob with content \"test content\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 8
+#line 9
     testRunner.Then("I should be able to fetch blob attributes", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 9
+#line 10
  testRunner.And("the block type should be \"BlockBlob\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 10
+#line 11
  testRunner.And("I should be able to download blob", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 11
+#line 12
  testRunner.And("the downloaded content should be \"test content\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 12
+#line 13
  testRunner.And("the blob uri should be \"http://127.0.0.1:10000/devstoreaccount1/testcontainer/tes" +
                         "tblob\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
@@ -135,16 +135,14 @@ this.ScenarioInitialize(scenarioInfo);
         [Xunit.TraitAttribute("Description", "create page blobs")]
         [Xunit.TraitAttribute("Category", "pageblob")]
         [Xunit.TraitAttribute("Category", "create")]
-        [Xunit.TraitAttribute("Category", "integration_test")]
         public void CreatePageBlobs()
         {
             string[] tagsOfScenario = new string[] {
                     "pageblob",
-                    "create",
-                    "integration_test"};
+                    "create"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("create page blobs", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 15
+#line 16
  this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -167,13 +165,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "https://crptestcollateral.blob.core.windows.net/vhds/folder1/folder2/4MPageBlobWi" +
                                 "thFolderPath.vhd",
                             "4M"});
-#line 16
+#line 17
      testRunner.Given("the following page blobs and their size", ((string)(null)), table1, "Given ");
 #line hidden
-#line 21
+#line 22
        testRunner.When("I ensure page blobs are created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 22
+#line 23
        testRunner.Then("I should be able to fetch attributes of page blobs", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
                 TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
@@ -196,7 +194,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "folder1/folder2/4MPageBlobWithFolderPath.vhd",
                             "4194304",
                             "PageBlob"});
-#line 23
+#line 24
        testRunner.And("page blobs should have the following properties", ((string)(null)), table2, "And ");
 #line hidden
             }

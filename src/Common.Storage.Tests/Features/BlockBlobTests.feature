@@ -1,7 +1,8 @@
+@integration_test
 Feature: BlockBlobTests
 	validate block blob operations
 
-@blockblob @create @integration_test
+@blockblob @create
 Scenario: create block blob
 	Given a new blob with uri "https://test.blob.core.windows.net/testcontainer/testblob"
     When I create blob with content "test content"
@@ -11,7 +12,7 @@ Scenario: create block blob
 	And the downloaded content should be "test content"
 	And the blob uri should be "http://127.0.0.1:10000/devstoreaccount1/testcontainer/testblob"
 
-@pageblob @create @integration_test
+@pageblob @create
 	Scenario: create page blobs
 	    Given the following page blobs and their size
 	     | BlobUri                                                                                           | Size |

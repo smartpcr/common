@@ -19,12 +19,14 @@ namespace Common.Monitoring.Tests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [Xunit.TraitAttribute("Category", "integration_test")]
     public partial class MetricsTestFeature : object, Xunit.IClassFixture<MetricsTestFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
-        private static string[] featureTags = ((string[])(null));
+        private static string[] featureTags = new string[] {
+                "integration_test"};
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
@@ -83,18 +85,16 @@ namespace Common.Monitoring.Tests.Features
         [Xunit.SkippableFactAttribute(DisplayName="Create a counter for total requests")]
         [Xunit.TraitAttribute("FeatureTitle", "MetricsTest")]
         [Xunit.TraitAttribute("Description", "Create a counter for total requests")]
-        [Xunit.TraitAttribute("Category", "integration_test")]
         [Xunit.TraitAttribute("Category", "prod")]
         [Xunit.TraitAttribute("Category", "counter")]
         public void CreateACounterForTotalRequests()
         {
             string[] tagsOfScenario = new string[] {
-                    "integration_test",
                     "prod",
                     "counter"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a counter for total requests", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 5
+#line 6
     this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -104,16 +104,16 @@ namespace Common.Monitoring.Tests.Features
             else
             {
                 this.ScenarioStart();
-#line 6
+#line 7
      testRunner.Given("a web api is running on port 19001", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 7
+#line 8
         testRunner.And("monitoring settings are configured with metrics capability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 8
+#line 9
      testRunner.When("I call api endpoint \"/api/hello\" 3 times", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 9
+#line 10
      testRunner.Then("the metric \"total_requests\" should be 3", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
