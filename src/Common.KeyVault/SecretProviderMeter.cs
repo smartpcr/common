@@ -6,19 +6,48 @@
 
 namespace Common.KeyVault;
 
-using Microsoft.R9.Extensions.Metering;
+using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using Microsoft.Extensions.AmbientMetadata;
 
-internal static partial class SecretProviderMeter
+internal class SecretProviderMeter
 {
-    [Counter(typeof(SecretProviderDimension))]
-    public static partial TotalSecretFailures CreateTotalSecretFailures(IMeter meter);
+    private readonly Counter<long> _totalSecretFailures;
+    private readonly Histogram<double> _getSecretDuration;
+    private readonly Counter<long> _totalCertFailures;
+    private readonly Histogram<double> _getCertDuration;
 
-    [Histogram]
-    public static partial GetSecretDuration CreateGetSecretDuration(IMeter meter);
+    private SecretProviderMeter(ApplicationMetadata metadata)
+    {
+        var meter = new Meter($"{metadata.ApplicationName}.{nameof(SecretProviderMeter)}");
+        this._totalSecretFailures = meter.CreateCounter<long>("TotalSecretFailures", "Total number of secret failures");
+        this._getSecretDuration = meter.CreateHistogram<double>("GetSecretDuration", "Get secret duration in milliseconds");
+        this._totalCertFailures = meter.CreateCounter<long>("TotalCertFailures", "Total number of cert failures");
+        this._getCertDuration = meter.CreateHistogram<double>("GetCertDuration", "Get cert duration in milliseconds");
+    }
 
-    [Counter(typeof(SecretProviderDimension))]
-    public static partial TotalCertFailures CreateTotalCertFailures(IMeter meter);
+    public static SecretProviderMeter Instance(ApplicationMetadata metadata)
+    {
+        return new SecretProviderMeter(metadata);
+    }
 
-    [Histogram]
-    public static partial GetCertDuration CreateGetCertDuration(IMeter meter);
+    public void IncrementTotalSecretFailures(params KeyValuePair<string, object?>[] dimensions)
+    {
+        this._totalSecretFailures.Add(1, dimensions);
+    }
+
+    public void RecordGetSecretDuration(double duration, params KeyValuePair<string, object?>[] dimensions)
+    {
+        this._getSecretDuration.Record(duration, dimensions);
+    }
+
+    public void IncrementTotalCertFailures(params KeyValuePair<string, object?>[] dimensions)
+    {
+        this._totalCertFailures.Add(1, dimensions);
+    }
+
+    public void RecordGetCertDuration(double duration, params KeyValuePair<string, object?>[] dimensions)
+    {
+        this._getCertDuration.Record(duration, dimensions);
+    }
 }

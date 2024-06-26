@@ -9,7 +9,6 @@ namespace Common.Monitoring.Sinks;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Microsoft.R9.Extensions.HttpClient.Logging;
 using OpenTelemetry.Exporter.Geneva;
 
 /// <summary>
@@ -40,24 +39,8 @@ public class GenevaLogSinkSettings
 
     public void Configure(GenevaExporterOptions options)
     {
-        var customFiles = new List<string>
-        {
-            HttpClientLoggingDimensions.Host, // a separate column will be created in Geneva for each dimension provided here.
-            HttpClientLoggingDimensions.Path,
-            HttpClientLoggingDimensions.Duration,
-            HttpClientLoggingDimensions.Method,
-            HttpClientLoggingDimensions.StatusCode,
-            HttpClientLoggingDimensions.ResponseBody,
-            $"{HttpClientLoggingDimensions.RequestHeaderPrefix}Accept",
-            $"{HttpClientLoggingDimensions.RequestHeaderPrefix}Authorization",
-        };
-        if (CustomFields.Any())
-        {
-            customFiles.AddRange(CustomFields);
-        }
-
         options.ConnectionString = ConnectionString;
-        options.CustomFields = customFiles;
+        options.CustomFields = CustomFields;
         options.PrepopulatedFields = PrepopulatedFields;
     }
 }

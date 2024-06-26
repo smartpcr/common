@@ -6,19 +6,47 @@
 
 namespace Common.Monitoring.Tests.Steps;
 
-using Microsoft.R9.Extensions.Metering;
+using System.Diagnostics.Metrics;
+using Microsoft.Extensions.AmbientMetadata;
 
-internal static partial class ApiRequestMetric
+public class ApiRequestMetric
 {
-    [Counter]
-    public static partial TotalRequests CreateTotalRequests(IMeter meter);
+    private readonly Counter<long> _totalRequests;
+    private readonly Counter<long> _totalSuccesses;
+    private readonly Counter<long> _totalFailures;
+    private readonly Histogram<double> _requestLatency;
 
-    [Counter]
-    public static partial SuccessfulRequests CreateSuccessfulRequests(IMeter meter);
+    private ApiRequestMetric(ApplicationMetadata metadata)
+    {
+        Meter meter = new Meter($"{metadata.ApplicationName}.ApiRequestMetric");
+        _totalRequests = meter.CreateCounter<long>("TotalRequests", "Total number of requests");
+        _totalSuccesses = meter.CreateCounter<long>("SuccessfulRequests", "Total number of successful requests");
+        _totalFailures = meter.CreateCounter<long>("FailedRequests", "Total number of failed requests");
+        _requestLatency = meter.CreateHistogram<double>("RequestLatency", "Request latency in milliseconds");
+    }
 
-    [Counter]
-    public static partial FailedRequests CreateFailedRequests(IMeter meter);
+    public static ApiRequestMetric Instance(ApplicationMetadata metadata)
+    {
+        return new ApiRequestMetric(metadata);
+    }
 
-    [Histogram]
-    public static partial RequestLatency CreateRequestLatency(IMeter meter);
+    public void IncrementTotalRequests()
+    {
+        _totalRequests.Add(1);
+    }
+
+    public void IncrementSuccessfulRequests()
+    {
+        _totalSuccesses.Add(1);
+    }
+
+    public void IncrementFailedRequests()
+    {
+        _totalFailures.Add(1);
+    }
+
+    public void RecordRequestLatency(double callLatencyInMs)
+    {
+        _requestLatency.Record(callLatencyInMs);
+    }
 }

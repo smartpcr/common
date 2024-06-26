@@ -86,7 +86,7 @@ public class QueueClientAuthHelper
         logger.CreateQueueClientStart(queueSettings.Account, queueSettings.AuthMode.ToString());
         try
         {
-            var clientCredential = authHelper.GetClientCredential(CancellationToken.None);
+            var (clientCredential, _) = authHelper.GetClientCredential(CancellationToken.None);
             var queueServiceClient = new QueueServiceClient(queueSettings.AccountServiceUrl, clientCredential);
 
             VerifyQueueServiceClient(queueServiceClient, queueSettings.QueueName);

@@ -7,7 +7,6 @@
 namespace Common.Http;
 
 using System;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using Config;
@@ -16,18 +15,12 @@ using Microsoft.Extensions.AmbientMetadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.R9.Extensions.HttpClient.Logging;
-using Microsoft.R9.Extensions.HttpClient.Metering;
 using Polly;
 using Polly.Extensions.Http;
 using Settings;
 
 public static class RestApiClientBuilder
 {
-    private const string HttpClientLoggingSettingFile = "appsettings.httpclientlogging.json";
-    private const string HttpClientLoggingSectionName = "R9:Logging:HttpClientLogging";
-    private const string HashRedactorSectionName = "R9:Redaction:XXHashRedactor";
-
     /// <summary>
     /// Registers a REST API client with aad auth and execute policy.
     /// </summary>
@@ -50,13 +43,6 @@ public static class RestApiClientBuilder
         {
             serviceSettings.Configure(client, metadata.ApplicationName);
         });
-        clientBuilder.AddHttpClientMetering();
-
-        if (File.Exists(HttpClientLoggingSettingFile))
-        {
-            var httpClientLoggingConfig = OptionsBuilder.LoadAdditionalConfigurationFile(HttpClientLoggingSettingFile);
-            clientBuilder.AddHttpClientLogging(httpClientLoggingConfig.GetSection(HttpClientLoggingSectionName));
-        }
 
         if (serviceSettings.AuthMode != HttpClientAuthMode.None)
         {
@@ -105,20 +91,13 @@ public static class RestApiClientBuilder
         where TClient : class
         where TImplementation : class, TClient
     {
-        var clientBuilder = services.AddHttpClient<TClient, TImplementation>((_, client) =>
+        services.AddHttpClient<TClient, TImplementation>((_, client) =>
         {
             client.BaseAddress = new Uri(endpoint);
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             client.Timeout = timeout == default ? TimeSpan.FromSeconds(10) : timeout;
         })
-        .SetHandlerLifetime(timeout == default ? TimeSpan.FromSeconds(10) : timeout)
-        .AddHttpClientMetering();
-
-        if (File.Exists(HttpClientLoggingSettingFile))
-        {
-            var httpClientLoggingConfig = OptionsBuilder.LoadAdditionalConfigurationFile(HttpClientLoggingSettingFile);
-            clientBuilder.AddHttpClientLogging(httpClientLoggingConfig.GetSection(HttpClientLoggingSectionName));
-        }
+        .SetHandlerLifetime(timeout == default ? TimeSpan.FromSeconds(10) : timeout);
     }
 
     private static void Configure(this ApiClientSettings settings, HttpClient client, string applicationName)

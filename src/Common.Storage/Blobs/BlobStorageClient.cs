@@ -312,7 +312,7 @@ public class BlobStorageClient : IBlobStorageClient
         return blobInfo.Value.ETag.ToString();
     }
 
-    public async Task<string> DownloadAsync(string blobFolder, string blobName, string localFolder, CancellationToken cancellationToken)
+    public async Task<string> DownloadAsync(string? blobFolder, string blobName, string localFolder, CancellationToken cancellationToken)
     {
         var blobPath = string.IsNullOrEmpty(blobFolder)
             ? blobName

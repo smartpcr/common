@@ -27,7 +27,7 @@ internal class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         var configuration = services.AddConfiguration();
-        services.ConfigureSettings<MonitorSettings>().AddR9Monitoring(configuration);
+        services.ConfigureSettings<MonitorSettings>().AddMonitoring(configuration);
 
         var serviceProvider = services.BuildServiceProvider();
         _scenarioContext.Set<IServiceProvider>(serviceProvider);
@@ -35,10 +35,5 @@ internal class Startup
         logger.StartingInitializer(_envName);
 
         services.AddControllers();
-    }
-
-    public void Configure(IApplicationBuilder app)
-    {
-        app.UseR9Monitoring();
     }
 }

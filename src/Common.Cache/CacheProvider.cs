@@ -19,7 +19,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.R9.Extensions.Metering;
 using Newtonsoft.Json;
 using OpenTelemetry.Trace;
 using Settings;
@@ -31,9 +30,7 @@ public class CacheProvider : ICacheProvider
     private readonly DistributedCacheEntryOptions cacheEntryOptions;
     private readonly ILogger<CacheProvider> logger;
     private readonly Tracer tracer;
-    private readonly CacheMisses totalMisses;
-    private readonly CacheExpires totalExpires;
-    private readonly CacheErrors totalErrors;
+    private readonly CacheMeter meter;
     private readonly MultilayerCache multilayerCache;
     private readonly IBlobStorageClient? blobCacheClient;
     private readonly CacheSettings settings;
@@ -70,10 +67,7 @@ public class CacheProvider : ICacheProvider
         var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
         var traceProvider = serviceProvider.GetRequiredService<TracerProvider>();
         tracer = traceProvider.GetTracer(metadata.ApplicationName + $".{nameof(CacheProvider)}", metadata.BuildVersion);
-        IMeter meter = serviceProvider.GetRequiredService<IMeter>();
-        totalMisses = CacheMeter.CreateCacheMisses(meter);
-        totalExpires = CacheMeter.CreateCacheExpires(meter);
-        totalErrors = CacheMeter.CreateCacheError(meter);
+        meter = CacheMeter.Instance(metadata);
 
         cacheEntryOptions = new DistributedCacheEntryOptions { SlidingExpiration = settings.TimeToLive };
 
@@ -101,6 +95,11 @@ public class CacheProvider : ICacheProvider
         using var span = tracer.StartActiveSpan(nameof(GetOrUpdateAsync));
         var value = await multilayerCache.GetAsync(key, cancel);
         CachedItem<T>? cachedItem;
+        var cacheDimensions = new[]
+        {
+            new KeyValuePair<string, object?>("name", nameof(CacheProvider)),
+            new KeyValuePair<string, object?>("key", key)
+        };
 
         async Task<T> RefreshItem()
         {
@@ -115,7 +114,7 @@ public class CacheProvider : ICacheProvider
 
         if (value == null)
         {
-            totalMisses.Add(1, new CacheDimension(nameof(CacheProvider), key));
+            this.meter.IncrementCacheMisses(cacheDimensions);
             return await RefreshItem();
         }
 
@@ -134,7 +133,7 @@ public class CacheProvider : ICacheProvider
                 if ((lastUpdateTime != default && lastUpdateTime > cachedItem.CreatedOn) ||
                     cachedItem.CreatedOn.Add(settings.TimeToLive) < DateTimeOffset.UtcNow)
                 {
-                    totalExpires.Add(1, new CacheDimension(nameof(CacheProvider), key));
+                    this.meter.IncrementCacheExpires(cacheDimensions);
                     needRefresh = true;
                 }
             }
@@ -151,7 +150,7 @@ public class CacheProvider : ICacheProvider
         {
             logger.CacheItemDeserializeError(typeof(T).Name, ex.Message);
             span.SetStatus(Status.Error);
-            totalErrors.Add(1, new CacheDimension(nameof(CacheProvider), key));
+            this.meter.IncrementCacheError(cacheDimensions);
             return await RefreshItem();
         }
     }
@@ -162,6 +161,11 @@ public class CacheProvider : ICacheProvider
         using var _ = tracer.StartActiveSpan(nameof(GetOrUpdate));
         var value = multilayerCache.Get(key);
         CachedItem<T>? cachedItem;
+        var cacheDimensions = new[]
+        {
+            new KeyValuePair<string, object?>("name", nameof(CacheProvider)),
+            new KeyValuePair<string, object?>("key", key)
+        };
 
         T RefreshItem()
         {
@@ -175,7 +179,7 @@ public class CacheProvider : ICacheProvider
 
         if (value == null)
         {
-            totalMisses.Add(1, new CacheDimension(nameof(CacheProvider), key));
+            this.meter.IncrementCacheMisses(cacheDimensions);
             return RefreshItem();
         }
 
@@ -191,7 +195,7 @@ public class CacheProvider : ICacheProvider
             if ((lastUpdateTime != default && lastUpdateTime > cachedItem.CreatedOn) ||
                 cachedItem.CreatedOn.Add(settings.TimeToLive) < DateTimeOffset.UtcNow)
             {
-                totalExpires.Add(1, new CacheDimension(nameof(CacheProvider), key));
+                this.meter.IncrementCacheExpires(cacheDimensions);
                 needRefresh = true;
             }
         }

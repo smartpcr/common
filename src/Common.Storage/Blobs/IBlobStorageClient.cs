@@ -44,7 +44,7 @@ public interface IBlobStorageClient
 
     Task<string> UpsertAsync(string blobName, byte[] content, string? etag = null, CancellationToken cancellationToken = default);
 
-    Task<string> DownloadAsync(string blobFolder, string blobName, string localFolder, CancellationToken cancellationToken);
+    Task<string> DownloadAsync(string? blobFolder, string blobName, string localFolder, CancellationToken cancellationToken);
 
     Task<long> CountAsync<T>(string prefix, Func<T, bool> filter, CancellationToken cancellationToken);
 

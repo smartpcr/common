@@ -22,7 +22,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.R9.Extensions.Metering;
 using OpenTelemetry.Trace;
 using Settings;
 
@@ -30,29 +29,22 @@ public class SecretProvider : ISecretProvider
 {
     private readonly ILogger<SecretProvider> logger;
     private readonly Tracer tracer;
-    private readonly TotalSecretFailures totalSecretFailures;
-    private readonly GetSecretDuration getSecretDuration;
-    private readonly TotalCertFailures totalCertFailures;
-    private readonly GetCertDuration getCertDuration;
     private readonly VaultSettings vaultSettings;
     private readonly SecretClient? secretClient;
     private readonly CertificateClient? certificateClient;
     private readonly KeyVaultClient? keyVaultClient;
+    private readonly SecretProviderMeter meter;
 
     public SecretProvider(
         IServiceProvider serviceProvider,
-        ILogger<SecretProvider> logger,
-        IMeter meter)
+        ILogger<SecretProvider> logger)
     {
         this.logger = logger;
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
         var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
         var traceProvider = serviceProvider.GetRequiredService<TracerProvider>();
         tracer = traceProvider.GetTracer(metadata.ApplicationName + $".{nameof(SecretProvider)}", metadata.BuildVersion);
-        totalSecretFailures = SecretProviderMeter.CreateTotalSecretFailures(meter);
-        getSecretDuration = SecretProviderMeter.CreateGetSecretDuration(meter);
-        totalCertFailures = SecretProviderMeter.CreateTotalCertFailures(meter);
-        getCertDuration = SecretProviderMeter.CreateGetCertDuration(meter);
+        this.meter = SecretProviderMeter.Instance(metadata);
 
         var vaultSettingsOptions = serviceProvider.GetService<IOptions<VaultSettings>>();
         vaultSettings = vaultSettingsOptions?.Value ?? configuration.GetConfiguredSettings<VaultSettings>();
@@ -127,6 +119,12 @@ public class SecretProvider : ISecretProvider
         using var span = tracer.StartActiveSpan(nameof(GetSecretAsync));
         logger.GetSecretStart(secretName, vaultSettings.VaultName, vaultSettings.AuthType.ToString());
         var watch = Stopwatch.StartNew();
+        var metricDimensions = new[]
+        {
+            new KeyValuePair<string, object?>(nameof(this.vaultSettings.AuthType), this.vaultSettings.AuthType),
+            new KeyValuePair<string, object?>(nameof(secretName), secretName)
+        };
+
         try
         {
             string? secretValue;
@@ -146,13 +144,13 @@ public class SecretProvider : ISecretProvider
         }
         catch (Exception ex)
         {
-            totalSecretFailures.Add(1, new SecretProviderDimension(vaultSettings.AuthType));
+            this.meter.IncrementTotalSecretFailures(metricDimensions);
             logger.GetSecretFailed(secretName, vaultSettings.VaultName, vaultSettings.AuthType.ToString(), ex.Message, watch.ElapsedMilliseconds);
             throw;
         }
         finally
         {
-            getSecretDuration.Record(watch.ElapsedMilliseconds);
+            this.meter.RecordGetSecretDuration(watch.ElapsedMilliseconds, metricDimensions);
         }
     }
 
@@ -161,6 +159,12 @@ public class SecretProvider : ISecretProvider
         using var span = tracer.StartActiveSpan(nameof(GetSecret));
         logger.GetSecretStart(secretName, vaultSettings.VaultName, vaultSettings.AuthType.ToString());
         var watch = Stopwatch.StartNew();
+        var metricDimensions = new[]
+        {
+            new KeyValuePair<string, object?>(nameof(this.vaultSettings.AuthType), this.vaultSettings.AuthType),
+            new KeyValuePair<string, object?>(nameof(secretName), secretName)
+        };
+
         try
         {
             string? secretValue;
@@ -181,13 +185,13 @@ public class SecretProvider : ISecretProvider
         }
         catch (Exception ex)
         {
-            totalSecretFailures.Add(1, new SecretProviderDimension(vaultSettings.AuthType));
+            this.meter.IncrementTotalSecretFailures(metricDimensions);
             logger.GetSecretFailed(secretName, vaultSettings.VaultName, vaultSettings.AuthType.ToString(), ex.Message, watch.ElapsedMilliseconds);
             throw;
         }
         finally
         {
-            getSecretDuration.Record(watch.ElapsedMilliseconds);
+            this.meter.RecordGetSecretDuration(watch.ElapsedMilliseconds, metricDimensions);
         }
     }
 
@@ -196,6 +200,12 @@ public class SecretProvider : ISecretProvider
         using var span = tracer.StartActiveSpan(nameof(GetCertAsync));
         logger.GetCertStart(certName, vaultSettings.VaultName, vaultSettings.AuthType.ToString());
         var watch = Stopwatch.StartNew();
+        var metricDimensions = new[]
+        {
+            new KeyValuePair<string, object?>(nameof(this.vaultSettings.AuthType), this.vaultSettings.AuthType),
+            new KeyValuePair<string, object?>(nameof(certName), certName)
+        };
+
         try
         {
             X509Certificate2? cert;
@@ -215,13 +225,13 @@ public class SecretProvider : ISecretProvider
         }
         catch (Exception ex)
         {
-            totalCertFailures.Add(1, new SecretProviderDimension(vaultSettings.AuthType));
+            this.meter.IncrementTotalCertFailures(metricDimensions);
             logger.GetCertFailed(certName, vaultSettings.VaultName, vaultSettings.AuthType.ToString(), ex.Message, watch.ElapsedMilliseconds);
             throw;
         }
         finally
         {
-            getCertDuration.Record(watch.ElapsedMilliseconds);
+            this.meter.RecordGetCertDuration(watch.ElapsedMilliseconds, metricDimensions);
         }
     }
 
@@ -230,6 +240,12 @@ public class SecretProvider : ISecretProvider
         using var span = tracer.StartActiveSpan(nameof(GetCert));
         logger.GetCertStart(certName, vaultSettings.VaultName, vaultSettings.AuthType.ToString());
         var watch = Stopwatch.StartNew();
+        var metricDimensions = new[]
+        {
+            new KeyValuePair<string, object?>(nameof(this.vaultSettings.AuthType), this.vaultSettings.AuthType),
+            new KeyValuePair<string, object?>(nameof(certName), certName)
+        };
+
         try
         {
             X509Certificate2? cert;
@@ -250,13 +266,13 @@ public class SecretProvider : ISecretProvider
         }
         catch (Exception ex)
         {
-            totalCertFailures.Add(1, new SecretProviderDimension(vaultSettings.AuthType));
+            this.meter.IncrementTotalCertFailures(metricDimensions);
             logger.GetCertFailed(certName, vaultSettings.VaultName, vaultSettings.AuthType.ToString(), ex.Message, watch.ElapsedMilliseconds);
             throw;
         }
         finally
         {
-            getCertDuration.Record(watch.ElapsedMilliseconds);
+            this.meter.RecordGetCertDuration(watch.ElapsedMilliseconds, metricDimensions);
         }
     }
 }

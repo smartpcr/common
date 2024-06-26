@@ -10,6 +10,7 @@ using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using Azure.Core;
+using Azure.Identity;
 using Azure.Security.KeyVault.Certificates;
 using Azure.Security.KeyVault.Secrets;
 using Config;
@@ -18,12 +19,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
-using Microsoft.R9.Extensions.Authentication.Azure;
 using Settings;
 
 public static class KeyVaultBuilder
 {
-    public static IServiceCollection AddKeyVault(this IServiceCollection services, IConfiguration configuration)
+    public static void AddKeyVault(this IServiceCollection services, IConfiguration configuration)
     {
         var serviceProvider = services.BuildServiceProvider();
         var vaultSettingsOptions = serviceProvider.GetService<IOptions<VaultSettings>>();
@@ -32,13 +32,13 @@ public static class KeyVaultBuilder
 
         if (vaultSettings.AuthType == VaultAuthType.Msi || vaultSettings.AuthType == VaultAuthType.User)
         {
-            services.AddSingleton<SecretClient>(sp =>
+            services.AddSingleton<SecretClient>(_ =>
             {
                 var tokenCredential = CreateTokenCredential(vaultSettings);
                 Console.WriteLine("registering secret client");
                 return new SecretClient(vaultSettings.VaultUrl, tokenCredential);
             });
-            services.AddSingleton<CertificateClient>(sp =>
+            services.AddSingleton<CertificateClient>(_ =>
             {
                 var tokenCredential = CreateTokenCredential(vaultSettings);
                 Console.WriteLine("registering certificate client");
@@ -82,15 +82,14 @@ public static class KeyVaultBuilder
 
         services.AddSingleton<ISecretProvider, SecretProvider>();
 
-        return services;
     }
 
     private static TokenCredential CreateTokenCredential(VaultSettings vaultSettings)
     {
         return vaultSettings.AuthType switch
         {
-            VaultAuthType.Msi => KeyVaultAccessTokenFactory.CreateDefaultAzureCredential(),
-            VaultAuthType.User => KeyVaultAccessTokenFactory.CreateDevelopmentCredential(),
+            VaultAuthType.Msi => new DefaultAzureCredential(),
+            VaultAuthType.User => CreateDevCredInternal(),
             _ => throw new NotSupportedException($"Vault auth type {vaultSettings.AuthType} is not supported"),
         };
     }
@@ -144,5 +143,15 @@ public static class KeyVaultBuilder
         }
 
         return secretOrCertFilePath;
+    }
+
+    internal static TokenCredential CreateDevCredInternal()
+    {
+        string? token = Environment.GetEnvironmentVariable("DEV_KEYVAULT_ACCESS_TOKEN");
+        if (!string.IsNullOrWhiteSpace(token))
+            return new StaticTokenCredential(token, TimeProvider.System);
+        return !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"))
+            ? new DeviceCodeTokenCredential("https://vault.azure.net")
+            : new DefaultAzureCredential();
     }
 }

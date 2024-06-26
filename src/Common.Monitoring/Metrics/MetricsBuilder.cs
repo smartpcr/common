@@ -7,48 +7,30 @@
 namespace Common.Monitoring.Metrics;
 
 using System;
-using System.Collections.Generic;
 using Azure.Monitor.OpenTelemetry.Exporter;
 using Config;
-using Enrichment;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.AmbientMetadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.R9.Extensions.HttpClient.Metering;
-using Microsoft.R9.Extensions.Metering;
-using Microsoft.R9.Extensions.Metering.Collectors;
-using Microsoft.R9.Service.Middleware;
 using OpenTelemetry.Exporter.Geneva;
 using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 using Sinks;
 
 public static class MetricsBuilder
 {
-    public static IServiceCollection AddR9Metrics(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddMetrics(this IServiceCollection services, IConfiguration configuration)
     {
         var metricsSettings = configuration.GetConfiguredSettings<MonitorSettings>().Metrics;
+        var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
         Console.WriteLine($"Registering metrics with sink types {metricsSettings.SinkTypes}");
-
-        services.AddEventCounterCollector(options =>
-            {
-                // https://learn.microsoft.com/en-us/dotnet/core/diagnostics/available-counters
-                options.Counters.Add("System.Runtime", GetRuntimeCounters());
-                Console.WriteLine("Event counter collector for System.Runtime enabled");
-            })
-            .AddHttpContextAccessor()
-            .AddHttpMetering(builder =>
-            {
-                // incoming
-                builder.AddMetricEnricher<MethodRequestMetricEnricher>();
-                Console.WriteLine("Http metering enabled");
-            });
 
         services.AddOpenTelemetry()
             .WithMetrics(builder =>
             {
-                // registered IMeter and available to constructor injection
-                builder//.AddMeter(metadata.ApplicationName) // open telemetry version
-                    .AddMetering() // use r9 version for better injection, creation and include all sources, requires c# version 10 or later
+                builder
+                    .ConfigureResource(r => r.AddService(metadata.ApplicationName, serviceVersion: metadata.BuildVersion, serviceInstanceId: Environment.MachineName))
+                    .AddMeter(metadata.ApplicationName)
                     .AddRuntimeInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddAspNetCoreInstrumentation();
@@ -84,7 +66,6 @@ public static class MetricsBuilder
                 {
                     var genevaMetricSinkSettings = configuration.GetConfiguredSettings<GenevaMetricSinkSettings>(GenevaMetricSinkSettings.SettingName);
                     builder.AddGenevaMetricExporter(genevaMetricSinkSettings.Configure);
-                    services.AddGenevaMetering(configuration.GetSection(GenevaMetricSinkSettings.GenevaMeterSettingName));
                     Console.WriteLine("Geneva metrics enabled");
                 }
 
@@ -104,25 +85,5 @@ public static class MetricsBuilder
             });
 
         return services;
-    }
-
-    public static void UseR9Metrics(this IApplicationBuilder app)
-    {
-        app.UseHttpMetering();
-    }
-
-    private static HashSet<string> GetRuntimeCounters()
-    {
-        return new HashSet<string>
-        {
-            "cpu-usage",
-            "alloc-rate",
-            "exception-count",
-            "active-timer-count",
-            "monitor-lock-contention-count",
-            "threadpool-queue-length",
-            "threadpool-thread-count",
-            "working-set"
-        };
     }
 }

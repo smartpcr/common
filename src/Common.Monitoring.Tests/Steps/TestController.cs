@@ -9,49 +9,45 @@ namespace Common.Monitoring.Tests.Steps;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Config;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.AmbientMetadata;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.R9.Extensions.Metering;
 
 [ApiController]
 [Route("api")]
 public class TestController : ControllerBase
 {
     private readonly ILogger<TestController> _logger;
-    private readonly TotalRequests _totalRequests;
-    private readonly SuccessfulRequests _totalSuccesses;
-    private readonly FailedRequests _totalFailures;
-    private readonly RequestLatency _requestLatency;
+    private readonly ApiRequestMetric _apiRequestMetric;
 
-    public TestController(ILoggerFactory loggerFactory, IMeterProvider meterProvider)
+    public TestController(IConfiguration configuration, ILoggerFactory loggerFactory)
     {
-        _logger = loggerFactory.CreateLogger<TestController>();
-        var meter = meterProvider.GetMeter<TestController>();
-        _totalRequests = ApiRequestMetric.CreateTotalRequests(meter);
-        _totalSuccesses = ApiRequestMetric.CreateSuccessfulRequests(meter);
-        _totalFailures = ApiRequestMetric.CreateFailedRequests(meter);
-        _requestLatency = ApiRequestMetric.CreateRequestLatency(meter);
+        this._logger = loggerFactory.CreateLogger<TestController>();
+        var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
+        this._apiRequestMetric = ApiRequestMetric.Instance(metadata);
     }
 
     [HttpGet("hello")]
     public async Task<string> SayHello()
     {
         _logger.StartingApiCall(DateTime.Now, Request.Path.Value);
-        _totalRequests.Add(1);
+        this._apiRequestMetric.IncrementTotalRequests();
 
         var watch = Stopwatch.StartNew();
         bool hasError = DateTime.Now.Second % 5 == 0;
         await InnerCall();
         if (hasError)
         {
-            _totalFailures.Add(1);
+            this._apiRequestMetric.IncrementFailedRequests();
             _logger.ApiCallFailed(DateTime.Now, Request.Path.Value, watch.ElapsedMilliseconds, "Simulated error");
             throw new InvalidOperationException("Simulated error");
         }
 
-        _totalSuccesses.Add(1);
+        this._apiRequestMetric.IncrementSuccessfulRequests();
         await Task.Delay(100);
-        _requestLatency.Record(watch.ElapsedMilliseconds);
+        this._apiRequestMetric.RecordRequestLatency(watch.ElapsedMilliseconds);
         _logger.ApiCallCompleted(DateTime.Now, Request.Path.Value, watch.ElapsedMilliseconds);
 
         return "Hello World";

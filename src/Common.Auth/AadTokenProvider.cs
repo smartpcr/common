@@ -22,8 +22,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Client;
-using Microsoft.IdentityModel.Protocols.Configuration;
-using Microsoft.R9.Extensions.Authentication.Msal;
 using Settings;
 
 public class AadTokenProvider
@@ -62,37 +60,38 @@ public class AadTokenProvider
 
         try
         {
-            switch (aadSettings.Scenarios)
+            switch (this.aadSettings.Scenarios)
             {
                 case AadAuthScenarios.ConfidentialApp:
-                case AadAuthScenarios.PublicApp:
-                    (var app, clientCert) = CreateConfidentialApp(cancellationToken);
-                    var authResult = await app.AcquireTokenForClientAsync(
-                        scopesToUse,
-                        acquireTokenBuilder =>
-                        {
-                            acquireTokenBuilder
-                                .WithCorrelationId(correlationId)
-                                .WithTenantId(aadSettings.TenantId);
-                        },
-                        cancellationToken);
+                    IConfidentialClientApplication app;
+                    (app, clientCert) = this.CreateConfidentialApp(cancellationToken);
+                    AuthenticationResult authResult = await app.AcquireTokenForClient(scopesToUse).ExecuteAsync(cancellationToken);
                     accessToken = authResult.AccessToken;
                     expiresOn = authResult.ExpiresOn;
                     break;
-                case AadAuthScenarios.InteractiveUser:
-                    var pubApp = CreatePublicClientApplication();
-                    var authResult2 = await pubApp.AcquireTokenInteractive(scopesToUse).ExecuteAsync(cancellationToken);
+                case AadAuthScenarios.PublicApp:
+                    IPublicClientApplication pubApp = this.CreatePublicClientApplication();
+                    AuthenticationResult authResult2 = await pubApp.AcquireTokenInteractive(scopesToUse).ExecuteAsync(cancellationToken);
                     accessToken = authResult2.AccessToken;
                     expiresOn = authResult2.ExpiresOn;
                     break;
+                case AadAuthScenarios.InteractiveUser:
+                    var browserCredential = new InteractiveBrowserCredential(new InteractiveBrowserCredentialOptions
+                    {
+                        TenantId = this.aadSettings.TenantId,
+                    });
+                    AccessToken tokenResult2 = await browserCredential.GetTokenAsync(new TokenRequestContext(scopesToUse), cancellationToken);
+                    accessToken = tokenResult2.Token;
+                    expiresOn = tokenResult2.ExpiresOn;
+                    break;
                 case AadAuthScenarios.ManagedIdentity:
                     var credential = new DefaultAzureCredential();
-                    var tokenResult = await credential.GetTokenAsync(new TokenRequestContext(scopesToUse), cancellationToken);
+                    AccessToken tokenResult = await credential.GetTokenAsync(new TokenRequestContext(scopesToUse), cancellationToken);
                     accessToken = tokenResult.Token;
                     expiresOn = tokenResult.ExpiresOn;
                     break;
                 default:
-                    throw new NotSupportedException($"Usage scenario {aadSettings.Scenarios} is not supported");
+                    throw new NotSupportedException($"Usage scenario {this.aadSettings.Scenarios} is not supported");
             }
         }
         catch (Exception ex)
@@ -112,31 +111,37 @@ public class AadTokenProvider
             throw error;
         }
 
-        logger.GotAccessToken(scopesToUse, accessToken, expiresOn.Value);
+        logger.GotAccessToken(scopesToUse, expiresOn.Value);
         return accessToken;
     }
 
-    public TokenCredential GetClientCredential(CancellationToken cancellationToken)
+    /// <summary>
+    /// Gets the client credential.
+    /// </summary>
+    /// <param name="cancellationToken">The cancel token</param>
+    /// <returns>Tuple of TokenCredential and X509Certificate2</returns>
+    public (TokenCredential tokenCredential, X509Certificate2? clientCert) GetClientCredential(CancellationToken cancellationToken)
     {
-        var (clientSecret, clientCert) = GetClientSecretOrCert(aadSettings, cancellationToken);
+        (string? clientSecret, X509Certificate2? clientCert) = this.GetClientSecretOrCert(this.aadSettings, cancellationToken);
         if (clientSecret != null)
         {
-            return new ClientSecretCredential(aadSettings.TenantId, aadSettings.ClientId, clientSecret);
+            return (new ClientSecretCredential(this.aadSettings.TenantId, this.aadSettings.ClientId, clientSecret), null);
         }
 
-        return new ClientCertificateCredential(
-            aadSettings.TenantId,
-            aadSettings.ClientId,
-            clientCert,
-            new ClientCertificateCredentialOptions
-            {
-                SendCertificateChain = true
-            });
+        return (new ClientCertificateCredential(this.aadSettings.TenantId, this.aadSettings.ClientId, clientCert), clientCert);
     }
 
+    /// <summary>
+    /// Gets the client secret or certificate.
+    /// </summary>
+    /// <param name="newAadSettings">AAD settings</param>
+    /// <param name="cancellationToken">The cancel token</param>
+    /// <returns>Client secret and cert</returns>
+    /// <exception cref="InvalidOperationException">InvalidConfigurationException</exception>
+    /// <exception cref="NotSupportedException">NotSupportedException</exception>
     public (string? clientSecret, X509Certificate2? clientCert) GetClientSecretOrCert(AadSettings newAadSettings, CancellationToken cancellationToken)
     {
-        var secretProvider = serviceProvider.GetService<ISecretProvider>();
+        ISecretProvider? secretProvider = this.serviceProvider.GetService<ISecretProvider>();
 
         switch (newAadSettings.ClientSecretSource)
         {
@@ -152,7 +157,7 @@ public class AadTokenProvider
                 var clientSecretName = newAadSettings.ClientSecretName;
                 if (secretProvider == null)
                 {
-                    throw new InvalidConfigurationException($"Aad client secret source is {newAadSettings.ClientSecretSource} but secret provider is not available");
+                    throw new InvalidOperationException($"Aad client secret source is {newAadSettings.ClientSecretSource} but secret provider is not available");
                 }
 
                 var clientSecretFromVault = GetSecret(secretProvider, clientSecretName);
@@ -161,78 +166,34 @@ public class AadTokenProvider
                 var clientCertName = newAadSettings.ClientSecretName;
                 if (secretProvider == null)
                 {
-                    throw new InvalidConfigurationException($"Aad client secret source is {newAadSettings.ClientSecretSource} but secret provider is not available");
+                    throw new InvalidOperationException($"Aad client secret source is {newAadSettings.ClientSecretSource} but secret provider is not available");
                 }
 
-                var clientCertFromVault = GetCert(secretProvider, clientCertName);
+                X509Certificate2 clientCertFromVault = GetCert(secretProvider, clientCertName);
                 return (null, clientCertFromVault);
             default:
                 throw new NotSupportedException($"client secret source {newAadSettings.ClientSecretSource} is not supported");
         }
     }
 
-    private static string GetSecret(ISecretProvider secretClient, string secretName)
+    public static OSPlatform GetOSPlatform()
     {
-        var result = secretClient.GetSecret(secretName);
-        if (result == null)
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            throw new InvalidOperationException($"unable to find secret: {secretName}");
+            return OSPlatform.Windows;
         }
 
-        return result;
-    }
-
-    private static X509Certificate2 GetCert(ISecretProvider secretProvider, string certName)
-    {
-        var result = secretProvider.GetCert(certName);
-        if (result == null)
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            throw new InvalidOperationException($"unable to find certificate: {certName}");
+            return OSPlatform.Linux;
         }
 
-        return result;
-    }
-
-    private (IConfidentialClientApplicationAdapter app, X509Certificate2? clientCert) CreateConfidentialApp(CancellationToken cancellationToken)
-    {
-        (string? clientSecret, var clientCert) = GetClientSecretOrCert(aadSettings, cancellationToken);
-        var appBuilder = ConfidentialClientApplicationBuilder
-            .Create(aadSettings.ClientId);
-        if (clientSecret != null)
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            appBuilder = appBuilder.WithClientSecret(clientSecret);
-        }
-        else if (clientCert != null)
-        {
-            appBuilder = appBuilder.WithCertificate(clientCert, sendX5C: true);
+            return OSPlatform.OSX;
         }
 
-        var app = appBuilder.BuildConfidentialClientApplicationAdapter(
-            serviceProvider,
-            _ => { },
-            Microsoft.Extensions.Options.Options.Create(
-                new MsalOptions
-                {
-                    EnableTokenCaching = true,
-                    EnableCacheSynchronization = false,
-                    EnableLegacyCacheCompatibility = false
-                }));
-
-        return (app, clientCert);
-    }
-
-    private IPublicClientApplication CreatePublicClientApplication()
-    {
-        var pubAppBuilder = PublicClientApplicationBuilder
-            .Create(aadSettings.ClientId)
-            .WithAuthority(aadSettings.Authority)
-            .WithLogging(serviceProvider);
-        pubAppBuilder = aadSettings.RedirectUrl != null
-            ? pubAppBuilder.WithRedirectUri(aadSettings.RedirectUrl.ToString())
-            : pubAppBuilder.WithDefaultRedirectUri();
-
-        var pubApp = pubAppBuilder.Build();
-        return pubApp;
+        throw new PlatformNotSupportedException("The current operating system is not supported.");
     }
 
     internal static string GetSecretOrCertFile(string secretOrCertFile)
@@ -260,23 +221,64 @@ public class AadTokenProvider
         return secretOrCertFilePath;
     }
 
-    private static OSPlatform GetOSPlatform()
+    private static string GetSecret(ISecretProvider secretClient, string secretName)
     {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        var result = secretClient.GetSecret(secretName);
+        if (result == null)
         {
-            return OSPlatform.Windows;
+            throw new InvalidOperationException($"unable to find secret: {secretName}");
         }
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        return result;
+    }
+
+    private static X509Certificate2 GetCert(ISecretProvider secretProvider, string certName)
+    {
+        var result = secretProvider.GetCert(certName);
+        if (result == null)
         {
-            return OSPlatform.Linux;
+            throw new InvalidOperationException($"unable to find certificate: {certName}");
         }
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        return result;
+    }
+
+    private (IConfidentialClientApplication app, X509Certificate2? clientCert) CreateConfidentialApp(CancellationToken cancellationToken)
+    {
+        var (clientSecret, clientCert) = this.GetClientSecretOrCert(this.aadSettings, cancellationToken);
+        ConfidentialClientApplicationBuilder appBuilder;
+        if (clientSecret != null)
         {
-            return OSPlatform.OSX;
+            appBuilder = ConfidentialClientApplicationBuilder.Create(this.aadSettings.ClientId)
+                .WithClientSecret(clientSecret)
+                .WithAuthority(new Uri(this.aadSettings.Authority));
+        }
+        else if (clientCert != null)
+        {
+            appBuilder = ConfidentialClientApplicationBuilder.Create(this.aadSettings.ClientId)
+                .WithCertificate(clientCert)
+                .WithAuthority(new Uri(this.aadSettings.Authority));
+        }
+        else
+        {
+            throw new InvalidOperationException("client secret or certificate must be specified for aad settings");
         }
 
-        throw new PlatformNotSupportedException("The current operating system is not supported.");
+        IConfidentialClientApplication app = appBuilder.Build();
+
+        return (app, clientCert);
+    }
+
+    private IPublicClientApplication CreatePublicClientApplication()
+    {
+        PublicClientApplicationBuilder pubAppBuilder = PublicClientApplicationBuilder
+            .Create(this.aadSettings.ClientId)
+            .WithAuthority(this.aadSettings.Authority);
+        pubAppBuilder = this.aadSettings.RedirectUrl != null
+            ? pubAppBuilder.WithRedirectUri(this.aadSettings.RedirectUrl.ToString())
+            : pubAppBuilder.WithDefaultRedirectUri();
+
+        IPublicClientApplication pubApp = pubAppBuilder.Build();
+        return pubApp;
     }
 }

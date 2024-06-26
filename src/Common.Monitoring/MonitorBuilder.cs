@@ -15,16 +15,10 @@ using Tracing;
 
 public static class MonitorBuilder
 {
-    public static IServiceCollection AddR9Monitoring(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddMonitoring(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddR9Logging(configuration)
-            .AddR9Metrics(configuration)
-            .AddR9Tracing(configuration);
-        return services;
-    }
-
-    public static void UseR9Monitoring(this IApplicationBuilder app)
-    {
-        app.UseR9Metrics();
+        return services.AddLogging(configuration)
+            .AddMetrics(configuration)
+            .AddTracing(configuration);
     }
 }

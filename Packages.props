@@ -2,7 +2,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ExtensionVersion>8.0.0</ExtensionVersion>
-    <R9Release>8.1.0</R9Release>
     <OpenTelemetryVersion>1.7.0</OpenTelemetryVersion>
     <MSTestVersion>3.0.4</MSTestVersion>
     <ReqnrollVersion>1.0.1</ReqnrollVersion>
@@ -68,35 +67,6 @@
     <PackageReference Update="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Update="Microsoft.Azure.WebJobs.Extensions" Version="5.0.0" />
     <PackageReference Update="Microsoft.NET.Sdk.Functions" Version="4.2.0"/>
-  </ItemGroup>
-
-  <ItemGroup Label="R9">
-    <PackageReference Update="Microsoft.R9.Extensions.Authentication.Azure.Development" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Authentication.Msal" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Compliance.Redaction.xxHash" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Configuration.Secrets.AzureKeyVault" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Enrichment.CorrelationVector" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Enrichment.Service" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Enrichment.Process" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Hosting.Development" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.HttpClient.Logging" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.HttpClient.Metering" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.HttpClient.Tracing" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Logging" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Logging.Abstractions" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Logging.Exporters.Console" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Logging.Exporters.Geneva" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Metering" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Metering.Collectors.EventCounters" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Metering.Geneva" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Telemetry" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Tracing.Http" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Service.Middleware.HttpMetering" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Caching.Testing" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Compliance.Testing" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.Extensions.Testing" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.StaticAnalysis" Version="$(R9Release)" />
-    <PackageReference Update="Microsoft.R9.StaticAnalysis.Style" Version="$(R9Release)" />
   </ItemGroup>
 
   <ItemGroup Label="Azure">

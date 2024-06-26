@@ -9,9 +9,11 @@ namespace Common.Hosts;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Config;
+using Microsoft.Extensions.AmbientMetadata;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.R9.Extensions.Metering;
 
 /// <summary>
 /// generate a metric count every 15 seconds
@@ -19,12 +21,13 @@ using Microsoft.R9.Extensions.Metering;
 public sealed class KeepAlive : BackgroundService
 {
     private readonly ILogger<KeepAlive> log;
-    private readonly Heartbeat heartbeat;
+    private readonly HeartbeatMeter meter;
 
-    public KeepAlive(ILogger<KeepAlive> log, IMeter meter)
+    public KeepAlive(ILogger<KeepAlive> log, IConfiguration configuration)
     {
         this.log = log;
-        this.heartbeat = HeartbeatMeter.CreateHeartbeat(meter);
+        var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
+        this.meter = HeartbeatMeter.Instance(metadata);
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -32,7 +35,7 @@ public sealed class KeepAlive : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             log.Heartbeat();
-            heartbeat.Add(1);
+            this.meter.IncrementHeartbeat();
 
             var sleepSeconds = 15;
 

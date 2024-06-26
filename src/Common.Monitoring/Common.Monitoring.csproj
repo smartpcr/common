@@ -15,20 +15,6 @@
     <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" />
-    <PackageReference Include="Microsoft.R9.Extensions.Compliance.Redaction.xxHash" />
-    <PackageReference Include="Microsoft.R9.Extensions.Enrichment.CorrelationVector" />
-    <PackageReference Include="Microsoft.R9.Extensions.Enrichment.Service" />
-    <PackageReference Include="Microsoft.R9.Extensions.Enrichment.Process" />
-    <PackageReference Include="Microsoft.R9.Extensions.HttpClient.Logging" />
-    <PackageReference Include="Microsoft.R9.Extensions.HttpClient.Metering" />
-    <PackageReference Include="Microsoft.R9.Extensions.HttpClient.Tracing" />
-    <PackageReference Include="Microsoft.R9.Extensions.Logging" />
-    <PackageReference Include="Microsoft.R9.Extensions.Logging.Exporters.Console" />
-    <PackageReference Include="Microsoft.R9.Extensions.Logging.Exporters.Geneva" />
-    <PackageReference Include="Microsoft.R9.Extensions.Metering" />
-    <PackageReference Include="Microsoft.R9.Extensions.Metering.Collectors.EventCounters" />
-    <PackageReference Include="Microsoft.R9.Extensions.Metering.Geneva" />
-    <PackageReference Include="Microsoft.R9.Service.Middleware.HttpMetering" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="OpenTelemetry.Exporter.Console" />
     <PackageReference Include="OpenTelemetry.Exporter.Geneva" />
@@ -40,6 +26,7 @@
     <PackageReference Include="OpenTelemetry.Exporter.Zipkin" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
   </ItemGroup>
 

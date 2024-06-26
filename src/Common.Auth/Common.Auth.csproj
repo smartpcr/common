@@ -16,8 +16,6 @@
     <PackageReference Include="Microsoft.Extensions.Compliance.Redaction" />
     <PackageReference Include="Microsoft.Extensions.Compliance.Testing" />
     <PackageReference Include="Microsoft.Identity.Client" />
-    <PackageReference Include="Microsoft.R9.Extensions.Authentication.Msal" />
-    <PackageReference Include="Microsoft.R9.Extensions.Caching.Testing" />
   </ItemGroup>
 
   <ItemGroup>

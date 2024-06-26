@@ -6,10 +6,26 @@
 
 namespace Common.Hosts;
 
-using Microsoft.R9.Extensions.Metering;
+using System.Diagnostics.Metrics;
+using Microsoft.Extensions.AmbientMetadata;
 
-internal static partial class HeartbeatMeter
+internal class HeartbeatMeter
 {
-    [Counter]
-    public static partial Heartbeat CreateHeartbeat(IMeter meter);
+    private readonly Counter<long> _heartbeat;
+
+    public HeartbeatMeter(ApplicationMetadata metadata)
+    {
+        var meter = new Meter($"{metadata.ApplicationName}.{nameof(HeartbeatMeter)}", metadata.BuildVersion);
+        this._heartbeat = meter.CreateCounter<long>("heartbeat", "Heartbeat");
+    }
+
+    public static HeartbeatMeter Instance(ApplicationMetadata metadata)
+    {
+        return new HeartbeatMeter(metadata);
+    }
+
+    public void IncrementHeartbeat()
+    {
+        this._heartbeat.Add(1);
+    }
 }

@@ -19,7 +19,7 @@ using Sinks;
 
 public static class TraceBuilder
 {
-    public static IServiceCollection AddR9Tracing(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddTracing(this IServiceCollection services, IConfiguration configuration)
     {
         var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
         var traceSettings = configuration.GetConfiguredSettings<MonitorSettings>().Traces;
@@ -41,7 +41,6 @@ public static class TraceBuilder
                     .AddSource(metadata.ApplicationName)
                     .AddSource(metadata.ApplicationName + ".*") // make sure all traces starts with ApplicationName
                     .SetSampler(_ => CreateSampler(traceSettings))
-                    .AddHttpClientInstrumentation()
                     .AddAspNetCoreInstrumentation(options =>
                     {
                         options.RecordException = true;

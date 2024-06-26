@@ -77,7 +77,7 @@ public sealed class SetupKeyVault
         {
             var services = TryGetServices(scenarioContext);
             configuration = services.AddConfiguration();
-            services.AddR9Monitoring(configuration);
+            services.AddMonitoring(configuration);
             scenarioContext.Set(configuration);
         }
 

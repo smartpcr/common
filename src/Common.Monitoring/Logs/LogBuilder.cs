@@ -12,13 +12,12 @@ using Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.R9.Extensions.Logging;
 using OpenTelemetry.Logs;
 using Sinks;
 
 public static class LogBuilder
 {
-    public static IServiceCollection AddR9Logging(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddLogging(this IServiceCollection services, IConfiguration configuration)
     {
         var monitorSettings = configuration.GetConfiguredSettings<MonitorSettings>();
         var logSettings = monitorSettings.Logs;
@@ -26,12 +25,7 @@ public static class LogBuilder
 
         services.AddLogging(loggingBuilder =>
         {
-            loggingBuilder.AddOpenTelemetryLogging(options =>
-            {
-                options.IncludeScopes = true;
-                options.UseFormattedMessage = true;
-                options.IncludeStackTrace = true;
-            }).AddOpenTelemetry(loggerOptions =>
+            loggingBuilder.AddOpenTelemetry(loggerOptions =>
             {
                 if (logSettings.SinkTypes.HasFlag(LogSinkTypes.Console))
                 {

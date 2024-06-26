@@ -8,9 +8,7 @@ namespace Common.Auth;
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Caching;
 using Config;
@@ -25,22 +23,10 @@ using Microsoft.Extensions.Compliance.Classification;
 using Microsoft.Extensions.Compliance.Redaction;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.R9.Extensions.Authentication.Msal;
-using Microsoft.R9.Extensions.Authentication.Msal.Caching;
-using Microsoft.R9.Extensions.Authentication.Msal.HttpClient;
-using Microsoft.R9.Extensions.Caching;
-using Microsoft.R9.Extensions.HttpClient.Resilience;
-using Microsoft.R9.Extensions.Metering;
 using Settings;
 
 public static class AadAuthBuilder
 {
-    private const string MsalOptionSettingFile = "appsettings.msaloptions.json";
-    private const string MsalOptionDevelopmentSettingFile = "appsettings.msaloptions-Development.json";
-    private const string MsalTelemetryOptionsSection = "msalTelemetryOptions";
-    private const string MsalCachingOptions = "msalCachingOptions";
-    private const string MsalHttpClientOptions = "msalHttpClientOptions";
-
     /// <summary>
     /// Add both authentication and authorization using AAD
     /// </summary>
@@ -126,36 +112,13 @@ public static class AadAuthBuilder
     /// <param name="services"></param>
     private static void AddR9AuthSetup(this IServiceCollection services)
     {
-        var serviceProvider = services.BuildServiceProvider();
-        var hostEnv = serviceProvider.GetRequiredService<IHostEnvironment>();
         services
             .AddRedaction(builder => builder.SetFakeRedactor(DataClassification.Unknown))
             .AddLogging()
-            .AddNullMetering()
             .AddSingleton<MemoryCache>()
             .AddSingleton<IMemoryCache, MemoryCacheWrapper>()
-            .AddSingleton(_ => TimeProvider.System)
-            .AddSingleton<FakeExtendedDistributedCache>()
-            .AddSingleton<IExtendedDistributedCache, ExtendedDistributedCacheWrapper>(); // deprecated, use polly instead
+            .AddSingleton(_ => TimeProvider.System);
         Console.WriteLine("registered caching, telemetry, logging, and http client for MSAL");
-
-        if (File.Exists(MsalOptionSettingFile))
-        {
-            var msalConfig = OptionsBuilder.LoadAdditionalConfigurationFile(MsalOptionSettingFile);
-            if (hostEnv.IsDevelopment && File.Exists(MsalOptionDevelopmentSettingFile))
-            {
-                File.Copy(MsalOptionSettingFile, MsalOptionDevelopmentSettingFile, true);
-                msalConfig = OptionsBuilder.LoadAdditionalConfigurationFile(MsalOptionDevelopmentSettingFile);
-            }
-
-            services.AddMsalTelemetry(msalConfig.GetSection(MsalTelemetryOptionsSection));
-            var cacheSection = msalConfig.GetSection(MsalCachingOptions);
-            cacheSection["TokenEncryptionKey"] = Convert.ToBase64String(Encoding.UTF8.GetBytes("helloworldhelloworldhelloworld!"));
-            services.AddMsalTokensCaching(cacheSection);
-            services.AddStandardMsalClient().Configure(msalConfig.GetSection(MsalHttpClientOptions)); // deprecated, use polly instead
-
-            Console.WriteLine("registered R9 MSAL telemetry, caching, and http client");
-        }
     }
 
     private static Func<HttpContext, string> AuthSelector(string fallbackScheme)

@@ -113,7 +113,7 @@ public class BlobClientAuthHelper
         logger.CreateBlobClientStart(blobSettings.Account, blobSettings.AuthMode.ToString());
         try
         {
-            var clientCredential = authTokenProvider.GetClientCredential(CancellationToken.None);
+            var (clientCredential, _) = authTokenProvider.GetClientCredential(CancellationToken.None);
 
             BlobContainerClient containerClient = new BlobContainerClient(
                 new Uri(blobSettings.ContainerEndpoint),

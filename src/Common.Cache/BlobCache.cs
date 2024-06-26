@@ -7,6 +7,7 @@
 namespace Common.Cache;
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +18,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.R9.Extensions.Metering;
 using OpenTelemetry.Trace;
 using Settings;
 using Storage.Blobs;
@@ -28,10 +28,7 @@ public class BlobCache : IDistributedCache
     private readonly CacheSettings cacheSettings;
     private readonly ILogger<BlobCache> logger;
     private readonly Tracer tracer;
-    private readonly CacheMisses totalMisses;
-    private readonly CacheHits totalHits;
-    private readonly CacheWrites totalWrites;
-    private readonly CacheExpires totalExpires;
+    private readonly CacheMeter meter;
     private readonly string tempFolder = Path.GetTempPath();
 
     public BlobCache(IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
@@ -41,11 +38,7 @@ public class BlobCache : IDistributedCache
         var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
         var traceProvider = serviceProvider.GetRequiredService<TracerProvider>();
         tracer = traceProvider.GetTracer(metadata.ApplicationName + $".{nameof(BlobCache)}", metadata.BuildVersion);
-        IMeter meter = serviceProvider.GetRequiredService<IMeter>();
-        totalMisses = CacheMeter.CreateCacheMisses(meter);
-        totalHits = CacheMeter.CreateCacheHits(meter);
-        totalWrites = CacheMeter.CreateCacheWrites(meter);
-        totalExpires = CacheMeter.CreateCacheExpires(meter);
+        meter = CacheMeter.Instance(metadata);
         cacheSettings = configuration.GetConfiguredSettings<CacheSettings>();
         blobStorageClient = new BlobStorageClient(serviceProvider,
             loggerFactory,
@@ -61,18 +54,24 @@ public class BlobCache : IDistributedCache
     {
         using var _ = tracer.StartActiveSpan(nameof(GetAsync));
         logger.ReadCacheStart(key);
+        var cacheDimensions = new[]
+        {
+            new KeyValuePair<string, object?>("name", nameof(BlobCache)),
+            new KeyValuePair<string, object?>("key", key)
+        };
+
         var tokenInfo = await blobStorageClient.GetBlobInfoAsync(key, token);
         if (tokenInfo == null)
         {
             logger.BlobCacheMiss(key);
-            totalMisses.Add(1, new CacheDimension(nameof(BlobCache), key));
+            this.meter.IncrementCacheMisses(cacheDimensions);
             return null;
         }
 
         if (tokenInfo.CreatedOn.Add(cacheSettings.TimeToLive) < DateTimeOffset.UtcNow)
         {
             logger.BlobCacheExpired(key);
-            totalExpires.Add(1, new CacheDimension(nameof(BlobCache), key));
+            this.meter.IncrementCacheExpires(cacheDimensions);
             return null;
         }
 
@@ -86,7 +85,7 @@ public class BlobCache : IDistributedCache
         var bytes = await File.ReadAllBytesAsync(downloadedBlogFile, token);
         File.Delete(downloadedBlogFile);
         logger.BlobCacheDownloaded(key);
-        totalHits.Add(1, new CacheDimension(nameof(BlobCache), key));
+        this.meter.IncrementCacheHits(cacheDimensions);
         return bytes;
     }
 
@@ -99,8 +98,14 @@ public class BlobCache : IDistributedCache
     public async Task SetAsync(string key, byte[] value, DistributedCacheEntryOptions options, CancellationToken token = new CancellationToken())
     {
         using var _ = tracer.StartActiveSpan(nameof(SetAsync));
+        var cacheDimensions = new[]
+        {
+            new KeyValuePair<string, object?>("name", nameof(BlobCache)),
+            new KeyValuePair<string, object?>("key", key)
+        };
+
         await blobStorageClient.UpsertAsync(key, value, null, token);
-        totalWrites.Add(1, new CacheDimension(nameof(BlobCache), key));
+        this.meter.IncrementCacheWrites(cacheDimensions);
     }
 
     public void Refresh(string key)

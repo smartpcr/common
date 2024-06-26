@@ -8,9 +8,6 @@
     <PackageReference Include="Ensure.That" />
     <PackageReference Include="Microsoft.Extensions.Compliance.Redaction" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" />
-    <PackageReference Include="Microsoft.R9.Extensions.Compliance.Redaction.xxHash" />
-    <PackageReference Include="Microsoft.R9.Extensions.HttpClient.Logging" />
-    <PackageReference Include="Microsoft.R9.Extensions.HttpClient.Metering" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="Polly" />
   </ItemGroup>

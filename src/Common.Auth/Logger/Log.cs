@@ -9,7 +9,6 @@ namespace Common.Auth.Logger;
 using System;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
-using Microsoft.R9.Extensions.Data.Classification;
 using Settings;
 
 internal static partial class Log
@@ -30,12 +29,11 @@ internal static partial class Log
     [LoggerMessage(
         2,
         LogLevel.Information,
-        "Got access token, scopes: {scopes}, access token: {accessToken}, expires on: {expiresOn}" +
+        "Got access token, scopes: {scopes}, access token: obfuscated, expires on: {expiresOn}" +
         ", \n\tcalled from {memberName}, in file {callerFile}, at line {lineNumber}")]
     public static partial void GotAccessToken(
         this ILogger logger,
         string[] scopes,
-        [EUPI] string accessToken,
         DateTimeOffset expiresOn,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string callerFile = "",

@@ -7,6 +7,7 @@
 namespace Common.Cache;
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -19,7 +20,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.R9.Extensions.Metering;
 using OpenTelemetry.Trace;
 using Settings;
 
@@ -29,9 +29,7 @@ public class SpillableMemoryCache : IDistributedCache
     private readonly CacheSettings cacheSettings;
     private readonly ILogger<SpillableMemoryCache> logger;
     private readonly Tracer tracer;
-    private readonly CacheMisses totalMisses;
-    private readonly CacheHits totalHits;
-    private readonly CacheExpires totalExpires;
+    private readonly CacheMeter meter;
     private readonly MemoryCache memoryCache;
 
     public SpillableMemoryCache(IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
@@ -41,10 +39,7 @@ public class SpillableMemoryCache : IDistributedCache
         var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
         var traceProvider = serviceProvider.GetRequiredService<TracerProvider>();
         tracer = traceProvider.GetTracer(metadata.ApplicationName + $".{nameof(SpillableMemoryCache)}", metadata.BuildVersion);
-        IMeter meter = serviceProvider.GetRequiredService<IMeter>();
-        totalMisses = CacheMeter.CreateCacheMisses(meter);
-        totalHits = CacheMeter.CreateCacheHits(meter);
-        totalExpires = CacheMeter.CreateCacheExpires(meter);
+        meter = CacheMeter.Instance(metadata);
 
         cacheSettings = configuration.GetConfiguredSettings<CacheSettings>();
         cacheFolder = cacheSettings.FileCache!.CacheFolder;
@@ -85,16 +80,22 @@ public class SpillableMemoryCache : IDistributedCache
     {
         using var _ = tracer.StartActiveSpan(nameof(GetAsync));
         logger.ReadCacheStart(key);
+        var cacheDimensions = new[]
+        {
+            new KeyValuePair<string, object?>("name", nameof(SpillableMemoryCache)),
+            new KeyValuePair<string, object?>("key", key)
+        };
+
         try
         {
             if (memoryCache.TryGetValue(key, out var value) && value is byte[] cachedValue)
             {
                 logger.ReadCacheStop(key);
-                totalHits.Add(1, new CacheDimension(nameof(SpillableMemoryCache), key));
+                this.meter.IncrementCacheHits(cacheDimensions);
                 return cachedValue;
             }
 
-            totalMisses.Add(1, new CacheDimension(nameof(SpillableMemoryCache), key));
+            this.meter.IncrementCacheMisses(cacheDimensions);
 
             var cacheFile = Path.Combine(cacheFolder, key);
             if (File.Exists(cacheFile))
@@ -102,18 +103,18 @@ public class SpillableMemoryCache : IDistributedCache
                 if (File.GetCreationTimeUtc(cacheFile).Add(cacheSettings.TimeToLive) < DateTimeOffset.UtcNow)
                 {
                     logger.ReadCacheFromFileStart(key);
-                    totalExpires.Add(1, new CacheDimension(nameof(SpillableMemoryCache), key));
+                    this.meter.IncrementCacheExpires(cacheDimensions);
                     return null;
                 }
             }
             else
             {
-                totalMisses.Add(1, new CacheDimension(nameof(cacheFile), key));
+                this.meter.IncrementCacheMisses(cacheDimensions);
                 return null;
             }
 
             var fileContent = await File.ReadAllBytesAsync(cacheFile, token);
-            totalHits.Add(1, new CacheDimension(nameof(cacheFile), key));
+            this.meter.IncrementCacheHits(cacheDimensions);
             var size = (int)Math.Ceiling((double)fileContent.Length / 1_000_000); // MB
             var entryOptions = new MemoryCacheEntryOptions()
                 .SetSize(size)
@@ -143,6 +144,7 @@ public class SpillableMemoryCache : IDistributedCache
     {
         using var _ = tracer.StartActiveSpan(nameof(SetAsync));
         logger.WriteCacheStart(key, value.Length);
+
         try
         {
             var size = (int)Math.Ceiling((double)value.Length / 1_000_000); // MB
