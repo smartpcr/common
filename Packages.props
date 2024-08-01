@@ -93,6 +93,7 @@
     <PackageReference Update="Microsoft.Azure.Storage.Queue" Version="11.0.1" />
     <PackageReference Update="Microsoft.Bcl.TimeProvider" Version="8.0.0" />
     <PackageReference Update="Microsoft.CodeAnalysis.Common" Version="4.8.0" />
+    <PackageReference Update="Microsoft.Diagnostics.Tracing.TraceEvent" Version="3.1.13" />
     <PackageReference Update="Microsoft.Identity.Client" Version="4.61.3" />
     <PackageReference Update="Microsoft.PowerShell.SDK" Version="7.4.1" />
     <PackageReference Update="System.Management" Version="8.0.0" />
