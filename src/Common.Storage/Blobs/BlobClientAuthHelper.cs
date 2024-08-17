@@ -24,7 +24,7 @@ public class BlobClientAuthHelper
     private readonly BlobStorageSettings blobSettings;
     private readonly ILogger<BlobClientAuthHelper> logger;
     private readonly ISecretProvider? secretProvider;
-    private readonly AadTokenProvider authTokenProvider;
+    private readonly AadTokenProvider? authTokenProvider;
 
     public BlobServiceClient BlobService { get; private set; }
     public BlobContainerClient ContainerClient { get; private set; }
@@ -35,7 +35,9 @@ public class BlobClientAuthHelper
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
         blobSettings = settings ?? configuration.GetConfiguredSettings<BlobStorageSettings>();
         secretProvider = serviceProvider.GetService<ISecretProvider>();
-        authTokenProvider = new AadTokenProvider(serviceProvider);
+        authTokenProvider = configuration.ContainsSettings<AadSettings>()
+            ? new AadTokenProvider(serviceProvider)
+            : null;
         logger = loggerFactory.CreateLogger<BlobClientAuthHelper>();
 
         (BlobService, ContainerClient, CreateContainerClient) = Initialize();
@@ -111,6 +113,11 @@ public class BlobClientAuthHelper
         TryCreateUsingSpn()
     {
         logger.CreateBlobClientStart(blobSettings.Account, blobSettings.AuthMode.ToString());
+        if (this.authTokenProvider == null)
+        {
+            throw new InvalidConfigurationException($"Blob client auth {blobSettings.AuthMode} requires {nameof(AadSettings)} to be configured");
+        }
+
         try
         {
             var (clientCredential, _) = authTokenProvider.GetClientCredential(CancellationToken.None);

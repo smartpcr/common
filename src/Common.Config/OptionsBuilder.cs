@@ -163,6 +163,13 @@ namespace Common.Config
             return settings;
         }
 
+        public static bool ContainsSettings<T>(this IConfiguration configuration, string? sectionName = null)
+            where T : class, new()
+        {
+            var configSection = GetConfigSection<T>(configuration, sectionName);
+            return configSection.Exists();
+        }
+
         /// <summary>
         /// flexibly load additional configuration files on demand and use them independently of the application's primary configuration
         /// </summary>
