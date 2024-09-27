@@ -31,23 +31,29 @@ namespace Common.XmlSchema
             }
 
             var enumBuilder = new StringBuilder();
+            enumBuilder.AppendLine(@$"//--------------------------------------------------------------
+// <copyright file=""Enums.cs"" company=""Microsoft Corp."">
+//     Copyright (c) Microsoft Corp. All rights reserved.
+// </copyright>
+//--------------------------------------------------------------
+");
             var enumTypes = new HashSet<string>();
             var indent = 0;
-            enumBuilder.Append($"{Indent(indent)}namespace {@namespace}\n{{");
+            enumBuilder.Append($"{Indent(indent)}namespace {@namespace}{Environment.NewLine}{{");
             indent++; // class
             this.GenerateEnums(enumBuilder, indent, enumTypes);
             indent--; // namespace
-            enumBuilder.Append($"\n{Indent(indent)}}}");
+            enumBuilder.Append($"{Environment.NewLine}{Indent(indent)}}}");
             System.IO.File.WriteAllText(Path.Combine(outputFolderPath, $"Enums.cs"), enumBuilder.ToString());
 
             var complexTypes = this._xsdSchema.Descendants().Where(e => e.Name.LocalName == "complexType");
             foreach (var complexType in complexTypes)
             {
-                this.GenerateCodeForComplexType(complexType, @namespace, outputFolderPath);
+                this.GenerateCodeForComplexType(complexType, @namespace, enumTypes, outputFolderPath);
             }
         }
 
-        private void GenerateCodeForComplexType(XElement complexType, string @namespace, string outputFolderPath)
+        private void GenerateCodeForComplexType(XElement complexType, string @namespace, HashSet<string> enumTypes, string outputFolderPath)
         {
             var indent = 0;
             var className = complexType.Attribute("name")?.Value ?? complexType.Parent?.Attribute("name")?.Value;
@@ -57,15 +63,21 @@ namespace Common.XmlSchema
             }
 
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"{Indent(indent)}namespace {@namespace}\n{{");
+            stringBuilder.AppendLine(@$"//--------------------------------------------------------------
+// <copyright file=""{className}.cs"" company=""Microsoft Corp."">
+//     Copyright (c) Microsoft Corp. All rights reserved.
+// </copyright>
+//--------------------------------------------------------------
+");
+            stringBuilder.Append($"{Indent(indent)}namespace {@namespace}{Environment.NewLine}{{");
             indent++; // class
-            stringBuilder.Append($"\n{Indent(indent)}using System;");
-            stringBuilder.Append($"\n{Indent(indent)}using System.Collections.Generic;");
-            stringBuilder.Append($"\n{Indent(indent)}using System.Xml.Serialization;");
-            stringBuilder.Append($"\n{Indent(indent)}using System.ComponentModel.DataAnnotations;\n");
+            stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}using System;");
+            stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}using System.Collections.Generic;");
+            stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}using System.ComponentModel.DataAnnotations;");
+            stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}using System.Xml.Serialization;{Environment.NewLine}");
 
-            stringBuilder.Append($"\n{Indent(indent)}[XmlRoot(\"{className}\")]");
-            stringBuilder.Append($"\n{Indent(indent)}public class {className}\n{Indent(indent)}{{");
+            stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlRoot(\"{className}\")]");
+            stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public partial class {className}{Environment.NewLine}{Indent(indent)}{{");
             indent++; // properties
 
             var elements = complexType.Element(xs + "sequence")?.Elements().Where(e => e.Name.LocalName == "element").ToList();
@@ -77,15 +89,22 @@ namespace Common.XmlSchema
                     string propertyType = GetPropertyType(element);
                     bool isRequired = element.Attribute("minOccurs")?.Value == "1";
                     bool isList = element.Attribute("maxOccurs")?.Value == "unbounded";
+                    if (enumTypes.Contains(propertyType) && !isRequired)
+                    {
+                        propertyType += "?";
+                    }
+                    string typeName = $"{(isList ? "List<" : "")}{propertyType}{(isList ? ">" : "")}";
+
                     if (isRequired)
                     {
-                        stringBuilder.Append($"\n{Indent(indent)}[Required][XmlElement(\"{propertyName}\")]");
+                        stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[Required][XmlElement(\"{propertyName}\")]");
                     }
                     else
                     {
-                        stringBuilder.Append($"\n{Indent(indent)}[XmlElement(\"{propertyName}\")]");
+                        stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlElement(\"{propertyName}\")]");
                     }
-                    stringBuilder.Append($"\n{Indent(indent)}public {(isList ? "List<" : "")}{propertyType}{(isList ? ">" : "")} {propertyName} {{ get; set; }}\n");
+
+                    stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public {typeName} {propertyName} {{ get; set; }}{Environment.NewLine}");
                 }
             }
 
@@ -95,21 +114,26 @@ namespace Common.XmlSchema
                 string attrName = attribute.Attribute("name")!.Value;
                 bool isRequired = attribute.Attribute("use")?.Value == "required";
                 string attrType = GetPropertyType(attribute);
+                if (enumTypes.Contains(attrType) && !isRequired)
+                {
+                    attrType += "?";
+                }
+
                 if (isRequired)
                 {
-                    stringBuilder.Append($"\n{Indent(indent)}[Required][XmlAttribute(\"{attrName}\")]");
+                    stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[Required][XmlAttribute(\"{attrName}\")]");
                 }
                 else
                 {
-                    stringBuilder.Append($"\n{Indent(indent)}[XmlAttribute(\"{attrName}\")]");
+                    stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlAttribute(\"{attrName}\")]");
                 }
-                stringBuilder.Append($"\n{Indent(indent)}public {attrType} {attrName} {{ get; set; }}\n");
+                stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public {attrType} {attrName} {{ get; set; }}{Environment.NewLine}");
             }
 
             indent--; // class
-            stringBuilder.Append($"\n{Indent(indent)}}}");
+            stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}}}");
             indent--; // namespace
-            stringBuilder.Append($"\n{Indent(indent)}}}");
+            stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}}}");
             System.IO.File.WriteAllText(Path.Combine(outputFolderPath, $"{className}.cs"), stringBuilder.ToString());
         }
 
@@ -129,8 +153,8 @@ namespace Common.XmlSchema
                     string enumName = simpleType.Attribute("name")!.Value;
                     if (!string.IsNullOrEmpty(enumName))
                     {
-                        stringBuilder.Append($"\n{this.Indent(indent)}public enum {enumName}");
-                        stringBuilder.Append($"\n{this.Indent(indent)}{{");
+                        stringBuilder.Append($"{Environment.NewLine}{this.Indent(indent)}public enum {enumName}");
+                        stringBuilder.Append($"{Environment.NewLine}{this.Indent(indent)}{{");
 
 
                         var enumerations = restriction.Elements().Where(e => e.Name.LocalName == "enumeration");
@@ -140,11 +164,11 @@ namespace Common.XmlSchema
                             if (!string.IsNullOrEmpty(enumValue))
                             {
                                 enumValue = this.ToEnumName(enumValue);
-                                stringBuilder.Append($"\n{this.Indent(indent + 1)}{enumValue},");
+                                stringBuilder.Append($"{Environment.NewLine}{this.Indent(indent + 1)}{enumValue},");
                             }
                         }
 
-                        stringBuilder.Append($"\n{this.Indent(indent)}}}\n");
+                        stringBuilder.Append($"{Environment.NewLine}{this.Indent(indent)}}}{Environment.NewLine}");
                         enumTypes.Add(enumName);
                     }
                 }
@@ -191,6 +215,10 @@ namespace Common.XmlSchema
                 case "xs:int":
                 case "xs:integer":
                     return "int";
+                case "xs:unsignedInt":
+                    return "uint";
+                case "xs:long":
+                    return "long";
                 case "xs:decimal":
                     return "decimal";
                 case "xs:date":

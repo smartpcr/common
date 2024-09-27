@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="bin\Debug\net8.0\Output\" />
+      <Content Include="Features\CSharpGenerator.feature" />
     </ItemGroup>
 
 </Project>

@@ -9,7 +9,7 @@ namespace Rule.Expressions.Tests.Steps
     using System.Linq;
     using FluentAssertions;
     using Models;
-    using TechTalk.SpecFlow;
+    using Reqnroll;
     using TechTalk.SpecFlow.Assist;
 
     [Binding]

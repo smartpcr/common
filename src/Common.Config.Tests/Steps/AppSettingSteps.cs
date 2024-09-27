@@ -17,7 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Models;
 using Newtonsoft.Json.Linq;
-using TechTalk.SpecFlow;
+using Reqnroll;
 using TechTalk.SpecFlow.Assist;
 
 [Binding]

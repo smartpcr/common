@@ -4,8 +4,8 @@
 
 Scenario: generate csharp code from a simple schema
 	Given xsd schema file "TestData\\DiscoveryManifest.xsd"
-	When I generate csharp code with namespace "Microsoft.AzureStack.Services.Update.ResourceProvider.Discovery.UnitTest.Schema.DiscoveryManifest" to output folder "E:\\work\\hci\\update\\src\\UpdateResourceProvider\\UpdateService\\Discovery\\UnitTest\\Schema\\DiscoveryManifest"
-  Then the code should be generated to "E:\\work\\hci\\update\\src\\UpdateResourceProvider\\UpdateService\\Discovery\\UnitTest\\Schema\\DiscoveryManifest"
+	When I generate csharp code with namespace "Microsoft.AzureStack.Services.Update.ResourceProvider.Discovery.UnitTest.Schema.DiscoveryManifest" to output folder "E:\\work\\hci\\urp\\src\\UpdateResourceProvider\\UpdateService\\Discovery\\UnitTest\\Schema\\DiscoveryManifest"
+  Then the code should be generated to "E:\\work\\hci\\urp\\src\\UpdateResourceProvider\\UpdateService\\Discovery\\UnitTest\\Schema\\DiscoveryManifest"
   | FileName |
   | Enums.cs |
-  | DiscoveryManifest.cs |
+  | Hotpatch.cs |
