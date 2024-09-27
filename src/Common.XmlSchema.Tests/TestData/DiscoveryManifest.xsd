@@ -1,0 +1,284 @@
+<?xml version="1.0"?>
+<!-- edited with XMLSpy v2017 (x64) (http://www.altova.com) by Xiaodong Li (Private) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:complexType name="UpdateDiscoveryManifest">
+    <xs:sequence>
+      <xs:element name="ManifestInfo" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="CreationDate" type="xs:dateTime" use="required"/>
+          <xs:attribute name="CreatedBy" type="xs:string" use="optional"/>
+          <xs:attribute name="ManifestType" type="ManifestType" use="optional"/>
+          <xs:attribute name="ReleaseType" type="ReleaseType" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Services" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ApplicableUpdate" type="ApplicableUpdateType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="RecalledUpdate" type="ApplicableUpdateType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Platform" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ApplicableUpdate" type="ApplicableUpdateType"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PackageMetadata" type="PackageMetadataType" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="DeferScanAndDownload" type="xs:boolean"/>
+    <xs:attribute name="InstallType" type="InstallType"/>
+  </xs:complexType>
+  <xs:complexType name="ApplicableUpdateType">
+    <xs:sequence>
+      <xs:element name="ValidatedConfigurations" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="RequiredPackages" type="RequiredPackagesType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="UpdateInfo" type="UpdateInfoType"/>
+      <xs:element name="File" type="FileType"/>
+      <xs:element name="SolutionMetadata" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Update" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:attribute name="Type" type="xs:string" use="required"/>
+                <xs:attribute name="Version" type="xs:string" use="required"/>
+                <xs:attribute name="InstallType"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="BillOfMaterials" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="BomItem" type="BomItemType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Type" type="xs:string" use="required"/>
+    <xs:attribute name="Version" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="UpdateInfoType">
+    <xs:sequence>
+      <xs:element name="UpdateName" type="xs:string"/>
+      <xs:element name="Version" type="xs:string"/>
+      <xs:element name="Type" minOccurs="0"/>
+      <xs:element name="Description" type="xs:string" minOccurs="0"/>
+      <xs:element name="Tags" type="xs:string" minOccurs="0"/>
+      <xs:element name="PackageSizeInMb" type="xs:int" minOccurs="0"/>
+      <xs:element name="KBLink" type="xs:string" minOccurs="0"/>
+      <xs:element name="MinVersionRequired" type="xs:string" minOccurs="0"/>
+      <xs:element name="MinOEMVersionRequired" type="xs:string" minOccurs="0"/>
+      <xs:element name="PlatformConsistencyEnforcement" type="xs:string" minOccurs="0"/>
+      <xs:element name="PackageHash" type="xs:string" minOccurs="0"/>
+      <xs:element name="OemVersions" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="OEMVersion" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="UpdateImpact" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="InstalledSBE" minOccurs="0" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:attribute name="Version" type="xs:string" use="required"/>
+                <xs:attribute name="RebootRequired" type="xs:boolean" use="required"/>
+                <xs:attribute name="ExpectedDurationMinutes" type="xs:int"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ValidatedConfigurations" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="RequiredPackages" type="RequiredPackagesType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Publisher" type="xs:string" minOccurs="0"/>
+      <xs:element name="SupportedModels" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="SupportedModel" type="xs:string" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="RebootRequired" type="RebootRequiredType" minOccurs="0"/>
+      <xs:element name="Copyright" type="xs:string" minOccurs="0"/>
+      <xs:element name="LicenseUri" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RequiredPackagesType">
+    <xs:sequence>
+      <xs:element name="Package" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="Type" type="xs:string" use="required"/>
+          <xs:attribute name="Version" type="xs:string"/>
+          <xs:attribute name="MinVersionRequired" type="xs:string"/>
+          <xs:attribute name="Publisher" type="xs:string"/>
+          <xs:attribute name="Family" type="xs:string"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PackageMetadataType">
+    <xs:sequence>
+      <xs:element name="ServicesUpdates">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Update" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="UpdateInfo">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="UpdateName" type="xs:string"/>
+                        <xs:element name="Version" type="xs:string"/>
+                        <xs:element name="Description" type="xs:string"/>
+                        <xs:element name="PackageSizeInMb" type="xs:unsignedByte"/>
+                        <xs:element name="RebootRequired" type="RebootRequiredType"/>
+                        <xs:element name="KBLink" type="xs:string"/>
+                        <xs:element name="PackageHash" type="xs:string"/>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="File" type="FileType"/>
+                </xs:sequence>
+                <xs:attribute name="Type" type="xs:string" use="required"/>
+                <xs:attribute name="Version" type="xs:string" use="required"/>
+                <xs:attribute name="InstallType" type="xs:string" use="optional"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PlatformUpdates">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Update" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="UpdateInfo">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="UpdateName" type="xs:string"/>
+                        <xs:element name="Version" type="xs:string"/>
+                        <xs:element name="Description" type="xs:string"/>
+                        <xs:element name="KBLink" type="xs:string"/>
+                        <xs:element name="PackageSizeInMb" type="xs:unsignedByte"/>
+                        <xs:element name="RebootRequired" type="RebootRequiredType"/>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="OS" minOccurs="0">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="Coldpatch" minOccurs="0">
+                          <xs:complexType>
+                            <xs:attribute name="Version" type="xs:string" use="required"/>
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="Hotpatch" minOccurs="0">
+                          <xs:complexType>
+                            <xs:attribute name="Version" type="xs:string" use="required"/>
+                            <xs:attribute name="BaselineVersion" type="xs:string" use="required"/>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:sequence>
+                      <xs:attribute name="Branch" type="xs:string" use="required"/>
+                      <xs:attribute name="SKU" type="xs:unsignedShort" use="required"/>
+                      <xs:attribute name="Product" type="xs:string" use="required"/>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+                <xs:attribute name="Type" type="xs:string" use="required"/>
+                <xs:attribute name="Version" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SBEUpdates">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Update" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="UpdateInfo" type="UpdateInfoType"/>
+                  <xs:element name="File" type="FileType"/>
+                </xs:sequence>
+                <xs:attribute name="Type" type="xs:string" use="required"/>
+                <xs:attribute name="Version" type="xs:string" use="required"/>
+                <xs:attribute name="Family" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FileType">
+    <xs:attribute name="Name" type="xs:string" use="required"/>
+    <xs:attribute name="Uri" type="xs:string" use="required"/>
+    <xs:attribute name="Type" type="DeliveryType"/>
+    <xs:attribute name="NotifyUri" type="xs:string"/>
+    <xs:attribute name="NotifyMsg" type="xs:string"/>
+  </xs:complexType>
+  <xs:simpleType name="RebootRequiredType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown"/>
+      <xs:enumeration value="Yes"/>
+      <xs:enumeration value="No"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="BomItemType">
+    <xs:sequence>
+      <!-- Recursive definition: BomItem can contain BomItem -->
+      <xs:element name="BomItem" type="BomItemType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="Id" type="xs:string"/>
+    <xs:attribute name="DisplayName" type="xs:string"/>
+    <xs:attribute name="Version" type="xs:string"/>
+  </xs:complexType>
+  <xs:simpleType name="ManifestType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="OEM"/>
+      <xs:enumeration value="SBE"/>
+      <xs:enumeration value="Component"/>
+      <xs:enumeration value="Solution"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ReleaseType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Draft"/>
+      <xs:enumeration value="ReleaseCandidate"/>
+      <xs:enumeration value="OEMRelease"/>
+      <xs:enumeration value="MicrosoftPublished"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="InstallType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Update"/>
+      <xs:enumeration value="Hotfix"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DeliveryType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown"/>
+      <xs:enumeration value="Notify"/>
+      <xs:enumeration value="Distribute"/>
+      <xs:enumeration value="DownloadConnector"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
