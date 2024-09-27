@@ -86,10 +86,10 @@ namespace Common.XmlSchema
                 foreach (var element in elements)
                 {
                     string propertyName = element.Attribute("name")!.Value;
-                    string propertyType = GetPropertyType(element);
+                    var (propertyType, isNullable) = GetPropertyType(element);
                     bool isRequired = element.Attribute("minOccurs")?.Value == "1";
                     bool isList = element.Attribute("maxOccurs")?.Value == "unbounded";
-                    if (enumTypes.Contains(propertyType) && !isRequired)
+                    if ((enumTypes.Contains(propertyType) || isNullable) && !isRequired)
                     {
                         propertyType += "?";
                     }
@@ -113,8 +113,8 @@ namespace Common.XmlSchema
             {
                 string attrName = attribute.Attribute("name")!.Value;
                 bool isRequired = attribute.Attribute("use")?.Value == "required";
-                string attrType = GetPropertyType(attribute);
-                if (enumTypes.Contains(attrType) && !isRequired)
+                var (attrType, isNullable) = GetPropertyType(attribute);
+                if ((enumTypes.Contains(attrType) || isNullable) && !isRequired)
                 {
                     attrType += "?";
                 }
@@ -175,7 +175,7 @@ namespace Common.XmlSchema
             }
         }
 
-        private string GetPropertyType(XElement element)
+        private (string typeName, bool isNullable) GetPropertyType(XElement element)
         {
             string? xsdType = element.Attribute("type")?.Value;
             if (string.IsNullOrEmpty(xsdType))
@@ -186,7 +186,7 @@ namespace Common.XmlSchema
                     var complexTypeName = complexType.Attribute("name")?.Value ?? element.Attribute("name")?.Value;
                     if (!string.IsNullOrEmpty(complexTypeName))
                     {
-                        return complexTypeName;
+                        return (complexTypeName, false);
                     }
                 }
 
@@ -196,44 +196,45 @@ namespace Common.XmlSchema
                     var simpleTypeName = simpleType.Attribute("name")?.Value ?? element.Attribute("name")?.Value;
                     if (!string.IsNullOrEmpty(simpleTypeName))
                     {
-                        return simpleTypeName;
+                        return (simpleTypeName, true);
                     }
                 }
 
-                return "string"; // Default to string for unhandled types
+                return ("string", false); // Default to string for unhandled types
             }
 
             if (!xsdType.StartsWith("xs:"))
             {
-                return xsdType;
+                return (xsdType, false);
             }
 
             switch (xsdType)
             {
                 case "xs:string":
-                    return "string";
+                    return ("string", false);
                 case "xs:int":
                 case "xs:integer":
-                    return "int";
+                    return ("int", true);
                 case "xs:unsignedInt":
-                    return "uint";
+                    return ("uint", true);
                 case "xs:long":
-                    return "long";
+                    return ("long", true);
                 case "xs:decimal":
-                    return "decimal";
-                case "xs:date":
-                    return "DateTime";
+                    return ("decimal", true);
                 case "xs:boolean":
-                    return "bool";
+                    return ("bool", true);
+                case "xs:dateTime":
+                case "xs:date":
+                    return ("DateTime", true);
                 default:
-                    return "string"; // Default to string for unhandled types
+                    return ("string", false); // Default to string for unhandled types
             }
         }
 
         private string ToEnumName(string value)
         {
             // Convert values into valid C# enum member names (e.g., replace spaces, ensure valid format)
-            return string.Join("_", value.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+            return string.Join("_", value.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries))
                 .Replace("-", "_")
                 .Replace(".", "")
                 .Replace(",", "")

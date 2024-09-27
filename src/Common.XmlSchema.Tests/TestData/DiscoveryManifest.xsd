@@ -79,7 +79,7 @@
     <xs:sequence>
       <xs:element name="UpdateName" type="xs:string"/>
       <xs:element name="Version" type="xs:string"/>
-      <xs:element name="Type" minOccurs="0" type="xs:string"/>
+      <xs:element name="Type" type="xs:string" minOccurs="0"/>
       <xs:element name="Description" type="xs:string" minOccurs="0"/>
       <xs:element name="Tags" type="xs:string" minOccurs="0"/>
       <xs:element name="PackageSizeInMb" type="xs:unsignedInt" minOccurs="0"/>
@@ -87,7 +87,7 @@
       <xs:element name="MinVersionRequired" type="xs:string" minOccurs="0"/>
       <xs:element name="MinOEMVersionRequired" type="xs:string" minOccurs="0"/>
       <xs:element name="PlatformConsistencyEnforcement" type="xs:string" minOccurs="0"/>
-      <xs:element name="PackageHash" type="xs:string" minOccurs="0"/>
+      <xs:element name="PackageHash" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="OemVersions" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
@@ -149,69 +149,21 @@
       <xs:element name="ServicesUpdates">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="Update" maxOccurs="unbounded">
-              <xs:complexType>
-                <xs:sequence>
-                  <xs:element name="UpdateInfo" type="UpdateInfo"/>
-                  <xs:element name="File" type="File"/>
-                </xs:sequence>
-                <xs:attribute name="Type" type="xs:string" use="required"/>
-                <xs:attribute name="Version" type="xs:string" use="required"/>
-                <xs:attribute name="InstallType" type="xs:string"/>
-              </xs:complexType>
-            </xs:element>
+            <xs:element name="Update" type="ServiceUpdate" maxOccurs="unbounded"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
       <xs:element name="PlatformUpdates">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="Update" maxOccurs="unbounded">
-              <xs:complexType>
-                <xs:sequence>
-                  <xs:element name="UpdateInfo" type="UpdateInfo"/>
-                  <xs:element name="OS" minOccurs="0">
-                    <xs:complexType>
-                      <xs:sequence>
-                        <xs:element name="Coldpatch" minOccurs="0">
-                          <xs:complexType>
-                            <xs:attribute name="Version" type="xs:string" use="required"/>
-                          </xs:complexType>
-                        </xs:element>
-                        <xs:element name="Hotpatch" minOccurs="0">
-                          <xs:complexType>
-                            <xs:attribute name="Version" type="xs:string" use="required"/>
-                            <xs:attribute name="BaselineVersion" type="xs:string" use="required"/>
-                          </xs:complexType>
-                        </xs:element>
-                      </xs:sequence>
-                      <xs:attribute name="Branch" type="xs:string" use="required"/>
-                      <xs:attribute name="SKU" type="xs:unsignedShort" use="required"/>
-                      <xs:attribute name="Product" type="xs:string" use="required"/>
-                    </xs:complexType>
-                  </xs:element>
-                </xs:sequence>
-                <xs:attribute name="Type" type="xs:string" use="required"/>
-                <xs:attribute name="Version" type="xs:string" use="required"/>
-              </xs:complexType>
-            </xs:element>
+            <xs:element name="Update" type="PlatformUpdate" maxOccurs="unbounded"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
       <xs:element name="SBEUpdates">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="Update" maxOccurs="unbounded">
-              <xs:complexType>
-                <xs:sequence>
-                  <xs:element name="UpdateInfo" type="UpdateInfo"/>
-                  <xs:element name="File" type="File"/>
-                </xs:sequence>
-                <xs:attribute name="Type" type="xs:string" use="required"/>
-                <xs:attribute name="Version" type="xs:string" use="required"/>
-                <xs:attribute name="Family" type="xs:string" use="required"/>
-              </xs:complexType>
-            </xs:element>
+            <xs:element name="Update" type="SbeUpdate" maxOccurs="unbounded"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -278,4 +230,49 @@
       <xs:enumeration value="DownloadConnector"/>
     </xs:restriction>
   </xs:simpleType>
+  <xs:complexType name="ServiceUpdate">
+    <xs:sequence>
+      <xs:element name="UpdateInfo" type="UpdateInfo"/>
+      <xs:element name="File" type="File"/>
+    </xs:sequence>
+    <xs:attribute name="Type" type="xs:string" use="required"/>
+    <xs:attribute name="Version" type="xs:string" use="required"/>
+    <xs:attribute name="InstallType" type="xs:string"/>
+  </xs:complexType>
+  <xs:complexType name="PlatformUpdate">
+    <xs:sequence>
+      <xs:element name="UpdateInfo" type="UpdateInfo"/>
+      <xs:element name="OS" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Coldpatch" minOccurs="0">
+              <xs:complexType>
+                <xs:attribute name="Version" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Hotpatch" minOccurs="0">
+              <xs:complexType>
+                <xs:attribute name="Version" type="xs:string" use="required"/>
+                <xs:attribute name="BaselineVersion" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="Branch" type="xs:string" use="required"/>
+          <xs:attribute name="SKU" type="xs:unsignedShort" use="required"/>
+          <xs:attribute name="Product" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Type" type="xs:string" use="required"/>
+    <xs:attribute name="Version" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="SbeUpdate">
+    <xs:sequence>
+      <xs:element name="UpdateInfo" type="UpdateInfo"/>
+      <xs:element name="File" type="File"/>
+    </xs:sequence>
+    <xs:attribute name="Type" type="xs:string" use="required"/>
+    <xs:attribute name="Version" type="xs:string" use="required"/>
+    <xs:attribute name="Family" type="xs:string" use="required"/>
+  </xs:complexType>
 </xs:schema>
