@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UpdateDiscoveryManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:///E:/work/hci/update/src/UpdateResourceProvider/UpdateService/Discovery/UnitTest/Schema/DiscoveryManifest/DiscoveryManifest.xsd">
+  <ManifestInfo CreatedBy="Manual" CreationDate="2021-08-16T10:30:00Z"/>
+  <Services>
+    <ApplicableUpdate Type="Services" Version="1.2201.0.20">
+      <ValidatedConfigurations>
+        <RequiredPackages>
+          <Package Type="Services" Version="1.2108.*.*" MinVersionRequired="1.2108.0.10"/>
+          <Package Type="Platform" Version="1.2108.*.*"/>
+          <Package Type="OEM" Publisher="HPE" MinVersionRequired="2.0.0.0"/>
+          <Package Type="OEM" Publisher="Dell" MinVersionRequired="2.0.0.0"/>
+        </RequiredPackages>
+        <RequiredPackages>
+          <Package Type="Services" Version="1.2110.*.*"/>
+          <Package Type="Platform" Version="1.2110.*.*"/>
+          <Package Type="OEM" Publisher="HPE" MinVersionRequired="2.0.0.0"/>
+          <Package Type="OEM" Publisher="Dell" MinVersionRequired="2.0.0.0"/>
+        </RequiredPackages>
+      </ValidatedConfigurations>
+      <UpdateInfo>
+        <UpdateName>AzS Hub Services - 1.2201.0.20</UpdateName>
+        <Version>1.2201.0.20</Version>
+        <Description>AzS Hub Services 1.2201.0.20</Description>
+        <Tags>Security;Reliability</Tags>
+        <PackageSizeInMb>79</PackageSizeInMb>
+        <KBLink>https://aka.ms/azurestackupdate</KBLink>
+        <PackageHash>DB7AC87289B8ABABEEE0303218100968A05A831AB7D2C4CA</PackageHash>
+      </UpdateInfo>
+      <File Name="Services_1.2201.0.20.zip" Uri="https://updatedownload.blob.core.windows.net/testupdatepackage/AzS_Update_9.8888.0.888.zip"/>
+    </ApplicableUpdate>
+    <ApplicableUpdate Type="Services" Version="1.2204.0.40">
+      <ValidatedConfigurations>
+        <RequiredPackages>
+          <Package Type="Services" Version="1.2110.*.*"/>
+          <Package Type="Platform" Version="1.2110.*.*"/>
+          <Package Type="OEM" Publisher="HPE" MinVersionRequired="2.0.0.0"/>
+          <Package Type="OEM" Publisher="Dell" MinVersionRequired="2.0.0.0"/>
+        </RequiredPackages>
+        <RequiredPackages>
+          <Package Type="Services" Version="1.2201.*.*"/>
+          <Package Type="Platform" Version="1.2201.*.*"/>
+          <Package Type="OEM" Publisher="HPE" MinVersionRequired="2.0.0.0"/>
+          <Package Type="OEM" Publisher="Dell" MinVersionRequired="2.0.0.0"/>
+        </RequiredPackages>
+      </ValidatedConfigurations>
+      <UpdateInfo>
+        <UpdateName>AzS Services - 1.2204.0.40</UpdateName>
+        <Version>1.2204.0.40</Version>
+        <Description>AzS Services 1.2204.0.40</Description>
+        <Tags>Security;Reliability</Tags>
+        <PackageSizeInMb>79</PackageSizeInMb>
+        <KBLink>https://aka.ms/azurestackupdate</KBLink>
+        <PackageHash>303218100968A05A831AB7D2C4CA2996</PackageHash>
+      </UpdateInfo>
+      <File Name="Services_1.2204.0.40.zip" Uri="https://updatedownload.blob.core.windows.net/testupdatepackage/AzS_Update_9.8888.0.888.zip"/>
+    </ApplicableUpdate>
+  </Services>
+  <Platform>
+    <ApplicableUpdate Type="Platform" Version="1.2110.0.82">
+      <ValidatedConfigurations>
+        <RequiredPackages>
+          <Package Type="Services" Version="1.2108.*.*" MinVersionRequired="1.2108.0.8"/>
+          <Package Type="Platform" Version="1.2108.*.*"/>
+          <Package Type="OEM" Publisher="HPE" MinVersionRequired="2.0.0.0"/>
+          <Package Type="OEM" Publisher="Dell" MinVersionRequired="2.0.0.0"/>
+        </RequiredPackages>
+        <RequiredPackages>
+          <Package Type="Services" Version="1.2110.*.*"/>
+          <Package Type="Platform" Version="1.2110.*.*" MinVersionRequired="1.2110.0.42"/>
+          <Package Type="OEM" Publisher="HPE" MinVersionRequired="2.0.0.0"/>
+          <Package Type="OEM" Publisher="Dell" MinVersionRequired="2.0.0.0"/>
+        </RequiredPackages>
+      </ValidatedConfigurations>
+      <UpdateInfo>
+        <UpdateName>AzS Platform - 1.2110.0.82</UpdateName>
+        <Version>1.2110.0.82</Version>
+        <Description>AzS Platform 1.2110.0.82</Description>
+        <Tags>Security;Reliability</Tags>
+        <PackageSizeInMb>83</PackageSizeInMb>
+        <KBLink>https://aka.ms/azurestackupdate</KBLink>
+        <PackageHash>68A05A831AB7D2C4CA2996FF2FDCC81358</PackageHash>
+      </UpdateInfo>
+      <File Name="Platform_1.2110.0.82.zip" Uri="https://updatedownload.blob.core.windows.net/testupdatepackage/AzS_Update_9.8888.0.888.zip"/>
+    </ApplicableUpdate>
+  </Platform>
+</UpdateDiscoveryManifest>

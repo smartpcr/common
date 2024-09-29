@@ -9,3 +9,8 @@ Scenario: generate csharp code from a simple schema
   | FileName |
   | Enums.cs |
   | Hotpatch.cs |
+
+Scenario: validate deserialization of generated code
+  Given input xml file "TestData\\Valid.xml"
+  When I instantiate from xml file
+  Then the object should be deserialized successfully

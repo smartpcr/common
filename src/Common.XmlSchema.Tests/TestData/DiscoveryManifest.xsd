@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <!-- edited with XMLSpy v2017 (x64) (http://www.altova.com) by Xiaodong Li (Private) -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="UpdateDiscoveryManifest" type="UpdateDiscoveryManifest"/>
   <xs:complexType name="UpdateDiscoveryManifest">
-    <xs:sequence>
+    <xs:choice maxOccurs="unbounded">
       <xs:element name="ManifestInfo" minOccurs="0">
         <xs:complexType>
           <xs:attribute name="CreationDate" type="xs:dateTime" use="required"/>
@@ -13,10 +14,10 @@
       </xs:element>
       <xs:element name="Services" minOccurs="0">
         <xs:complexType>
-          <xs:sequence>
+          <xs:choice maxOccurs="unbounded">
             <xs:element name="ApplicableUpdate" type="ApplicableUpdate" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="RecalledUpdate" type="ApplicableUpdate" minOccurs="0" maxOccurs="unbounded"/>
-          </xs:sequence>
+          </xs:choice>
         </xs:complexType>
       </xs:element>
       <xs:element name="Platform" minOccurs="0">
@@ -27,10 +28,10 @@
         </xs:complexType>
       </xs:element>
       <xs:element name="PackageMetadata" type="PackageMetadata" minOccurs="0"/>
-    </xs:sequence>
+    </xs:choice>
   </xs:complexType>
   <xs:complexType name="ApplicableUpdate">
-    <xs:sequence>
+    <xs:choice maxOccurs="unbounded">
       <xs:element name="ValidatedConfigurations" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
@@ -66,7 +67,7 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-    </xs:sequence>
+    </xs:choice>
     <xs:attribute name="Type" type="xs:string" use="required"/>
     <xs:attribute name="Version" type="xs:string" use="required"/>
     <xs:attribute name="OEMVersion" type="xs:string"/>
@@ -76,7 +77,7 @@
     <xs:attribute name="Family" type="xs:string"/>
   </xs:complexType>
   <xs:complexType name="UpdateInfo">
-    <xs:sequence>
+    <xs:choice maxOccurs="unbounded">
       <xs:element name="UpdateName" type="xs:string"/>
       <xs:element name="Version" type="xs:string"/>
       <xs:element name="Type" type="xs:string" minOccurs="0"/>
@@ -108,13 +109,6 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="ValidatedConfigurations" minOccurs="0">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="RequiredPackages" type="RequiredPackages" minOccurs="0" maxOccurs="unbounded"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
       <xs:element name="Publisher" type="xs:string" minOccurs="0"/>
       <xs:element name="SupportedModels" minOccurs="0">
         <xs:complexType>
@@ -129,7 +123,7 @@
       <xs:element name="InstallType" type="InstallType"/>
       <xs:element name="OEMFamily" type="xs:string"/>
       <xs:element name="PackageType" type="xs:string"/>
-    </xs:sequence>
+    </xs:choice>
   </xs:complexType>
   <xs:complexType name="RequiredPackages">
     <xs:sequence>
@@ -145,7 +139,7 @@
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="PackageMetadata">
-    <xs:sequence>
+    <xs:choice maxOccurs="unbounded">
       <xs:element name="ServicesUpdates">
         <xs:complexType>
           <xs:sequence>
@@ -167,7 +161,7 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-    </xs:sequence>
+    </xs:choice>
   </xs:complexType>
   <xs:complexType name="File">
     <xs:attribute name="Name" type="xs:string" use="required"/>
@@ -231,20 +225,20 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="ServiceUpdate">
-    <xs:sequence>
+    <xs:choice maxOccurs="unbounded">
       <xs:element name="UpdateInfo" type="UpdateInfo"/>
       <xs:element name="File" type="File"/>
-    </xs:sequence>
+    </xs:choice>
     <xs:attribute name="Type" type="xs:string" use="required"/>
     <xs:attribute name="Version" type="xs:string" use="required"/>
     <xs:attribute name="InstallType" type="xs:string"/>
   </xs:complexType>
   <xs:complexType name="PlatformUpdate">
-    <xs:sequence>
+    <xs:choice maxOccurs="unbounded">
       <xs:element name="UpdateInfo" type="UpdateInfo"/>
       <xs:element name="OS" minOccurs="0">
         <xs:complexType>
-          <xs:sequence>
+          <xs:choice maxOccurs="unbounded">
             <xs:element name="Coldpatch" minOccurs="0">
               <xs:complexType>
                 <xs:attribute name="Version" type="xs:string" use="required"/>
@@ -256,21 +250,21 @@
                 <xs:attribute name="BaselineVersion" type="xs:string" use="required"/>
               </xs:complexType>
             </xs:element>
-          </xs:sequence>
+          </xs:choice>
           <xs:attribute name="Branch" type="xs:string" use="required"/>
           <xs:attribute name="SKU" type="xs:unsignedShort" use="required"/>
           <xs:attribute name="Product" type="xs:string" use="required"/>
         </xs:complexType>
       </xs:element>
-    </xs:sequence>
+    </xs:choice>
     <xs:attribute name="Type" type="xs:string" use="required"/>
     <xs:attribute name="Version" type="xs:string" use="required"/>
   </xs:complexType>
   <xs:complexType name="SbeUpdate">
-    <xs:sequence>
+    <xs:choice maxOccurs="unbounded">
       <xs:element name="UpdateInfo" type="UpdateInfo"/>
       <xs:element name="File" type="File"/>
-    </xs:sequence>
+    </xs:choice>
     <xs:attribute name="Type" type="xs:string" use="required"/>
     <xs:attribute name="Version" type="xs:string" use="required"/>
     <xs:attribute name="Family" type="xs:string" use="required"/>

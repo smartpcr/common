@@ -13,12 +13,12 @@ namespace Common.XmlSchema
     using System.Text;
     using System.Xml.Linq;
 
-    public class XsdToPocoGenerator
+    public class XsdToCsGenerator
     {
         private static readonly XNamespace xs = "http://www.w3.org/2001/XMLSchema";
         private readonly XDocument _xsdSchema;
 
-        public XsdToPocoGenerator(string xsdSchemaFilePath)
+        public XsdToCsGenerator(string xsdSchemaFilePath)
         {
             this._xsdSchema = XDocument.Load(xsdSchemaFilePath);
         }
@@ -80,7 +80,8 @@ namespace Common.XmlSchema
             stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public partial class {className}{Environment.NewLine}{Indent(indent)}{{");
             indent++; // properties
 
-            var elements = complexType.Element(xs + "sequence")?.Elements().Where(e => e.Name.LocalName == "element").ToList();
+            var childElements = complexType.Element(xs + "sequence")?.Elements() ?? complexType.Element(xs + "choice")?.Elements();
+            var elements = childElements?.Where(e => e.Name.LocalName == "element").ToList();
             if (elements != null)
             {
                 foreach (var element in elements)
@@ -89,10 +90,6 @@ namespace Common.XmlSchema
                     var (propertyType, isNullable) = GetPropertyType(element);
                     bool isRequired = element.Attribute("minOccurs")?.Value == "1";
                     bool isList = element.Attribute("maxOccurs")?.Value == "unbounded";
-                    if ((enumTypes.Contains(propertyType) || isNullable) && !isRequired)
-                    {
-                        propertyType += "?";
-                    }
                     string typeName = $"{(isList ? "List<" : "")}{propertyType}{(isList ? ">" : "")}";
 
                     if (isRequired)
@@ -103,8 +100,13 @@ namespace Common.XmlSchema
                     {
                         stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlElement(\"{propertyName}\")]");
                     }
-
                     stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public {typeName} {propertyName} {{ get; set; }}{Environment.NewLine}");
+
+                    if ((enumTypes.Contains(propertyType) || isNullable) && !isRequired)
+                    {
+                        stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlIgnore]");
+                        stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public bool {propertyName}Specified {{ get; set; }}{Environment.NewLine}");
+                    }
                 }
             }
 
@@ -114,10 +116,6 @@ namespace Common.XmlSchema
                 string attrName = attribute.Attribute("name")!.Value;
                 bool isRequired = attribute.Attribute("use")?.Value == "required";
                 var (attrType, isNullable) = GetPropertyType(attribute);
-                if ((enumTypes.Contains(attrType) || isNullable) && !isRequired)
-                {
-                    attrType += "?";
-                }
 
                 if (isRequired)
                 {
@@ -128,6 +126,12 @@ namespace Common.XmlSchema
                     stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlAttribute(\"{attrName}\")]");
                 }
                 stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public {attrType} {attrName} {{ get; set; }}{Environment.NewLine}");
+
+                if ((enumTypes.Contains(attrType) || isNullable) && !isRequired)
+                {
+                    stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlIgnore]");
+                    stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public bool {attrName}Specified {{ get; set; }}{Environment.NewLine}");
+                }
             }
 
             indent--; // class

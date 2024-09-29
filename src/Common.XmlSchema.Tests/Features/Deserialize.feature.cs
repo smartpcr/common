@@ -19,7 +19,7 @@ namespace Common.XmlSchema.Tests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "1.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class CSharpGeneratorFeature : object, Xunit.IClassFixture<CSharpGeneratorFeature.FixtureData>, Xunit.IAsyncLifetime
+    public partial class DeserializeXmlIntoObjectsFeature : object, Xunit.IClassFixture<DeserializeXmlIntoObjectsFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private static Reqnroll.ITestRunner testRunner;
@@ -28,10 +28,10 @@ namespace Common.XmlSchema.Tests.Features
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "CSharpGenerator.feature"
+#line 1 "Deserialize.feature"
 #line hidden
         
-        public CSharpGeneratorFeature(CSharpGeneratorFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public DeserializeXmlIntoObjectsFeature(DeserializeXmlIntoObjectsFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
         }
@@ -39,7 +39,7 @@ namespace Common.XmlSchema.Tests.Features
         public static async System.Threading.Tasks.Task FeatureSetupAsync()
         {
             testRunner = Reqnroll.TestRunnerManager.GetTestRunnerForAssembly(null, Reqnroll.xUnit.ReqnrollPlugin.XUnitParallelWorkerTracker.Instance.GetWorkerId());
-            Reqnroll.FeatureInfo featureInfo = new Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "CSharpGenerator", "\tAs a user,\r\n  I want to be able to generate C# code from an XML schema", ProgrammingLanguage.CSharp, featureTags);
+            Reqnroll.FeatureInfo featureInfo = new Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Deserialize xml into objects", null, ProgrammingLanguage.CSharp, featureTags);
             await testRunner.OnFeatureStartAsync(featureInfo);
         }
         
@@ -86,69 +86,31 @@ namespace Common.XmlSchema.Tests.Features
             await this.TestTearDownAsync();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="generate csharp code from a simple schema")]
-        [Xunit.TraitAttribute("FeatureTitle", "CSharpGenerator")]
-        [Xunit.TraitAttribute("Description", "generate csharp code from a simple schema")]
-        public async System.Threading.Tasks.Task GenerateCsharpCodeFromASimpleSchema()
+        [Xunit.SkippableFactAttribute(DisplayName="deserialize simple xml into c# objects")]
+        [Xunit.TraitAttribute("FeatureTitle", "Deserialize xml into objects")]
+        [Xunit.TraitAttribute("Description", "deserialize simple xml into c# objects")]
+        public async System.Threading.Tasks.Task DeserializeSimpleXmlIntoCObjects()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("generate csharp code from a simple schema", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("deserialize simple xml into c# objects", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 3
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 4
+  await testRunner.GivenAsync("input xml file \"Schema\\\\V1\\\\V1.xml\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
+#line hidden
 #line 5
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 6
- await testRunner.GivenAsync("xsd schema file \"TestData\\\\DiscoveryManifest.xsd\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 7
- await testRunner.WhenAsync(@"I generate csharp code with namespace ""Microsoft.AzureStack.Services.Update.ResourceProvider.Discovery.UnitTest.Schema.DiscoveryManifest"" to output folder ""E:\\work\\hci\\urp\\src\\UpdateResourceProvider\\UpdateService\\Discovery\\UnitTest\\Schema\\DiscoveryManifest""", ((string)(null)), ((Reqnroll.Table)(null)), "When ");
-#line hidden
-                Reqnroll.Table table1 = new Reqnroll.Table(new string[] {
-                            "FileName"});
-                table1.AddRow(new string[] {
-                            "Enums.cs"});
-                table1.AddRow(new string[] {
-                            "Hotpatch.cs"});
-#line 8
-  await testRunner.ThenAsync("the code should be generated to \"E:\\\\work\\\\hci\\\\urp\\\\src\\\\UpdateResourceProvider\\" +
-                        "\\UpdateService\\\\Discovery\\\\UnitTest\\\\Schema\\\\DiscoveryManifest\"", ((string)(null)), table1, "Then ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="validate deserialization of generated code")]
-        [Xunit.TraitAttribute("FeatureTitle", "CSharpGenerator")]
-        [Xunit.TraitAttribute("Description", "validate deserialization of generated code")]
-        public async System.Threading.Tasks.Task ValidateDeserializationOfGeneratedCode()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            Reqnroll.ScenarioInfo scenarioInfo = new Reqnroll.ScenarioInfo("validate deserialization of generated code", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 13
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 14
-  await testRunner.GivenAsync("input xml file \"TestData\\\\Valid.xml\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 15
   await testRunner.WhenAsync("I instantiate from xml file", ((string)(null)), ((Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 16
+#line 6
   await testRunner.ThenAsync("the object should be deserialized successfully", ((string)(null)), ((Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -162,12 +124,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.InitializeAsync()
             {
-                await CSharpGeneratorFeature.FeatureSetupAsync();
+                await DeserializeXmlIntoObjectsFeature.FeatureSetupAsync();
             }
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.DisposeAsync()
             {
-                await CSharpGeneratorFeature.FeatureTearDownAsync();
+                await DeserializeXmlIntoObjectsFeature.FeatureTearDownAsync();
             }
         }
     }
