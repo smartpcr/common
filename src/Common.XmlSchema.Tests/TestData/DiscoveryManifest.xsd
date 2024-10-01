@@ -79,13 +79,13 @@
   <xs:complexType name="UpdateInfo">
     <xs:choice maxOccurs="unbounded">
       <xs:element name="UpdateName" type="xs:string"/>
-      <xs:element name="Version" type="xs:string"/>
+      <xs:element name="Version" type="VersionEx"/>
       <xs:element name="Type" type="xs:string" minOccurs="0"/>
       <xs:element name="Description" type="xs:string" minOccurs="0"/>
       <xs:element name="Tags" type="xs:string" minOccurs="0"/>
       <xs:element name="PackageSizeInMb" type="xs:unsignedInt" minOccurs="0"/>
       <xs:element name="KBLink" type="xs:string" minOccurs="0"/>
-      <xs:element name="MinVersionRequired" type="xs:string" minOccurs="0"/>
+      <xs:element name="MinVersionRequired" type="Version" minOccurs="0"/>
       <xs:element name="MinOEMVersionRequired" type="xs:string" minOccurs="0"/>
       <xs:element name="PlatformConsistencyEnforcement" type="xs:string" minOccurs="0"/>
       <xs:element name="PackageHash" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
@@ -130,8 +130,8 @@
       <xs:element name="Package" maxOccurs="unbounded">
         <xs:complexType>
           <xs:attribute name="Type" type="xs:string" use="required"/>
-          <xs:attribute name="Version" type="xs:string"/>
-          <xs:attribute name="MinVersionRequired" type="xs:string"/>
+          <xs:attribute name="Version" type="VersionEx"/>
+          <xs:attribute name="MinVersionRequired" type="Version"/>
           <xs:attribute name="Publisher" type="xs:string"/>
           <xs:attribute name="Family" type="xs:string"/>
         </xs:complexType>
@@ -269,4 +269,15 @@
     <xs:attribute name="Version" type="xs:string" use="required"/>
     <xs:attribute name="Family" type="xs:string" use="required"/>
   </xs:complexType>
+  <xs:simpleType name="Version">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="VersionEx">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([0-9]+|\*)\.([0-9]+|\*)\.([0-9]+|\*)\.([0-9]+|\*)"/>
+    </xs:restriction>
+    <!-- version with wildcard on build/revision part, i.e. 10.2306.*.* -->
+  </xs:simpleType>
 </xs:schema>

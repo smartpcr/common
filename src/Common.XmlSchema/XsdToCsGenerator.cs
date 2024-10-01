@@ -13,6 +13,10 @@ namespace Common.XmlSchema
     using System.Text;
     using System.Xml.Linq;
 
+    /// <summary>
+    /// TODO: handle xsd import, scan for global and inline complex type, only create new class if contents not matching
+    /// ignore difference among xs:choice, xs:all and xs:sequence, c# doesn't support it
+    /// </summary>
     public class XsdToCsGenerator
     {
         private static readonly XNamespace xs = "http://www.w3.org/2001/XMLSchema";
@@ -30,6 +34,8 @@ namespace Common.XmlSchema
                 Directory.CreateDirectory(outputFolderPath);
             }
 
+            var patterns = new Dictionary<string, string>();
+            this.PopulateStringRegexPatterns(patterns);
             var enumBuilder = new StringBuilder();
             enumBuilder.AppendLine(@$"//--------------------------------------------------------------
 // <copyright file=""Enums.cs"" company=""Microsoft Corp."">
@@ -49,11 +55,11 @@ namespace Common.XmlSchema
             var complexTypes = this._xsdSchema.Descendants().Where(e => e.Name.LocalName == "complexType");
             foreach (var complexType in complexTypes)
             {
-                this.GenerateCodeForComplexType(complexType, @namespace, enumTypes, outputFolderPath);
+                this.GenerateCodeForComplexType(complexType, @namespace, enumTypes, patterns, outputFolderPath);
             }
         }
 
-        private void GenerateCodeForComplexType(XElement complexType, string @namespace, HashSet<string> enumTypes, string outputFolderPath)
+        private void GenerateCodeForComplexType(XElement complexType, string @namespace, HashSet<string> enumTypes, Dictionary<string, string> regexPatterns, string outputFolderPath)
         {
             var indent = 0;
             var className = complexType.Attribute("name")?.Value ?? complexType.Parent?.Attribute("name")?.Value;
@@ -90,7 +96,6 @@ namespace Common.XmlSchema
                     var (propertyType, isNullable) = GetPropertyType(element);
                     bool isRequired = element.Attribute("minOccurs")?.Value == "1";
                     bool isList = element.Attribute("maxOccurs")?.Value == "unbounded";
-                    string typeName = $"{(isList ? "List<" : "")}{propertyType}{(isList ? ">" : "")}";
 
                     if (isRequired)
                     {
@@ -100,6 +105,14 @@ namespace Common.XmlSchema
                     {
                         stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlElement(\"{propertyName}\")]");
                     }
+
+                    if (regexPatterns.TryGetValue(propertyType, out var regexPattern))
+                    {
+                        stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[RegularExpression(@\"{regexPattern}\")]");
+                        propertyType = "string";
+                    }
+
+                    string typeName = $"{(isList ? "List<" : "")}{propertyType}{(isList ? ">" : "")}";
                     stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public {typeName} {propertyName} {{ get; set; }}{Environment.NewLine}");
 
                     if ((enumTypes.Contains(propertyType) || isNullable) && !isRequired)
@@ -125,6 +138,13 @@ namespace Common.XmlSchema
                 {
                     stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlAttribute(\"{attrName}\")]");
                 }
+
+                if (regexPatterns.TryGetValue(attrType, out var regexPattern))
+                {
+                    stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[RegularExpression(@\"{regexPattern}\")]");
+                    attrType = "string";
+                }
+
                 stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public {attrType} {attrName} {{ get; set; }}{Environment.NewLine}");
 
                 if ((enumTypes.Contains(attrType) || isNullable) && !isRequired)
@@ -155,13 +175,12 @@ namespace Common.XmlSchema
                 if (restriction != null)
                 {
                     string enumName = simpleType.Attribute("name")!.Value;
-                    if (!string.IsNullOrEmpty(enumName))
+                    var enumerations = restriction.Elements().Where(e => e.Name.LocalName == "enumeration").ToList();
+
+                    if (!string.IsNullOrEmpty(enumName) && enumerations?.Any() == true)
                     {
                         stringBuilder.Append($"{Environment.NewLine}{this.Indent(indent)}public enum {enumName}");
                         stringBuilder.Append($"{Environment.NewLine}{this.Indent(indent)}{{");
-
-
-                        var enumerations = restriction.Elements().Where(e => e.Name.LocalName == "enumeration");
                         foreach (var enumeration in enumerations)
                         {
                             string enumValue = enumeration.Attribute("value")?.Value ?? enumeration.Value;
@@ -171,9 +190,30 @@ namespace Common.XmlSchema
                                 stringBuilder.Append($"{Environment.NewLine}{this.Indent(indent + 1)}{enumValue},");
                             }
                         }
-
                         stringBuilder.Append($"{Environment.NewLine}{this.Indent(indent)}}}{Environment.NewLine}");
                         enumTypes.Add(enumName);
+                    }
+                }
+            }
+        }
+
+        private void PopulateStringRegexPatterns(Dictionary<string, string> patterns)
+        {
+            var simpleTypes = _xsdSchema.Descendants().Where(e => e.Name.LocalName == "simpleType");
+            foreach (var simpleType in simpleTypes)
+            {
+                var restriction = simpleType.Elements().FirstOrDefault(e => e.Name.LocalName == "restriction" && e.Attribute("base")?.Value == "xs:string");
+                if (restriction != null)
+                {
+                    var pattern = restriction.Elements().FirstOrDefault(e => e.Name.LocalName == "pattern");
+                    if (pattern != null)
+                    {
+                        string patternValue = pattern.Attribute("value")?.Value;
+                        if (!string.IsNullOrEmpty(patternValue))
+                        {
+                            string typeName = simpleType.Attribute("name")!.Value;
+                            patterns.Add(typeName, patternValue);
+                        }
                     }
                 }
             }

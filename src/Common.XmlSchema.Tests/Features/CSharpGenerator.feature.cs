@@ -105,10 +105,11 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 await this.ScenarioStartAsync();
 #line 6
- await testRunner.GivenAsync("xsd schema file \"TestData\\\\DiscoveryManifest.xsd\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
+ await testRunner.GivenAsync("xsd schema file \"E:\\\\work\\\\hci\\\\urp\\\\src\\\\UpdateResourceProvider\\\\UpdateService\\\\" +
+                        "Discovery\\\\UnitTest\\\\Schema\\\\SolutionManifest.xsd\"", ((string)(null)), ((Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 7
- await testRunner.WhenAsync(@"I generate csharp code with namespace ""Microsoft.AzureStack.Services.Update.ResourceProvider.Discovery.UnitTest.Schema.DiscoveryManifest"" to output folder ""E:\\work\\hci\\urp\\src\\UpdateResourceProvider\\UpdateService\\Discovery\\UnitTest\\Schema\\DiscoveryManifest""", ((string)(null)), ((Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync(@"I generate csharp code with namespace ""Microsoft.AzureStack.Services.Update.ResourceProvider.Discovery.UnitTest.Schema.DiscoveryManifest"" to output folder ""E:\\work\\hci\\urp\\src\\UpdateResourceProvider\\UpdateService\\Discovery\\UnitTest\\Schema\\DiscoveryManifest\\Models""", ((string)(null)), ((Reqnroll.Table)(null)), "When ");
 #line hidden
                 Reqnroll.Table table1 = new Reqnroll.Table(new string[] {
                             "FileName"});
@@ -118,7 +119,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Hotpatch.cs"});
 #line 8
   await testRunner.ThenAsync("the code should be generated to \"E:\\\\work\\\\hci\\\\urp\\\\src\\\\UpdateResourceProvider\\" +
-                        "\\UpdateService\\\\Discovery\\\\UnitTest\\\\Schema\\\\DiscoveryManifest\"", ((string)(null)), table1, "Then ");
+                        "\\UpdateService\\\\Discovery\\\\UnitTest\\\\Schema\\\\DiscoveryManifest\\\\Models\"", ((string)(null)), table1, "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
