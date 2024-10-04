@@ -1,6 +1,6 @@
-﻿Feature: batch ingest json files into Kusto
-
-  Scenario: ingest json files into Kusto
-    Given json files in folder "TestData\\JsonFiles"
-    When I ingest json files into Kusto table "TestTable"
-    Then the json files should be ingested into Kusto table "TestTable"
+Feature: Batch ingest
+  Scenario: batch ingest json files to kusto
+    Given json file folder "testdata\\json"
+    When I ingest json files
+    Then kusto db should have table "Places"
+    And table "Places" should have 10 rows

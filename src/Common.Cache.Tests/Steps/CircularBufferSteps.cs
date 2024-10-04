@@ -10,7 +10,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Reqnroll;
+using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 
 [Binding]

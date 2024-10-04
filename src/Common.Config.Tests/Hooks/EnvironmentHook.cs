@@ -10,7 +10,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Mocks;
-using Reqnroll;
+using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 
 /// <summary>
@@ -20,9 +20,9 @@ using TechTalk.SpecFlow.Infrastructure;
 public class EnvironmentHook
 {
     private readonly ScenarioContext context;
-    private readonly IReqnrollOutputHelper outputHelper;
+    private readonly ISpecFlowOutputHelper outputHelper;
 
-    public EnvironmentHook(ScenarioContext scenarioContext, IReqnrollOutputHelper outputHelper)
+    public EnvironmentHook(ScenarioContext scenarioContext, ISpecFlowOutputHelper outputHelper)
     {
         this.context = scenarioContext;
         this.outputHelper = outputHelper;
