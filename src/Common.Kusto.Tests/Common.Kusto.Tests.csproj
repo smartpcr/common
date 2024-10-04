@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Common.Config\Common.Config.csproj" />
+    <ProjectReference Include="..\Common.Kusto\Common.Kusto.csproj" />
+    <ProjectReference Include="..\Common.Monitoring\Common.Monitoring.csproj" />
+    <ProjectReference Include="..\Common.Settings\Common.Settings.csproj" />
+  </ItemGroup>
+</Project>
