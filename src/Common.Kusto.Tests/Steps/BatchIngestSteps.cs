@@ -49,6 +49,10 @@ namespace Common.Kusto.Tests.Steps
             var inputJsonFolder = this.context.Get<string>("InputJsonFolder");
             var jsonFiles = Directory.GetFiles(inputJsonFolder, "*.json", SearchOption.TopDirectoryOnly);
             var people = new List<Person>();
+            var kustoClient = this.featureContext.Get<IKustoClient>();
+            var tableName = this.context.Get<string>("TableName");
+            var totalAdded = 0;
+
             foreach (var jsonFile in jsonFiles)
             {
                 var json = await File.ReadAllTextAsync(jsonFile);
@@ -56,13 +60,11 @@ namespace Common.Kusto.Tests.Steps
                 if (group?.Count > 0)
                 {
                     people.AddRange(group);
+                    var added = await kustoClient.BulkInsertFromFile<Person>(jsonFile, tableName, default);
+                    totalAdded += added;
                 }
             }
             this.outputWriter.WriteLine($"Ingesting {people.Count} records");
-
-            var kustoClient = this.featureContext.Get<IKustoClient>();
-            var tableName = this.context.Get<string>("TableName");
-            var totalAdded = await kustoClient.BulkInsert(tableName, people, IngestMode.InsertNew, "Id", default);
             totalAdded.Should().Be(people.Count);
         }
 

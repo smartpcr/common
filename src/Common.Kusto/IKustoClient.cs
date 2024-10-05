@@ -43,6 +43,8 @@ public interface IKustoClient : IDisposable
 
     Task<int> BulkInsert<T>(string tableName, IList<T> items, IngestMode ingestMode, string idPropName, CancellationToken cancellationToken);
 
+    Task<int> BulkInsertFromFile<T>(string jsonFile, string tableName, CancellationToken cancel);
+
     Task<T?> ExecuteScalar<T>(string query, string fieldName, CancellationToken cancel);
 
     Task<IDataReader> ExecuteReader(string query);

@@ -52,7 +52,11 @@ public class KustoAuthHelper
         }
     }
 
-    public IKustoIngestClient IngestClient => KustoIngestFactory.CreateDirectIngestClient(kustoConnectionStringBuilder);
+    public IKustoIngestClient DirectIngestClient => KustoIngestFactory.CreateDirectIngestClient(kustoConnectionStringBuilder);
+
+    public IKustoIngestClient StreamingIngestClient => KustoIngestFactory.CreateStreamingIngestClient(kustoConnectionStringBuilder);
+
+    public IKustoQueuedIngestClient QueuedIngestClient => KustoIngestFactory.CreateQueuedIngestClient(kustoConnectionStringBuilder);
 
     private KustoConnectionStringBuilder GetConnStringBuilder()
     {

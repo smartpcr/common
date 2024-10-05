@@ -445,4 +445,33 @@ internal static partial class KustoClientLogger
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string callerFile = "",
         [CallerLineNumber] int lineNumber = 0);
+
+    [LoggerMessage(
+        34,
+        LogLevel.Information,
+        "Start bulk insert from {jsonFile} into table {tableName}..." +
+        ", \n\tcalled from {memberName}, in file {callerFile}, at line {lineNumber}")]
+    public static partial void BulkInsertFromFileStart(
+        this ILogger logger,
+        string jsonFile,
+        string tableName,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string callerFile = "",
+        [CallerLineNumber] int lineNumber = 0);
+
+    [LoggerMessage(
+        35,
+        LogLevel.Information,
+        "Finished bulk insert from {jsonFile} into table {tableName} in {elapsedMilliseconds}, {successfulInserts} successful, {failedInserts} failed." +
+        ", \n\tcalled from {memberName}, in file {callerFile}, at line {lineNumber}")]
+    public static partial void BulkInsertFromFileStop(
+        this ILogger logger,
+        string jsonFile,
+        string tableName,
+        long elapsedMilliseconds,
+        int successfulInserts,
+        int failedInserts,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string callerFile = "",
+        [CallerLineNumber] int lineNumber = 0);
 }

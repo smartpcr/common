@@ -40,6 +40,7 @@ public class KustoClient : IKustoClient
     private readonly ICslAdminProvider adminClient;
     private readonly IKustoIngestClient ingestClient;
     private readonly ICslQueryProvider queryClient;
+    private readonly IKustoQueuedIngestClient queuedIngestClient;
 
     public KustoClient(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, KustoSettings? kustoSettings = null)
     {
@@ -52,7 +53,8 @@ public class KustoClient : IKustoClient
         var kustoAuthHelper = new KustoAuthHelper(serviceProvider, kustoSettings);
         this.queryClient = kustoAuthHelper.QueryQueryClient;
         this.adminClient = kustoAuthHelper.AdminClient;
-        this.ingestClient = kustoAuthHelper.IngestClient;
+        this.ingestClient = kustoAuthHelper.DirectIngestClient;
+        this.queuedIngestClient = kustoAuthHelper.QueuedIngestClient;
     }
 
     public async Task<IEnumerable<T>> ExecuteQuery<T>(string query, TimeSpan timeout = default, CancellationToken cancellationToken = default)
@@ -172,7 +174,7 @@ public class KustoClient : IKustoClient
                     await writer.WriteLineAsync(JsonConvert.SerializeObject(item));
                 }
 
-                await writer.FlushAsync();
+                await writer.FlushAsync(cancellationToken);
                 totalSize = memoryStream.Length;
                 memoryStream.Seek(0, SeekOrigin.Begin);
                 await ingestClient.IngestFromStreamAsync(memoryStream, props);
@@ -199,7 +201,7 @@ public class KustoClient : IKustoClient
                 await writer.WriteLineAsync(JsonConvert.SerializeObject(item));
             }
 
-            await writer.FlushAsync();
+            await writer.FlushAsync(cancellationToken);
             totalSize = memoryStream.Length;
             memoryStream.Seek(0, SeekOrigin.Begin);
             await ingestClient.IngestFromStreamAsync(memoryStream, props);
@@ -208,6 +210,30 @@ public class KustoClient : IKustoClient
         stopwatch.Stop();
         logger.BulkInsertStop(itemChanged, tableName, stopwatch.ElapsedMilliseconds, totalSize);
         return itemChanged;
+    }
+
+    public async Task<int> BulkInsertFromFile<T>(string jsonFile, string tableName, CancellationToken cancel)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        logger.BulkInsertFromFileStart(jsonFile, tableName);
+        var ingestProps = new KustoQueuedIngestionProperties(this.kustoSettings.DbName, tableName)
+        {
+            Format = DataSourceFormat.json,
+            IngestionMapping = new IngestionMapping
+            {
+                IngestionMappingKind = IngestionMappingKind.Json,
+                IngestionMappings = typeof(T).GetKustoColumnMappings()
+            },
+            ReportLevel = IngestionReportLevel.FailuresAndSuccesses,
+            ReportMethod = IngestionReportMethod.Queue
+        };
+
+        var ingestResult = await this.queuedIngestClient.IngestFromStorageAsync(jsonFile, ingestProps);
+        var statusCollection = ingestResult.GetIngestionStatusCollection().ToList();
+        var successfulInserts = statusCollection.Count(s => s.Status == global::Kusto.Ingest.Status.Succeeded);
+        var failedInserts = statusCollection.Count(s => s.Status == global::Kusto.Ingest.Status.Failed);
+        this.logger.BulkInsertFromFileStop(jsonFile, tableName, stopwatch.ElapsedMilliseconds, successfulInserts, failedInserts);
+        return successfulInserts;
     }
 
     public async Task<T?> ExecuteScalar<T>(string query, string fieldName, CancellationToken cancel)
@@ -898,6 +924,7 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
             this.adminClient.Dispose();
             this.queryClient.Dispose();
             this.ingestClient.Dispose();
+            this.queuedIngestClient.Dispose();
         }
         catch (ObjectDisposedException)
         {
