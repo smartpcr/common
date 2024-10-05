@@ -37,9 +37,9 @@ public class KustoClient : IKustoClient
     private readonly KustoSettings kustoSettings;
     private readonly ILogger<KustoClient> logger;
     private readonly Tracer tracer;
-    private readonly AsyncLazy<ICslAdminProvider> adminClientFunc;
-    private readonly AsyncLazy<IKustoIngestClient> ingestClientFunc;
-    private readonly AsyncLazy<ICslQueryProvider> queryClientFunc;
+    private readonly ICslAdminProvider adminClient;
+    private readonly IKustoIngestClient ingestClient;
+    private readonly ICslQueryProvider queryClient;
 
     public KustoClient(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, KustoSettings? kustoSettings = null)
     {
@@ -49,22 +49,10 @@ public class KustoClient : IKustoClient
         var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
         var traceProvider = serviceProvider.GetRequiredService<TracerProvider>();
         tracer = traceProvider.GetTracer(metadata.ApplicationName + $".{nameof(KustoClient)}", metadata.BuildVersion);
-
-        queryClientFunc = new AsyncLazy<ICslQueryProvider>(() =>
-        {
-            var clientFactory = new KustoAuthHelper(serviceProvider, kustoSettings);
-            return clientFactory.QueryQueryClient;
-        });
-        adminClientFunc = new AsyncLazy<ICslAdminProvider>(() =>
-        {
-            var clientFactory = new KustoAuthHelper(serviceProvider, kustoSettings);
-            return clientFactory.AdminClient;
-        });
-        ingestClientFunc = new AsyncLazy<IKustoIngestClient>(() =>
-        {
-            var clientFactory = new KustoAuthHelper(serviceProvider, kustoSettings);
-            return clientFactory.IngestClient;
-        });
+        var kustoAuthHelper = new KustoAuthHelper(serviceProvider, kustoSettings);
+        this.queryClient = kustoAuthHelper.QueryQueryClient;
+        this.adminClient = kustoAuthHelper.AdminClient;
+        this.ingestClient = kustoAuthHelper.IngestClient;
     }
 
     public async Task<IEnumerable<T>> ExecuteQuery<T>(string query, TimeSpan timeout = default, CancellationToken cancellationToken = default)
@@ -72,8 +60,7 @@ public class KustoClient : IKustoClient
         using var _ = tracer.StartActiveSpan(nameof(ExecuteQuery));
         logger.ExecuteQueryStart(query);
         var stopWatch = Stopwatch.StartNew();
-        var queryClient = await queryClientFunc.Value;
-        var reader = await queryClient.ExecuteQueryAsync(
+        var reader = await this.queryClient.ExecuteQueryAsync(
             kustoSettings.DbName,
             query,
             GetClientRequestProps(timeout),
@@ -91,7 +78,6 @@ public class KustoClient : IKustoClient
         int batchSize = 100)
     {
         using var _ = tracer.StartActiveSpan(nameof(ExecuteQuery));
-        var queryClient = await queryClientFunc.Value;
         var reader = await queryClient.ExecuteQueryAsync(
             kustoSettings.DbName,
             query,
@@ -108,7 +94,6 @@ public class KustoClient : IKustoClient
         int batchSize = 100)
     {
         using var _ = tracer.StartActiveSpan(nameof(ExecuteQuery));
-        var queryClient = await queryClientFunc.Value;
         var reader = await queryClient.ExecuteQueryAsync(
             kustoSettings.DbName,
             query,
@@ -123,7 +108,6 @@ public class KustoClient : IKustoClient
         params (string name, string value)[] parameters)
     {
         using var _ = tracer.StartActiveSpan(nameof(ExecuteFunction));
-        var queryClient = await queryClientFunc.Value;
         var reader = await queryClient.ExecuteQueryAsync(
             kustoSettings.DbName,
             functionName,
@@ -140,7 +124,6 @@ public class KustoClient : IKustoClient
         int batchSize = 100)
     {
         using var _ = tracer.StartActiveSpan(nameof(ExecuteFunction));
-        var queryClient = await queryClientFunc.Value;
         var reader = await queryClient.ExecuteQueryAsync(
             kustoSettings.DbName,
             functionName,
@@ -175,8 +158,6 @@ public class KustoClient : IKustoClient
 
         long totalSize = 0;
         int itemChanged = 0;
-        var ingestClient = await ingestClientFunc.Value;
-        var adminClient = await adminClientFunc.Value;
 
         if (ingestMode == IngestMode.InsertNew)
         {
@@ -234,7 +215,6 @@ public class KustoClient : IKustoClient
         logger.ExecuteScalarStart(query);
         using var span = tracer.StartActiveSpan(nameof(ExecuteScalar));
         var watch = Stopwatch.StartNew();
-        var queryClient = await queryClientFunc.Value;
         try
         {
             var reader = await queryClient.ExecuteQueryAsync(
@@ -265,7 +245,6 @@ public class KustoClient : IKustoClient
         logger.ExecuteReaderStart(query);
         var watch = Stopwatch.StartNew();
         using var _ = tracer.StartActiveSpan(nameof(ExecuteReader));
-        var queryClient = await queryClientFunc.Value;
         var reader = await queryClient.ExecuteQueryAsync(
             kustoSettings.DbName,
             query,
@@ -279,7 +258,6 @@ public class KustoClient : IKustoClient
         logger.DropTableStart(tableName);
         using var _ = tracer.StartActiveSpan(nameof(DropTable));
         var watch = Stopwatch.StartNew();
-        var adminClient = await adminClientFunc.Value;
         var showTableCmd = CslCommandGenerator.GenerateTableDropCommand(tableName, true);
         await adminClient.ExecuteControlCommandAsync(kustoSettings.DbName, showTableCmd);
         logger.DropTableStop(tableName, watch.ElapsedMilliseconds);
@@ -290,7 +268,6 @@ public class KustoClient : IKustoClient
         logger.RefreshStagingTableStart(stagingTableName, targetTableName, ingestionMapName);
         var watch = Stopwatch.StartNew();
         using var _ = tracer.StartActiveSpan(nameof(RefreshStagingTable));
-        var adminClient = await adminClientFunc.Value;
         var tableSchemaReader = await adminClient.ExecuteControlCommandAsync(kustoSettings.DbName, $".show table {targetTableName} cslschema");
         var tableSchema = tableSchemaReader.ToStringColumn("Schema").FirstOrDefault();
         await adminClient.ExecuteControlCommandAsync(kustoSettings.DbName, $".drop table {stagingTableName} ifexists");
@@ -309,7 +286,6 @@ public class KustoClient : IKustoClient
         using var _ = tracer.StartActiveSpan(nameof(SwapTable));
         logger.SwapTableStart(targetTable, stagingTable);
         var watch = Stopwatch.StartNew();
-        var adminClient = await adminClientFunc.Value;
         await adminClient.ExecuteControlCommandAsync(kustoSettings.DbName, $".rename tables {stagingTable}={targetTable},{targetTable}={stagingTable}");
         logger.SwapTableStop(targetTable, stagingTable, watch.ElapsedMilliseconds);
     }
@@ -320,7 +296,6 @@ public class KustoClient : IKustoClient
         var showRetentionPolicyCommand = CslCommandGenerator.GenerateTableShowRetentionPolicyCommand(fromTableName);
         logger.CopyRetentionPolicyStart(fromTableName, toTableName);
         var watch = Stopwatch.StartNew();
-        var adminClient = await adminClientFunc.Value;
         var reader = await adminClient.ExecuteControlCommandAsync(kustoSettings.DbName, showRetentionPolicyCommand);
         if (reader.Read())
         {
@@ -353,7 +328,6 @@ public class KustoClient : IKustoClient
         logger.ListTablesStart();
         var watch = Stopwatch.StartNew();
         var showTablesCmd = CslCommandGenerator.GenerateTablesShowCommand();
-        var adminClient = await adminClientFunc.Value;
         var reader = await adminClient.ExecuteControlCommandAsync(kustoSettings.DbName, showTablesCmd);
         var tableNames = new List<string>();
         while (reader.Read())
@@ -422,7 +396,6 @@ public class KustoClient : IKustoClient
         logger.ListFunctionsStart();
         var watch = Stopwatch.StartNew();
         var showFunctionsCmd = CslCommandGenerator.GenerateFunctionsShowCommand();
-        var adminClient = await adminClientFunc.Value;
         var reader = await adminClient.ExecuteControlCommandAsync(kustoSettings.DbName, showFunctionsCmd);
         var functionNames = new List<string>();
         while (reader.Read())
@@ -494,7 +467,6 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
     {
         using var span = tracer.StartActiveSpan(nameof(EnsureTable));
         var tableExists = false;
-        var adminClient = await adminClientFunc.Value;
 
         try
         {
@@ -544,7 +516,6 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
 
         string? lastId = null;
         const int ThrottleSize = 500000;
-        var queryClient = await queryClientFunc.Value;
         while (true)
         {
             var batchRead = 0;
@@ -924,18 +895,9 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
     {
         try
         {
-            if (this.adminClientFunc.IsValueCreated)
-            {
-                this.adminClientFunc.Value.Dispose();
-            }
-            if (this.queryClientFunc.IsValueCreated)
-            {
-                this.queryClientFunc.Value.Dispose();
-            }
-            if (this.ingestClientFunc.IsValueCreated)
-            {
-                this.ingestClientFunc.Value.Dispose();
-            }
+            this.adminClient.Dispose();
+            this.queryClient.Dispose();
+            this.ingestClient.Dispose();
         }
         catch (ObjectDisposedException)
         {
