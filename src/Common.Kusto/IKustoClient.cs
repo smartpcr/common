@@ -12,7 +12,7 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
-public interface IKustoClient
+public interface IKustoClient : IDisposable
 {
     Task<IEnumerable<T>> ExecuteQuery<T>(string query, TimeSpan timeout = default, CancellationToken cancellationToken = default);
 

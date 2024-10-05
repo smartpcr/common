@@ -90,6 +90,8 @@ public class KustoAuthHelper
                     .WithAadUserPromptAuthentication(
                         aadSettings.ClientId,
                         aadSettings.Authority);
+            case KustoAuthMode.None:
+                return new KustoConnectionStringBuilder($"{kustoSettings.ClusterUrl}") { InitialCatalog = kustoSettings.DbName };
             default:
                 throw new NotSupportedException($"Kusto auth mode {kustoSettings.AuthMode} is not supported");
         }

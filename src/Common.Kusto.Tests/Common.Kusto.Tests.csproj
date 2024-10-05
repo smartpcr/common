@@ -1,8 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Common.Config\Common.Config.csproj" />
     <ProjectReference Include="..\Common.Kusto\Common.Kusto.csproj" />
     <ProjectReference Include="..\Common.Monitoring\Common.Monitoring.csproj" />
     <ProjectReference Include="..\Common.Settings\Common.Settings.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\people.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

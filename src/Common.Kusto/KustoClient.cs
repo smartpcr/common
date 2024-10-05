@@ -19,6 +19,7 @@ using Config;
 using global::Kusto.Cloud.Platform.Data;
 using global::Kusto.Data;
 using global::Kusto.Data.Common;
+using global::Kusto.Data.Ingestion;
 using global::Kusto.Ingest;
 using Microsoft.Extensions.AmbientMetadata;
 using Microsoft.Extensions.Configuration;
@@ -165,7 +166,11 @@ public class KustoClient : IKustoClient
             DropByTags = new List<string> { DateTime.Today.ToString("MM/dd/yyyy") },
             IngestByTags = new List<string> { Guid.Empty.ToString() },
             Format = DataSourceFormat.json,
-            JsonMapping = columnMappings.Select(p => p.mapping)
+            IngestionMapping = new IngestionMapping
+            {
+                IngestionMappingKind = IngestionMappingKind.Json,
+                IngestionMappings = columnMappings
+            }
         };
 
         long totalSize = 0;
@@ -370,12 +375,12 @@ public class KustoClient : IKustoClient
                 var schemaJson = reader.GetString(1);
                 var schema = JObject.Parse(schemaJson);
                 var columns = new List<KustoColumn>();
-                foreach (var column in schema.Value<JArray>("OrderedColumns"))
+                foreach (var column in schema.Value<JArray>("OrderedColumns")!)
                 {
                     var columnName = column.Value<string>("Name");
-                    var columnType = Type.GetType(column.Value<string>("Type"));
+                    var columnType = Type.GetType(column.Value<string>("Type")!);
                     var cslType = column.Value<string>("CslType");
-                    columns.Add(new KustoColumn() { Name = columnName, Type = columnType, CslType = cslType });
+                    columns.Add(new KustoColumn() { Name = columnName!, Type = columnType!, CslType = cslType! });
                 }
 
                 table.Columns = columns;
@@ -387,8 +392,8 @@ public class KustoClient : IKustoClient
             reader = await adminClient.ExecuteControlCommandAsync(kustoSettings.DbName, showDetailCmd);
             if (reader.Read())
             {
-                table.Folder = reader.Value<string>("Folder");
-                table.DocString = reader.Value<string>("DocString");
+                table.Folder = reader.Value<string>("Folder")!;
+                table.DocString = reader.Value<string>("DocString")!;
                 var retentionPolicy = reader.Value<string>("RetentionPolicy");
                 if (!string.IsNullOrEmpty(retentionPolicy))
                 {
@@ -509,23 +514,9 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
 
         if (!tableExists)
         {
+            var createTableCmd = CslCommandGenerator.GenerateTableCreateCommand(
+                tableName, typeof(T));
             var columnMappings = typeof(T).GetKustoColumnMappings();
-            var createTableCmd = CslCommandGenerator.GenerateTableCreateCommand(tableName,
-                columnMappings.Select(cm =>
-                {
-                    var columnType = cm.fieldType;
-                    if (columnType?.IsEnum == true)
-                    {
-                        columnType = typeof(string);
-                    }
-
-                    if (columnType == typeof(byte))
-                    {
-                        columnType = typeof(int);
-                    }
-
-                    return new Tuple<string, Type>(cm.mapping.ColumnName, columnType);
-                }));
             logger.CreateTable(tableName, columnMappings.Count);
             await adminClient.ExecuteControlCommandAsync(kustoSettings.DbName, createTableCmd);
         }
@@ -589,7 +580,7 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
         foreach (var item in items)
         {
             var id = idProp.GetValue(item)?.ToString();
-            var found = existingIds.Contains(id);
+            var found = !string.IsNullOrEmpty(id) && existingIds.Contains(id);
             if (found)
                 updates.Add(item);
             else
@@ -621,7 +612,7 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
 
         while (reader.Read() && !cancellationToken.IsCancellationRequested)
         {
-            var instance = Create<T>(reader, propMappings);
+            var instance = Create<T>(reader, propMappings!);
             output.Add(instance);
             total++;
             if (total % 100 == 0)
@@ -652,7 +643,7 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
         T? lastRecord = default;
         while (reader.Read() && !cancellationToken.IsCancellationRequested)
         {
-            var instance = Create<T>(reader, propMappings);
+            var instance = Create<T>(reader, propMappings!);
             output.Add(instance);
             if (output.Count >= batchSize)
             {
@@ -787,7 +778,7 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
                 Func<object, object>? converter = null;
                 if (!property.PropertyType.IsAssignableFrom(dataType))
                 {
-                    converter = CreateConverter(dataType, property.PropertyType);
+                    converter = CreateConverter(dataType, property.PropertyType)!;
                 }
 
                 propMappings.Add(i, (property, converter));
@@ -805,7 +796,7 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
         IDataReader reader,
         Dictionary<int, (PropertyInfo prop, Func<object, object> converter)> propMappings)
     {
-        return (T)Create(typeof(T), reader, propMappings);
+        return (T)Create(typeof(T), reader, propMappings!);
     }
 
     private object Create(
@@ -864,7 +855,7 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
             }
         }
 
-        return instance;
+        return instance!;
     }
 
     private Func<object, object?>? CreateConverter(Type srcType, Type tgtType)
@@ -931,4 +922,42 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
     }
 
     #endregion
+
+    private void ReleaseUnmanagedResources()
+    {
+        try
+        {
+            if (this.adminClientFunc.IsValueCreated)
+            {
+                this.adminClientFunc.Value.Dispose();
+            }
+            if (this.queryClientFunc.IsValueCreated)
+            {
+                this.queryClientFunc.Value.Dispose();
+            }
+            if (this.ingestClientFunc.IsValueCreated)
+            {
+                this.ingestClientFunc.Value.Dispose();
+            }
+        }
+        catch (ObjectDisposedException)
+        {
+            // ignore
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Error releasing unmanaged resources");
+        }
+    }
+
+    public void Dispose()
+    {
+        ReleaseUnmanagedResources();
+        GC.SuppressFinalize(this);
+    }
+
+    ~KustoClient()
+    {
+        ReleaseUnmanagedResources();
+    }
 }

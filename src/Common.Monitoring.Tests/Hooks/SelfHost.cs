@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Reqnroll;
+using TechTalk.SpecFlow;
 
 /// <summary>
 /// Start and stop a self-hosted web api for testing, make sure IServiceProvider is registered in ScenarioContext

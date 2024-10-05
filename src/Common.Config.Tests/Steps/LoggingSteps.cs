@@ -12,7 +12,7 @@ using Common.Config.Tests.Mocks;
 using FluentAssertions;
 using Hooks;
 using Microsoft.Extensions.Logging;
-using Reqnroll;
+using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using TechTalk.SpecFlow.Infrastructure;
 
@@ -20,9 +20,9 @@ using TechTalk.SpecFlow.Infrastructure;
 public class LoggingSteps
 {
     private readonly ScenarioContext scenarioContext;
-    private readonly IReqnrollOutputHelper outputHelper;
+    private readonly ISpecFlowOutputHelper outputHelper;
 
-    public LoggingSteps(ScenarioContext scenarioContext, IReqnrollOutputHelper outputHelper)
+    public LoggingSteps(ScenarioContext scenarioContext, ISpecFlowOutputHelper outputHelper)
     {
         this.scenarioContext = scenarioContext;
         this.outputHelper = outputHelper;

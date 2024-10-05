@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace Common.Monitoring.Tests.Features
+namespace Common.Kusto.Tests.Features
 {
     using TechTalk.SpecFlow;
     using System;
@@ -19,21 +19,19 @@ namespace Common.Monitoring.Tests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [Xunit.TraitAttribute("Category", "integration_test")]
-    public partial class MetricsTestFeature : object, Xunit.IClassFixture<MetricsTestFeature.FixtureData>, System.IDisposable
+    public partial class BatchIngestFeature : object, Xunit.IClassFixture<BatchIngestFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
-        private static string[] featureTags = new string[] {
-                "integration_test"};
+        private static string[] featureTags = ((string[])(null));
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "MetricsTest.feature"
+#line 1 "BatchIngest.feature"
 #line hidden
         
-        public MetricsTestFeature(MetricsTestFeature.FixtureData fixtureData, Common_Monitoring_Tests_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public BatchIngestFeature(BatchIngestFeature.FixtureData fixtureData, Common_Kusto_Tests_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -42,7 +40,8 @@ namespace Common.Monitoring.Tests.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "MetricsTest", "\tShould be able to create counter, histogram and gauge metrics", ProgrammingLanguage.CSharp, featureTags);
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "BatchIngest", "As a user,\r\nI want to be able to ingest json files in batch to kusto database,\r\nS" +
+                    "o that I can query them later.", ProgrammingLanguage.CSharp, featureTags);
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -82,18 +81,14 @@ namespace Common.Monitoring.Tests.Features
             this.TestTearDown();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Create a counter for total requests")]
-        [Xunit.TraitAttribute("FeatureTitle", "MetricsTest")]
-        [Xunit.TraitAttribute("Description", "Create a counter for total requests")]
-        [Xunit.TraitAttribute("Category", "prod")]
-        [Xunit.TraitAttribute("Category", "counter")]
-        public void CreateACounterForTotalRequests()
+        [Xunit.SkippableFactAttribute(DisplayName="batch ingest json files")]
+        [Xunit.TraitAttribute("FeatureTitle", "BatchIngest")]
+        [Xunit.TraitAttribute("Description", "batch ingest json files")]
+        public void BatchIngestJsonFiles()
         {
-            string[] tagsOfScenario = new string[] {
-                    "prod",
-                    "counter"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a counter for total requests", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("batch ingest json files", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 6
     this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -105,16 +100,19 @@ namespace Common.Monitoring.Tests.Features
             {
                 this.ScenarioStart();
 #line 7
-     testRunner.Given("a web api is running on port 19001", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+        testRunner.Given("json file folder \"TestData\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 8
-        testRunner.And("monitoring settings are configured with metrics capability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+        testRunner.When("Ensure kusto table \"People\" exists", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 9
-     testRunner.When("I call api endpoint \"/api/hello\" 3 times", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+        testRunner.When("I ingest json files", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 10
-     testRunner.Then("the metric \"total_requests\" should be 3", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+        testRunner.Then("kusto db should have table \"People\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 11
+        testRunner.And("table \"People\" should have 10 rows", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -127,12 +125,12 @@ namespace Common.Monitoring.Tests.Features
             
             public FixtureData()
             {
-                MetricsTestFeature.FeatureSetup();
+                BatchIngestFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                MetricsTestFeature.FeatureTearDown();
+                BatchIngestFeature.FeatureTearDown();
             }
         }
     }

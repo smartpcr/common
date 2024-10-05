@@ -11,7 +11,7 @@ using Config;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Reqnroll;
+using TechTalk.SpecFlow;
 
 internal class Startup
 {

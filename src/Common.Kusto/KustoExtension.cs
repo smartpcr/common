@@ -56,52 +56,42 @@ public static class KustoExtension
         return typeToKustoColumnType.GetValueOrDefault(type, "string");
     }
 
-    public static List<(JsonColumnMapping mapping, Type fieldType)> GetKustoColumnMappings(this Type type)
+    public static List<(string columnName, Type columnType)> GetColumns(this Type type)
     {
-        var columnMappings = new List<(JsonColumnMapping mapping, Type fieldType)>();
-        var declaredProps = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-        var allProps = type.GetProperties();
-        if (declaredProps.Any())
+        var allProps = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        var columns = allProps.Select(prop =>
         {
-            var nonDeclaredProps = allProps.Where(p => declaredProps.All(p2 => p2.Name != p.Name)).ToArray();
-            allProps = declaredProps.Union(nonDeclaredProps).ToArray();
-        }
+            var jsonPropAttr = prop.GetCustomAttribute<JsonPropertyAttribute>();
+            var propName = jsonPropAttr?.PropertyName ?? prop.Name;
+            return (propName, prop.PropertyType);
+        }).ToList();
 
-        foreach (var prop in allProps)
+        return columns;
+    }
+
+    public static List<ColumnMapping> GetKustoColumnMappings(this Type type)
+    {
+        var allProps = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        var columnMappings = allProps.Select(prop =>
         {
             var jsonPropAttr = prop.GetCustomAttribute<JsonPropertyAttribute>();
             var propName = jsonPropAttr?.PropertyName ?? prop.Name;
             var kustoColAttr = prop.GetCustomAttribute<KustoColumnAttribute>();
-            var kustoFieldType = kustoColAttr == null
-                ? prop.PropertyType.ToKustoColumnType()
-                : kustoColAttr.CslType;
-            var propType = prop.PropertyType.GetTypeWithNullableSupport();
-            if (propType == typeof(decimal))
+            var kustoFieldType = kustoColAttr?.CslType ?? prop.PropertyType.ToKustoColumnType();
+            var transformMethod = (prop.PropertyType == typeof(string[]) || prop.PropertyType == typeof(List<string>))
+                ? TransformationMethod.PropertyBagArrayToDictionary
+                : TransformationMethod.None;
+            return new ColumnMapping
             {
-                propType = typeof(double);
-            }
-
-            if (prop.PropertyType == typeof(string[]) || prop.PropertyType == typeof(List<string>))
-            {
-                columnMappings.Add((
-                    new JsonColumnMapping
-                    {
-                        ColumnName = propName,
-                        ColumnType = kustoFieldType,
-                        JsonPath = "$." + propName,
-                        TransformationMethod = TransformationMethod.PropertyBagArrayToDictionary
-                    }, typeof(string)));
-            }
-            else
-            {
-                columnMappings.Add((new JsonColumnMapping
+                ColumnName = propName,
+                ColumnType = kustoFieldType,
+                Properties = new Dictionary<string, string>
                 {
-                    ColumnName = propName,
-                    ColumnType = kustoFieldType,
-                    JsonPath = "$." + propName,
-                }, propType));
-            }
-        }
+                    { "Path", "$." + propName },
+                    { "Transform", transformMethod.ToString() }
+                }
+            };
+        }).ToList();
 
         return columnMappings;
     }

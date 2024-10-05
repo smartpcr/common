@@ -10,5 +10,6 @@ public enum KustoAuthMode
 {
     Msi,
     Spn,
-    User
+    User,
+    None
 }
