@@ -20,7 +20,6 @@
     <PackageReference Include="OpenTelemetry.Exporter.Geneva" />
     <PackageReference Include="OpenTelemetry.Exporter.Jaeger" />
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
-    <PackageReference Include="OpenTelemetry.Exporter.Prometheus" />
     <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" />
     <PackageReference Include="OpenTelemetry.Exporter.Prometheus.HttpListener" />
     <PackageReference Include="OpenTelemetry.Exporter.Zipkin" />
