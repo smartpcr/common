@@ -21,9 +21,10 @@ namespace Common.Kusto.Tests.Hooks
         {
             var services = new ServiceCollection();
             var configuration = services.AddConfiguration();
+            services.AddSingleton<ILoggerFactory, MockedLoggerFactory>();
             services.AddMonitoring(configuration);
             var serviceProvider = services.BuildServiceProvider();
-            var kustoSettings = configuration.GetConfiguredSettings<KustoSettings>("Kusto");
+            var kustoSettings = configuration.GetConfiguredSettings<KustoSettings>();
             featureContext.Set(kustoSettings);
 
             ILoggerFactory loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();

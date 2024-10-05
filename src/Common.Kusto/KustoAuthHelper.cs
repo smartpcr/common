@@ -56,6 +56,11 @@ public class KustoAuthHelper
 
     private KustoConnectionStringBuilder GetConnStringBuilder()
     {
+        if (this.kustoSettings.AuthMode == KustoAuthMode.None)
+        {
+            return new KustoConnectionStringBuilder($"{kustoSettings.ClusterUrl}") { InitialCatalog = kustoSettings.DbName };
+        }
+
         var aadSettings = kustoSettings.Aad ?? configuration.GetConfiguredSettings<AadSettings>();
         var tokenProvider = new AadTokenProvider(serviceProvider);
 
@@ -90,8 +95,6 @@ public class KustoAuthHelper
                     .WithAadUserPromptAuthentication(
                         aadSettings.ClientId,
                         aadSettings.Authority);
-            case KustoAuthMode.None:
-                return new KustoConnectionStringBuilder($"{kustoSettings.ClusterUrl}") { InitialCatalog = kustoSettings.DbName };
             default:
                 throw new NotSupportedException($"Kusto auth mode {kustoSettings.AuthMode} is not supported");
         }

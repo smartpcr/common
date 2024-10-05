@@ -13,7 +13,6 @@ public class KustoSettings
 {
     private string? clusterUrl;
 
-    [Required]
     public string ClusterName { get; set; }
 
     public string RegionName { get; set; }
@@ -23,6 +22,7 @@ public class KustoSettings
 
     public string TableName { get; set; }
 
+    [Required]
     public KustoAuthMode AuthMode { get; set; } = KustoAuthMode.Spn;
 
     public string KustoTableMapName { get; set; } = "JsonMap2";

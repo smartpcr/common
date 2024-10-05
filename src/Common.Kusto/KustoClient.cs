@@ -514,8 +514,9 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
 
         if (!tableExists)
         {
+            var cols = typeof(T).GetColumns();
             var createTableCmd = CslCommandGenerator.GenerateTableCreateCommand(
-                tableName, typeof(T));
+                tableName, cols.Select(c => new Tuple<string, Type>(c.columnName, c.columnType)).ToList());
             var columnMappings = typeof(T).GetKustoColumnMappings();
             logger.CreateTable(tableName, columnMappings.Count);
             await adminClient.ExecuteControlCommandAsync(kustoSettings.DbName, createTableCmd);
