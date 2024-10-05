@@ -540,10 +540,6 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
             return (updates, items);
         }
 
-        var idPropName1 = idProp.Name.Equals("Id", StringComparison.OrdinalIgnoreCase)
-            ? "['id']"
-            : idProp.Name;
-
         var existingIds = new HashSet<string>();
 
         string? lastId = null;
@@ -552,10 +548,10 @@ let lastWrite = {0} | extend {1}=ingestion_time() | summarize LastWriteTime=max(
         while (true)
         {
             var batchRead = 0;
-            var idQuery = $"{tableName} \n| order by {idPropName1} asc \n| project {idPropName1} \n| take {ThrottleSize}";
+            var idQuery = $"{tableName} \n| order by {idPropName} asc \n| project {idPropName} \n| take {ThrottleSize}";
             if (lastId != null)
             {
-                idQuery = $"{tableName} \n| where strcmp({idPropName1},'{lastId}')>0 \n| order by {idPropName1} asc \n| project {idPropName1} \n| take {ThrottleSize}";
+                idQuery = $"{tableName} \n| where strcmp({idPropName},'{lastId}')>0 \n| order by {idPropName} asc \n| project {idPropName} \n| take {ThrottleSize}";
             }
 
             logger.IdQuery(idQuery);
