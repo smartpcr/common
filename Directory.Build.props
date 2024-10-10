@@ -47,12 +47,17 @@
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(IsTestProject)' == 'true' And '$(UseReqnroll)' == 'true'">
-    <PackageReference Include="Reqnroll.xUnit" />
+  <ItemGroup Condition="'$(IsTestProject)' == 'true' And '$(UseSpecflow)' == ''">
+    <PackageReference Include="Reqnroll" />
+    <PackageReference Include="Reqnroll.CustomPlugin" />
+    <PackageReference Include="Reqnroll.ExternalData" />
+    <PackageReference Include="Reqnroll.Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Reqnroll.SpecFlowCompatibility" />
+    <PackageReference Include="Reqnroll.Tools.MsBuild.Generation" />
+    <PackageReference Include="Reqnroll.xUnit" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(IsTestProject)' == 'true' And '$(UseReqnroll)' == ''">
+  <ItemGroup Condition="'$(IsTestProject)' == 'true' And '$(UseSpecflow)' == 'true'">
     <PackageReference Include="Specflow" />
     <PackageReference Include="Specflow.Tools.MsBuild.Generation" />
     <PackageReference Include="Specflow.xUnit" />

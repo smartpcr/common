@@ -1,0 +1,5 @@
+﻿<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:include schemaLocation="./SolutionManifest.xsd"/>
+  <xs:element name="UpdateDiscoveryManifest" type="UpdateDiscoveryManifest"/>
+</xs:schema>

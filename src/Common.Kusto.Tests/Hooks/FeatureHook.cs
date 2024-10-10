@@ -11,7 +11,7 @@ namespace Common.Kusto.Tests.Hooks
     using Microsoft.Extensions.Logging;
     using Monitoring;
     using Settings;
-    using TechTalk.SpecFlow;
+    using Reqnroll;
 
     [Binding]
     public sealed class FeatureHook

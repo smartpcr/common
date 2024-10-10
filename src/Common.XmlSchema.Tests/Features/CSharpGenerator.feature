@@ -2,10 +2,10 @@
 	As a user,
   I want to be able to generate C# code from an XML schema
 
-Scenario: generate csharp code from a simple schema
-	Given xsd schema file "E:\\work\\hci\\urp\\src\\UpdateResourceProvider\\UpdateService\\Discovery\\UnitTest\\Schema\\SolutionManifest.xsd"
-	When I generate csharp code with namespace "Microsoft.AzureStack.Services.Update.ResourceProvider.Discovery.UnitTest.Schema.DiscoveryManifest" to output folder "E:\\work\\hci\\urp\\src\\UpdateResourceProvider\\UpdateService\\Discovery\\UnitTest\\Schema\\DiscoveryManifest\\Models"
-  Then the code should be generated to "E:\\work\\hci\\urp\\src\\UpdateResourceProvider\\UpdateService\\Discovery\\UnitTest\\Schema\\DiscoveryManifest\\Models"
+Scenario: generate csharp code for SolutionManifest
+	Given xsd schema file "Schema\\SolutionManifest.xsd"
+	When I generate csharp code with namespace "Microsoft.AzureStack.UpdateService.Models" to output folder "Schema\\DiscoveryManifest\\Models"
+  Then the code should be generated to "Schema\\DiscoveryManifest\\Models"
   | FileName    |
   | Enums.cs    |
   | Hotpatch.cs |

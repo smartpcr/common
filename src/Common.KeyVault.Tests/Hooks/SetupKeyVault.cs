@@ -5,17 +5,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Monitoring;
 using Settings;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Infrastructure;
+using Reqnroll;
+using Reqnroll.Infrastructure;
 
 
 [Binding]
 public sealed class SetupKeyVault
 {
     private readonly ScenarioContext context;
-    private readonly ISpecFlowOutputHelper outputHelper;
+    private readonly IReqnrollOutputHelper outputHelper;
 
-    public SetupKeyVault(ScenarioContext scenarioContext, ISpecFlowOutputHelper outputHelper)
+    public SetupKeyVault(ScenarioContext scenarioContext, IReqnrollOutputHelper outputHelper)
     {
         this.context = scenarioContext;
         this.outputHelper = outputHelper;

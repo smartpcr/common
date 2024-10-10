@@ -1,0 +1,15 @@
+﻿<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:include schemaLocation="./SolutionManifest.xsd"/>
+  <xs:include schemaLocation="./Signature.xsd"/>
+  <xs:element name="ASZSolutionBundleUpdates" type="ASZSolutionBundleUpdates"/>
+  <xs:complexType name="ASZSolutionBundleUpdates">
+    <xs:sequence>
+      <xs:element name="ManifestInfo" type="ManifestInfo"/>
+      <xs:element name="ApplicableUpdate" type="ApplicableUpdate"/>
+      <xs:element name="PackageMetadata" type="PackageMetadata"/>
+      <xs:element name="Signature" type="SignatureType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

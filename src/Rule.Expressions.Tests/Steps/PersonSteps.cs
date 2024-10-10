@@ -9,8 +9,8 @@ namespace Rule.Expressions.Tests.Steps
     using System.Linq;
     using FluentAssertions;
     using Models;
-    using TechTalk.SpecFlow;
-    using TechTalk.SpecFlow.Assist;
+    using Reqnroll;
+    using Reqnroll.Assist;
 
     [Binding]
     public class PersonSteps

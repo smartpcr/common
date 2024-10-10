@@ -7,7 +7,7 @@ namespace Rule.Expressions.Tests.Steps
     using FluentAssertions;
     using Models;
     using Newtonsoft.Json.Linq;
-    using TechTalk.SpecFlow;
+    using Reqnroll;
 
     [Binding]
     public class OperatorSteps

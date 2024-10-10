@@ -17,14 +17,14 @@ namespace Common.XmlSchema
     /// TODO: handle xsd import, scan for global and inline complex type, only create new class if contents not matching
     /// ignore difference among xs:choice, xs:all and xs:sequence, c# doesn't support it
     /// </summary>
-    public class XsdToCsGenerator
+        public class XsdToCsGenerator
     {
         private static readonly XNamespace xs = "http://www.w3.org/2001/XMLSchema";
-        private readonly XDocument _xsdSchema;
+        private readonly XDocument xsdSchema;
 
         public XsdToCsGenerator(string xsdSchemaFilePath)
         {
-            this._xsdSchema = XDocument.Load(xsdSchemaFilePath);
+            this.xsdSchema = XDocument.Load(xsdSchemaFilePath);
         }
 
         public void GeneratePocoClasses(string outputFolderPath, string @namespace)
@@ -50,9 +50,9 @@ namespace Common.XmlSchema
             this.GenerateEnums(enumBuilder, indent, enumTypes);
             indent--; // namespace
             enumBuilder.Append($"{Environment.NewLine}{Indent(indent)}}}");
-            System.IO.File.WriteAllText(Path.Combine(outputFolderPath, $"Enums.cs"), enumBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputFolderPath, $"Enums.cs"), enumBuilder.ToString());
 
-            var complexTypes = this._xsdSchema.Descendants().Where(e => e.Name.LocalName == "complexType");
+            var complexTypes = this.xsdSchema.Descendants().Where(e => e.Name.LocalName == "complexType");
             foreach (var complexType in complexTypes)
             {
                 this.GenerateCodeForComplexType(complexType, @namespace, enumTypes, patterns, outputFolderPath);
@@ -82,83 +82,123 @@ namespace Common.XmlSchema
             stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}using System.ComponentModel.DataAnnotations;");
             stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}using System.Xml.Serialization;{Environment.NewLine}");
 
-            stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlRoot(\"{className}\")]");
-            stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public partial class {className}{Environment.NewLine}{Indent(indent)}{{");
-            indent++; // properties
+            // Check if this complex type extends another complex type
+            var complexContent = complexType.Element(xs + "complexContent");
+            var extension = complexContent?.Element(xs + "extension");
+            string baseClassName = null;
+            if (extension != null)
+            {
+                // The base class is specified in the 'base' attribute of <xs:extension>
+                baseClassName = extension.Attribute("base")?.Value;
+            }
 
-            var childElements = complexType.Element(xs + "sequence")?.Elements() ?? complexType.Element(xs + "choice")?.Elements();
+            stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlRoot(\"{className}\")]");
+            IEnumerable<XElement> childElements = null;
+            IEnumerable<XElement> attributes = null;
+            if (baseClassName != null)
+            {
+                // Generate a class that inherits from the base class
+                stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public partial class {className} : {baseClassName}{Environment.NewLine}{Indent(indent)}{{");
+                childElements = extension.Element(xs + "sequence")?.Elements() ?? extension.Element(xs + "choice")?.Elements();
+                attributes = extension.Elements().Where(e => e.Name.LocalName == "attribute");
+            }
+            else
+            {
+                // Generate a class without inheritance
+                stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public partial class {className}{Environment.NewLine}{Indent(indent)}{{");
+                childElements = complexType.Element(xs + "sequence")?.Elements() ?? complexType.Element(xs + "choice")?.Elements();
+                attributes = complexType.Elements().Where(e => e.Name.LocalName == "attribute");
+            }
+
+            indent++; // properties
+            // Process the elements (sequence or choice) inside the complex type
             var elements = childElements?.Where(e => e.Name.LocalName == "element").ToList();
             if (elements != null)
             {
                 foreach (var element in elements)
                 {
-                    string propertyName = element.Attribute("name")!.Value;
-                    var (propertyType, isNullable) = GetPropertyType(element);
-                    bool isRequired = element.Attribute("minOccurs")?.Value == "1";
-                    bool isList = element.Attribute("maxOccurs")?.Value == "unbounded";
-
-                    if (isRequired)
-                    {
-                        stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[Required][XmlElement(\"{propertyName}\")]");
-                    }
-                    else
-                    {
-                        stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlElement(\"{propertyName}\")]");
-                    }
-
-                    if (regexPatterns.TryGetValue(propertyType, out var regexPattern))
-                    {
-                        stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[RegularExpression(@\"{regexPattern}\")]");
-                        propertyType = "string";
-                    }
-
-                    string typeName = $"{(isList ? "List<" : "")}{propertyType}{(isList ? ">" : "")}";
-                    stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public {typeName} {propertyName} {{ get; set; }}{Environment.NewLine}");
-
-                    if ((enumTypes.Contains(propertyType) || isNullable) && !isRequired)
-                    {
-                        stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlIgnore]");
-                        stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public bool {propertyName}Specified {{ get; set; }}{Environment.NewLine}");
-                    }
+                    GenerateProperty(element, enumTypes, regexPatterns, stringBuilder, indent);
                 }
             }
 
-            var attributes = complexType.Elements().Where(e => e.Name.LocalName == "attribute");
+            // Process the attributes inside the complex type
             foreach (var attribute in attributes)
             {
-                string attrName = attribute.Attribute("name")!.Value;
-                bool isRequired = attribute.Attribute("use")?.Value == "required";
-                var (attrType, isNullable) = GetPropertyType(attribute);
-
-                if (isRequired)
-                {
-                    stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[Required][XmlAttribute(\"{attrName}\")]");
-                }
-                else
-                {
-                    stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlAttribute(\"{attrName}\")]");
-                }
-
-                if (regexPatterns.TryGetValue(attrType, out var regexPattern))
-                {
-                    stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[RegularExpression(@\"{regexPattern}\")]");
-                    attrType = "string";
-                }
-
-                stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public {attrType} {attrName} {{ get; set; }}{Environment.NewLine}");
-
-                if ((enumTypes.Contains(attrType) || isNullable) && !isRequired)
-                {
-                    stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlIgnore]");
-                    stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public bool {attrName}Specified {{ get; set; }}{Environment.NewLine}");
-                }
+                GenerateProperty(attribute, enumTypes, regexPatterns, stringBuilder, indent, isAttribute: true);
             }
 
             indent--; // class
             stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}}}");
             indent--; // namespace
             stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}}}");
-            System.IO.File.WriteAllText(Path.Combine(outputFolderPath, $"{className}.cs"), stringBuilder.ToString());
+            File.WriteAllText(Path.Combine(outputFolderPath, $"{className}.cs"), stringBuilder.ToString());
+        }
+
+        private void GenerateProperty(
+            XElement element,
+            HashSet<string> enumTypes,
+            Dictionary<string, string> regexPatterns,
+            StringBuilder stringBuilder,
+            int indent,
+            bool isAttribute = false)
+        {
+            var propertyName = element.Attribute("name")?.Value;
+            if (propertyName == null) return;
+
+            var (propertyType, isNullable) = GetPropertyType(element);
+            var isRequired = isAttribute
+                ? element.Attribute("use")?.Value == "required"
+                : element.Attribute("minOccurs")?.Value == "1";
+            var isList = !isAttribute && element.Attribute("maxOccurs")?.Value == "unbounded";
+            var fixedValue = element.Attribute("fixed")?.Value;
+            var defaultValue = element.Attribute("default")?.Value;
+
+            if (!isRequired && !string.IsNullOrEmpty(fixedValue))
+            {
+                stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlIgnore]");
+            }
+            else if (isRequired)
+            {
+                stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[Required]{(isAttribute ? "[XmlAttribute(\"" : "[XmlElement(\"")}{propertyName}\")]");
+            }
+            else
+            {
+                stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}{(isAttribute ? "[XmlAttribute(\"" : "[XmlElement(\"")}{propertyName}\")]");
+            }
+
+            if (regexPatterns.TryGetValue(propertyType, out var regexPattern))
+            {
+                stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[RegularExpression(@\"{regexPattern}\")]");
+                propertyType = "string";
+            }
+
+            var typeName = $"{(isList ? "List<" : "")}{propertyType}{(isList ? ">" : "")}";
+            stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public {typeName} {propertyName} {{ get; set; }}");
+
+            defaultValue = fixedValue ?? defaultValue;
+            if (!string.IsNullOrEmpty(defaultValue))
+            {
+                if (propertyType == "string")
+                {
+                    defaultValue = $"\"{defaultValue}\"";
+                }
+                else if (propertyType == "bool")
+                {
+                    defaultValue = defaultValue.ToLowerInvariant();
+                }
+                else if (propertyType == "DateTime")
+                {
+                    defaultValue = $"DateTime.Parse(\"{defaultValue}\")";
+                }
+                stringBuilder.Append($" = {defaultValue};");
+            }
+            stringBuilder.AppendLine();
+
+            if ((enumTypes.Contains(propertyType) || isNullable) && !isRequired && string.IsNullOrEmpty(fixedValue))
+            {
+                stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}[XmlIgnore]");
+                stringBuilder.Append($"{Environment.NewLine}{Indent(indent)}public bool {propertyName}Specified {{ get; set; }}{Environment.NewLine}");
+            }
         }
 
         private string Indent(int indent)
@@ -168,7 +208,7 @@ namespace Common.XmlSchema
 
         private void GenerateEnums(StringBuilder stringBuilder, int indent, HashSet<string> enumTypes)
         {
-            var simpleTypes = _xsdSchema.Descendants().Where(e => e.Name.LocalName == "simpleType");
+            var simpleTypes = xsdSchema.Descendants().Where(e => e.Name.LocalName == "simpleType");
             foreach (var simpleType in simpleTypes)
             {
                 var restriction = simpleType.Elements().FirstOrDefault(e => e.Name.LocalName == "restriction" && e.Attribute("base")?.Value == "xs:string");
@@ -177,7 +217,7 @@ namespace Common.XmlSchema
                     string enumName = simpleType.Attribute("name")!.Value;
                     var enumerations = restriction.Elements().Where(e => e.Name.LocalName == "enumeration").ToList();
 
-                    if (!string.IsNullOrEmpty(enumName) && enumerations?.Any() == true)
+                    if (!string.IsNullOrEmpty(enumName) && enumerations.Any())
                     {
                         stringBuilder.Append($"{Environment.NewLine}{this.Indent(indent)}public enum {enumName}");
                         stringBuilder.Append($"{Environment.NewLine}{this.Indent(indent)}{{");
@@ -199,7 +239,7 @@ namespace Common.XmlSchema
 
         private void PopulateStringRegexPatterns(Dictionary<string, string> patterns)
         {
-            var simpleTypes = _xsdSchema.Descendants().Where(e => e.Name.LocalName == "simpleType");
+            var simpleTypes = xsdSchema.Descendants().Where(e => e.Name.LocalName == "simpleType");
             foreach (var simpleType in simpleTypes)
             {
                 var restriction = simpleType.Elements().FirstOrDefault(e => e.Name.LocalName == "restriction" && e.Attribute("base")?.Value == "xs:string");
@@ -221,7 +261,7 @@ namespace Common.XmlSchema
 
         private (string typeName, bool isNullable) GetPropertyType(XElement element)
         {
-            string? xsdType = element.Attribute("type")?.Value;
+            string xsdType = element.Attribute("type")?.Value;
             if (string.IsNullOrEmpty(xsdType))
             {
                 var complexType = element.Element(element.Name.Namespace + "complexType");
@@ -278,7 +318,7 @@ namespace Common.XmlSchema
         private string ToEnumName(string value)
         {
             // Convert values into valid C# enum member names (e.g., replace spaces, ensure valid format)
-            return string.Join("_", value.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries))
+            return string.Join("_", value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
                 .Replace("-", "_")
                 .Replace(".", "")
                 .Replace(",", "")

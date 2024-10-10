@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<UpdateDiscoveryManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:///E:/work/hci/update/src/UpdateResourceProvider/UpdateService/Discovery/UnitTest/Schema/DiscoveryManifest/DiscoveryManifest.xsd">
+<UpdateDiscoveryManifest>
   <ManifestInfo CreatedBy="Manual" CreationDate="2021-08-16T10:30:00Z"/>
   <Services>
     <ApplicableUpdate Type="Services" Version="1.2201.0.20">

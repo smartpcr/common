@@ -12,17 +12,15 @@ using Common.Config.Tests.Mocks;
 using FluentAssertions;
 using Hooks;
 using Microsoft.Extensions.Logging;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
-using TechTalk.SpecFlow.Infrastructure;
+using Reqnroll;
 
 [Binding]
 public class LoggingSteps
 {
     private readonly ScenarioContext scenarioContext;
-    private readonly ISpecFlowOutputHelper outputHelper;
+    private readonly IReqnrollOutputHelper outputHelper;
 
-    public LoggingSteps(ScenarioContext scenarioContext, ISpecFlowOutputHelper outputHelper)
+    public LoggingSteps(ScenarioContext scenarioContext, IReqnrollOutputHelper outputHelper)
     {
         this.scenarioContext = scenarioContext;
         this.outputHelper = outputHelper;

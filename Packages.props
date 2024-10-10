@@ -4,7 +4,7 @@
     <ExtensionVersion>8.0.0</ExtensionVersion>
     <OpenTelemetryVersion>1.9.0</OpenTelemetryVersion>
     <MSTestVersion>3.0.4</MSTestVersion>
-    <ReqnrollVersion>1.0.1</ReqnrollVersion>
+    <ReqnrollVersion>2.1.0</ReqnrollVersion>
     <SpecflowVersion>3.9.74</SpecflowVersion>
     <KustoVersion>12.0.1</KustoVersion>
     <AspNetCoreVersion>2.2.0</AspNetCoreVersion>
@@ -128,10 +128,14 @@
     <PackageReference Update="Specflow.xUnit" Version="$(SpecflowVersion)" />
     <PackageReference Update="Specflow.Plus.LivingDocPlugin" Version="3.9.57" />
     <PackageReference Update="Specflow.MsTest" Version="$(SpecflowVersion)" />
+    <PackageReference Update="Reqnroll" Version="$(ReqnrollVersion)" />
+    <PackageReference Update="Reqnroll.CustomPlugin" Version="$(ReqnrollVersion)" />
+    <PackageReference Update="Reqnroll.ExternalData" Version="$(ReqnrollVersion)" />
+    <PackageReference Update="Reqnroll.Microsoft.Extensions.DependencyInjection" Version="$(ReqnrollVersion)" />
     <PackageReference Update="Reqnroll.MsTest" Version="$(ReqnrollVersion)" />
-    <PackageReference Update="Reqnroll.xUnit" Version="$(ReqnrollVersion)" />
-    <PackageReference Update="Reqnroll.Tools.MsBuild.Generation" Version="$(ReqnrollVersion)" />
     <PackageReference Update="Reqnroll.SpecFlowCompatibility" Version="$(ReqnrollVersion)" />
+    <PackageReference Update="Reqnroll.Tools.MsBuild.Generation" Version="$(ReqnrollVersion)" />
+    <PackageReference Update="Reqnroll.xUnit" Version="$(ReqnrollVersion)" />
     <PackageReference Update="xunit" Version="2.6.6" />
     <PackageReference Update="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

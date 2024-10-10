@@ -19,7 +19,7 @@ namespace Common.Kusto.Tests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "2.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class BatchIngestFeature : object, Xunit.IClassFixture<BatchIngestFeature.FixtureData>, Xunit.IAsyncLifetime
+    public partial class EtwIngestFeature : object, Xunit.IClassFixture<EtwIngestFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private static global::Reqnroll.ITestRunner testRunner;
@@ -28,10 +28,10 @@ namespace Common.Kusto.Tests.Features
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "BatchIngest.feature"
+#line 1 "EtwIngest.feature"
 #line hidden
         
-        public BatchIngestFeature(BatchIngestFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public EtwIngestFeature(EtwIngestFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
         }
@@ -39,8 +39,9 @@ namespace Common.Kusto.Tests.Features
         public static async System.Threading.Tasks.Task FeatureSetupAsync()
         {
             testRunner = global::Reqnroll.TestRunnerManager.GetTestRunnerForAssembly();
-            global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "BatchIngest", "As a user,\r\nI want to be able to ingest json files in batch to kusto database,\r\nS" +
-                    "o that I can query them later.", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+            global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "EtwIngest", "\tAs a user,\r\n  I want to be able to extract ETW events from a file,\r\n  and infer " +
+                    "its kusto table schema based on provider and event,\r\n  and ingest the events int" +
+                    "o the kusto table.", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
             await testRunner.OnFeatureStartAsync(featureInfo);
         }
         
@@ -86,16 +87,18 @@ namespace Common.Kusto.Tests.Features
             await this.TestTearDownAsync();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="batch ingest json files")]
-        [Xunit.TraitAttribute("FeatureTitle", "BatchIngest")]
-        [Xunit.TraitAttribute("Description", "batch ingest json files")]
-        public async System.Threading.Tasks.Task BatchIngestJsonFiles()
+        [Xunit.SkippableFactAttribute(DisplayName="extract etl file")]
+        [Xunit.TraitAttribute("FeatureTitle", "EtwIngest")]
+        [Xunit.TraitAttribute("Description", "extract etl file")]
+        [Xunit.TraitAttribute("Category", "etw")]
+        public async System.Threading.Tasks.Task ExtractEtlFile()
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = new string[] {
+                    "etw"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("batch ingest json files", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 6
-  this.ScenarioInitialize(scenarioInfo);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("extract etl file", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 8
+this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
             {
@@ -104,20 +107,42 @@ namespace Common.Kusto.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 7
-    await testRunner.GivenAsync("json file folder \"TestData\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 8
-    await testRunner.WhenAsync("Ensure kusto table \"People\" exists", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
 #line 9
-    await testRunner.WhenAsync("I ingest json files", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.GivenAsync("etl file \"E:\\\\kustodata\\\\SAC14-S1-N01_Microsoft-AzureStack-Compute-HostPluginWatc" +
+                        "hDog.2024-09-23.1.etl\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 10
-    await testRunner.ThenAsync("kusto db should have table \"People\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.WhenAsync("I parse etl file", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
+                global::Reqnroll.Table table1 = new global::Reqnroll.Table(new string[] {
+                            "ProviderName",
+                            "EventName"});
+                table1.AddRow(new string[] {
+                            "Microsoft-AzureStack-Compute-HostPluginWatchDog",
+                            "ConfigFileFound"});
+                table1.AddRow(new string[] {
+                            "Microsoft-AzureStack-Compute-HostPluginWatchDog",
+                            "EnsureProcessStarted/Start"});
+                table1.AddRow(new string[] {
+                            "Microsoft-AzureStack-Compute-HostPluginWatchDog",
+                            "EnsureProcessStarted/Stop"});
+                table1.AddRow(new string[] {
+                            "Microsoft-AzureStack-Compute-HostPluginWatchDog",
+                            "FoundProcessAlreadyRunning"});
+                table1.AddRow(new string[] {
+                            "Microsoft-AzureStack-Compute-HostPluginWatchDog",
+                            "ProcessStarted"});
+                table1.AddRow(new string[] {
+                            "Microsoft-AzureStack-Compute-HostPluginWatchDog",
+                            "ReadConfigFromStore"});
+                table1.AddRow(new string[] {
+                            "Microsoft-AzureStack-Compute-HostPluginWatchDog",
+                            "StartWatchDog/Start"});
+                table1.AddRow(new string[] {
+                            "Microsoft-AzureStack-Compute-HostPluginWatchDog",
+                            "StartWatchDog/Stop"});
 #line 11
-    await testRunner.AndAsync("table \"People\" should have 10 rows", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.ThenAsync("the result have the following events", ((string)(null)), table1, "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -130,12 +155,12 @@ namespace Common.Kusto.Tests.Features
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.InitializeAsync()
             {
-                await BatchIngestFeature.FeatureSetupAsync();
+                await EtwIngestFeature.FeatureSetupAsync();
             }
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.DisposeAsync()
             {
-                await BatchIngestFeature.FeatureTearDownAsync();
+                await EtwIngestFeature.FeatureTearDownAsync();
             }
         }
     }

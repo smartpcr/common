@@ -1,0 +1,33 @@
+﻿<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:complexType name="SignatureType">
+    <xs:sequence>
+      <xs:element name="KeyInfo" type="KeyInfoType"/>
+      <xs:element name="Object" type="ObjectType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="KeyInfoType">
+    <xs:sequence>
+      <xs:element name="X509Data" type="X509DataType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="X509DataType">
+    <xs:sequence>
+      <xs:element name="X509Certificate" type="xs:string" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ObjectType">
+    <xs:sequence>
+      <xs:element name="X509Data" type="X509DataType"/>
+      <xs:element name="CounterSignature" type="CounterSignatureType"/>
+    </xs:sequence>
+    <xs:attribute name="Id" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="CounterSignatureType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="ts-format" type="xs:string" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>
