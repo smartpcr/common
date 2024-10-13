@@ -8,7 +8,6 @@ namespace Common.Monitoring.Tests.Steps;
 
 using System.Diagnostics.Metrics;
 using Microsoft.Extensions.AmbientMetadata;
-using OpenTelemetry.Metrics;
 
 public class ApiRequestMetric
 {
@@ -30,7 +29,7 @@ public class ApiRequestMetric
         this.totalRequests = meter.CreateCounter<long>(TotalRequests, "Total number of requests");
         this.totalSuccesses = meter.CreateCounter<long>(SuccessfulRequests, "Total number of successful requests");
         this.totalFailures = meter.CreateCounter<long>(FailedRequests, "Total number of failed requests");
-        this.requestLatency = meter.CreateHistogram<double>(RequestLatency, "Request latency in milliseconds");
+        this.requestLatency = meter.CreateHistogram<double>(RequestLatency, unit: "ms", description: "Request latency in milliseconds");
     }
 
     public static ApiRequestMetric Instance(ApplicationMetadata metadata)

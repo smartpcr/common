@@ -19,6 +19,7 @@ using Microsoft.Extensions.AmbientMetadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Steps;
 using TechTalk.SpecFlow;
@@ -39,6 +40,7 @@ internal class SelfHost
     private readonly ILogger<SelfHost> logger;
     private readonly ApiRequestMetric apiRequestMetric;
     private readonly Tracer tracer;
+    private readonly MeterProvider meterProvider;
 
     public SelfHost(ScenarioContext scenarioContext, FeatureContext featureContext, ISpecFlowOutputHelper outputWriter)
     {
@@ -54,6 +56,7 @@ internal class SelfHost
         this.apiRequestMetric = ApiRequestMetric.Instance(metadata);
         var traceProvider = serviceProvider.GetRequiredService<TracerProvider>();
         this.tracer = traceProvider.GetTracer(metadata.ApplicationName + $".{nameof(SelfHost)}", metadata.BuildVersion);
+        this.meterProvider = serviceProvider.GetRequiredService<MeterProvider>();
 
         this.listener = new HttpListener()
         {
@@ -173,6 +176,8 @@ internal class SelfHost
 
         await context.Response.OutputStream.FlushAsync();
         context.Response.Close();
+
+        this.meterProvider.ForceFlush();
     }
 
     private static int GetUnusedPort(List<int> usedPorts)

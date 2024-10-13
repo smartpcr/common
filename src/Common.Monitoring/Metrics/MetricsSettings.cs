@@ -17,4 +17,10 @@ public class MetricsSettings
     /// We override this value in test projects to make the tests run faster.
     /// </summary>
     public int ExportIntervalMilliseconds { get; set; } = 60000;
+
+    public bool IncludeRuntimeMetrics { get; set; } = true;
+
+    public bool IncludeAspNetCoreMetrics { get; set; } = true;
+
+    public bool IncludeHttpMetrics { get; set; } = true;
 }

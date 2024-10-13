@@ -104,9 +104,10 @@
     <PackageReference Update="AsyncEnumerator" Version="4.0.2" />
     <PackageReference Update="AutoFixture" Version="4.18.1" />
     <PackageReference Update="Ensure.That" Version="10.1.0" />
+    <PackageReference Update="evtx" Version="1.2.0" />
     <PackageReference Update="FluentScheduler" Version="5.5.1" />
     <PackageReference Update="Nerdbank.GitVersioning" Version="3.6.139" />
-    <PackageReference Update="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Update="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Update="NCrontab" Version="3.3.3" />
     <PackageReference Update="Polly" Version="8.2.1" />
     <PackageReference Update="Quartz" Version="3.8.0" />

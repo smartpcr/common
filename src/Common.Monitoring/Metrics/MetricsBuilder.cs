@@ -31,10 +31,19 @@ public static class MetricsBuilder
 
         var builder = Sdk.CreateMeterProviderBuilder()
             .ConfigureResource(r => r.AddService(metadata.ApplicationName, serviceVersion: metadata.BuildVersion, serviceInstanceId: Environment.MachineName))
-            .AddMeter(metadata.ApplicationName)
-            .AddRuntimeInstrumentation()
-            .AddHttpClientInstrumentation()
-            .AddAspNetCoreInstrumentation();
+            .AddMeter(metadata.ApplicationName);
+        if (metricsSettings.IncludeHttpMetrics)
+        {
+            builder = builder.AddHttpClientInstrumentation();
+        }
+        if (metricsSettings.IncludeAspNetCoreMetrics)
+        {
+            builder = builder.AddAspNetCoreInstrumentation();
+        }
+        if (metricsSettings.IncludeRuntimeMetrics)
+        {
+            builder = builder.AddRuntimeInstrumentation();
+        }
         Console.WriteLine($"OpenTelemetry metrics enabled for Runtime, HttpClient, AspNetCore and {metadata.ApplicationName}");
 
         if (metricsSettings.SinkTypes.HasFlag(MetricSinkTypes.Console))

@@ -7,12 +7,14 @@
 namespace Common.Monitoring.Tests.Steps;
 
 using System;
-using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Metrics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -68,8 +70,23 @@ public class MetricsTestSteps
     }
 
     [Then(@"the metric ""(.*)"" should be (.*)")]
-    public void ThenTheMetricShouldBe(string path, int count)
+    public void ThenTheMetricShouldBe(string metricName, long count)
     {
-        this.logger.LogInformation($"api is called {count} times on {path}");
+        var logsFolder = Path.Combine(Directory.GetCurrentDirectory(), "logs");
+        var metricFiles = Directory.GetFiles(logsFolder, "metrics_*.log", SearchOption.AllDirectories);
+        metricFiles.Should().NotBeNullOrEmpty();
+        var lastMetricFile = metricFiles.Select(f => new FileInfo(f))
+            .OrderByDescending(f => f.LastWriteTime).Single();
+        var metridFileParser = new MetricFileParser(lastMetricFile.FullName);
+        var metrics = metridFileParser.Parse();
+        var metricsByName = metrics.Where(m => m.Name == metricName).ToList();
+        metricsByName.Should().NotBeNullOrEmpty();
+        var lastWriteTime = metricsByName.Select(m => m.TimeStamp)
+            .OrderByDescending(t => t).First();
+        var lastMetricByName = metricsByName
+            .Where(m => m.TimeStamp == lastWriteTime)
+            .OrderByDescending(m => m.LongValue).First();
+        lastMetricByName.Should().NotBeNull();
+        lastMetricByName!.LongValue.Should().Be(count);
     }
 }

@@ -32,16 +32,11 @@ public class MetricFileExporter : BaseExporter<Metric>
         var sb = new StringBuilder();
         foreach (var metric in batch)
         {
-            if (sb.Length > 0)
-            {
-                sb.Append(", ");
-            }
-
-            sb.AppendLine($"{metric.Name}: ");
+            sb.AppendLine($"{metric.Name}[{metric.MetricType}]:");
 
             foreach (ref readonly var metricPoint in metric.GetMetricPoints())
             {
-                sb.AppendLine($"\tStart Time: {metricPoint.StartTime}");
+                sb.AppendLine($"\tStart Time: {metricPoint.StartTime.ToString("yyyy-MM-dd hh:mm:ss.fff")}");
 
                 foreach (var tag in metricPoint.Tags)
                 {
@@ -66,6 +61,9 @@ public class MetricFileExporter : BaseExporter<Metric>
                     case MetricType.Histogram:
                         sb.AppendLine($"\tHistogram sum: {metricPoint.GetHistogramSum()}");
                         sb.AppendLine($"\tHistogram count: {metricPoint.GetHistogramCount()}");
+                        break;
+                    case MetricType.LongSumNonMonotonic:
+                        sb.AppendLine($"\tValue: {metricPoint.GetSumLong()} (Non-Monotonic)");
                         break;
                     default:
                         sb.AppendLine($"\tUnsupported metric type: {metric.MetricType}");

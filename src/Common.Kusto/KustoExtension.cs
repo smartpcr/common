@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using global::Kusto.Cloud.Platform.Utils;
 using global::Kusto.Data.Common;
 using Newtonsoft.Json;
@@ -95,4 +96,55 @@ public static class KustoExtension
 
         return columnMappings;
     }
+
+    public static bool IsTableExist(this ICslAdminProvider adminClient, string kustoTableName)
+        {
+            var showDatabasesCommand = ".show tables";
+            using var result = adminClient.ExecuteControlCommand(showDatabasesCommand);
+            while (result.Read())
+            {
+                if (result.GetString(0) == kustoTableName)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static string GenerateCreateTableCommand(string tableName, List<(string fieldName, Type fieldType)> fields)
+        {
+            var createTableCmd = new StringBuilder($".create table ['{tableName}'] ({Environment.NewLine}");
+            for (var i = 0; i < fields.Count; i++)
+            {
+                var field = fields.ElementAt(i);
+                if (i < fields.Count - 1)
+                {
+                    createTableCmd.Append($"  {field.fieldName} : {field.fieldType.ToKustoColumnType()},{Environment.NewLine}");
+                }
+                else
+                {
+                    createTableCmd.Append($"  {field.fieldName} : {field.fieldType.ToKustoColumnType()}{Environment.NewLine}");
+                }
+            }
+            createTableCmd.Append(")");
+            return createTableCmd.ToString();
+        }
+
+        public static string GenerateCsvIngestionMapping(string tableName, string mappingName,
+            List<(string fieldName, Type fieldType)> fields)
+        {
+            var csvMappingCmd = new StringBuilder(@$".create-or-alter table ['{tableName}'] ingestion csv mapping '{mappingName}' '[");
+            for (var ordinal = 0; ordinal < fields.Count; ordinal++)
+            {
+                var eventField = fields.ElementAt(ordinal);
+                csvMappingCmd.Append($"{{\"column\":\"{eventField.fieldName}\",\"datatype\":\"{eventField.fieldType.ToKustoColumnType()}\",\"Ordinal\":{ordinal}}}");
+                if (ordinal < fields.Count - 1)
+                {
+                    csvMappingCmd.Append(',');
+                }
+            }
+            csvMappingCmd.Append("]'");
+            return csvMappingCmd.ToString();
+        }
 }
