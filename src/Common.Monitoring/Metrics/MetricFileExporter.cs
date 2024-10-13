@@ -37,14 +37,39 @@ public class MetricFileExporter : BaseExporter<Metric>
                 sb.Append(", ");
             }
 
-            sb.Append($"{metric.Name}: ");
+            sb.AppendLine($"{metric.Name}: ");
 
             foreach (ref readonly var metricPoint in metric.GetMetricPoints())
             {
-                sb.Append($"{metricPoint.StartTime}\n");
-                foreach (var metricPointTag in metricPoint.Tags)
+                sb.AppendLine($"\tStart Time: {metricPoint.StartTime}");
+
+                foreach (var tag in metricPoint.Tags)
                 {
-                    sb.Append($"\t{metricPointTag.Key}={metricPointTag.Value}\n");
+                    sb.AppendLine($"\t\tTag: {tag.Key} = {tag.Value}");
+                }
+
+                // Add metric values based on metric type
+                switch (metric.MetricType)
+                {
+                    case MetricType.LongSum:
+                        sb.AppendLine($"\tValue: {metricPoint.GetSumLong()}");
+                        break;
+                    case MetricType.DoubleSum:
+                        sb.AppendLine($"\tValue: {metricPoint.GetSumDouble()}");
+                        break;
+                    case MetricType.LongGauge:
+                        sb.AppendLine($"\tValue: {metricPoint.GetGaugeLastValueLong()}");
+                        break;
+                    case MetricType.DoubleGauge:
+                        sb.AppendLine($"\tValue: {metricPoint.GetGaugeLastValueDouble()}");
+                        break;
+                    case MetricType.Histogram:
+                        sb.AppendLine($"\tHistogram sum: {metricPoint.GetHistogramSum()}");
+                        sb.AppendLine($"\tHistogram count: {metricPoint.GetHistogramCount()}");
+                        break;
+                    default:
+                        sb.AppendLine($"\tUnsupported metric type: {metric.MetricType}");
+                        break;
                 }
             }
         }

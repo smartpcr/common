@@ -12,6 +12,7 @@ using Config;
 using Microsoft.Extensions.AmbientMetadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using OpenTelemetry.Exporter.Geneva;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -25,13 +26,14 @@ public static class MetricsBuilder
         var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
         Console.WriteLine($"Registering metrics with sink types {metricsSettings.SinkTypes}");
 
+        services.TryAdd(ServiceDescriptor.Singleton(typeof (Meter<>), typeof (Meter<>)));
+
         services.AddOpenTelemetry()
             .WithMetrics(builder =>
             {
                 builder
                     .ConfigureResource(r => r.AddService(metadata.ApplicationName, serviceVersion: metadata.BuildVersion, serviceInstanceId: Environment.MachineName))
                     .AddMeter(metadata.ApplicationName)
-                    .AddMeter($"{metadata.ApplicationName}.*")
                     .AddRuntimeInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddAspNetCoreInstrumentation();

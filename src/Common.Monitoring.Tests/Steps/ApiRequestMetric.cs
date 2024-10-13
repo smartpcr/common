@@ -11,6 +11,8 @@ using Microsoft.Extensions.AmbientMetadata;
 
 public class ApiRequestMetric
 {
+    private static Meter meter;
+    private static ApiRequestMetric? instance;
     public const string TotalRequests = "total_requests";
     public const string SuccessfulRequests = "successful_requests";
     public const string FailedRequests = "failed_requests";
@@ -23,7 +25,7 @@ public class ApiRequestMetric
 
     private ApiRequestMetric(ApplicationMetadata metadata)
     {
-        var meter = new Meter($"{metadata.ApplicationName}.{nameof(ApiRequestMetric)}");
+        meter = new Meter($"{metadata.ApplicationName}"); // meter is added with configured name, it doesn't allow prefix
         this.totalRequests = meter.CreateCounter<long>(TotalRequests, "Total number of requests");
         this.totalSuccesses = meter.CreateCounter<long>(SuccessfulRequests, "Total number of successful requests");
         this.totalFailures = meter.CreateCounter<long>(FailedRequests, "Total number of failed requests");
@@ -32,7 +34,12 @@ public class ApiRequestMetric
 
     public static ApiRequestMetric Instance(ApplicationMetadata metadata)
     {
-        return new ApiRequestMetric(metadata);
+        if (ApiRequestMetric.instance == null)
+        {
+            ApiRequestMetric.instance = new ApiRequestMetric(metadata);
+        }
+
+        return ApiRequestMetric.instance;
     }
 
     public void IncrementTotalRequests()
