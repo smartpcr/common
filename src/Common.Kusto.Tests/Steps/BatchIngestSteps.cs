@@ -12,17 +12,17 @@ namespace Common.Kusto.Tests.Steps
     using System.Threading.Tasks;
     using FluentAssertions;
     using Newtonsoft.Json;
-    using Reqnroll;
-    using Reqnroll.Infrastructure;
+    using TechTalk.SpecFlow;
+    using TechTalk.SpecFlow.Infrastructure;
 
     [Binding]
     public class BatchIngestSteps
     {
         private readonly ScenarioContext context;
         private readonly FeatureContext featureContext;
-        private readonly IReqnrollOutputHelper outputWriter;
+        private readonly ISpecFlowOutputHelper outputWriter;
 
-        public BatchIngestSteps(ScenarioContext context, FeatureContext featureContext, IReqnrollOutputHelper outputWriter)
+        public BatchIngestSteps(ScenarioContext context, FeatureContext featureContext, ISpecFlowOutputHelper outputWriter)
         {
             this.context = context;
             this.featureContext = featureContext;

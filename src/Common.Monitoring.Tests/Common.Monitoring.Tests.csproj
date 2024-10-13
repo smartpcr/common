@@ -16,6 +16,9 @@
     <Compile Include="..\Common.Config.Tests\Hooks\ScenarioContextExtension.cs">
       <Link>Hooks\ScenarioContextExtension.cs</Link>
     </Compile>
+    <Compile Include="..\Common.Config.Tests\Hooks\TestOutputHelper.cs">
+      <Link>Hooks\TestOutputHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Common.Config.Tests\Mocks\MockedLogger.cs">
       <Link>Mocks\MockedLogger.cs</Link>
     </Compile>

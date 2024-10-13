@@ -3,9 +3,9 @@ root = true
 
 [*]
 
-indent_size = 4
+indent_size = 2
 indent_style = space
-tab_width = 4
+tab_width = 2
 end_of_line = crlf
 insert_final_newline = false
 trim_trailing_whitespace = true
@@ -15,38 +15,41 @@ dotnet_separate_import_directive_groups = false
 dotnet_sort_system_directives_first = true
 csharp_using_directive_placement = inside_namespace:suggestion
 
-# spellcheck settings
-spelling_languages = en-us
-spelling_checkable_types = strings,identifiers,comments
-spelling_error_severity = information
-spelling_exclusion_path = spellchecking_exclusions.dic
-
 # file header
 file_header_template = -----------------------------------------------------------------------\n<copyright file="{fileName}" company="Microsoft Corp.">\n    Copyright (c) Microsoft Corp. All rights reserved.\n</copyright>\n-----------------------------------------------------------------------
 
-[*.{appxmanifest,axml,build,config,csproj,dbml,discomap,dtd,json,jsproj,lsproj,njsproj,nuspec,proj,props,resjson,resw,resx,StyleCop,targets,tasks,vbproj,yml,xml,xsd,feature}]
-indent_size = 2
-tab_width = 2
+[*.{cs,ps1}]
+indent_size = 4
+tab_width = 4
 
-# this. and Me. preferences
-dotnet_style_qualification_for_event = false:warning
-dotnet_style_qualification_for_field = false:warning
-dotnet_style_qualification_for_method = false:warning
-dotnet_style_qualification_for_property = false:warning
+[*.cs]
+
+# Enforce 'this' qualifier for instance members
+dotnet_style_qualification_for_field = true:suggestion
+dotnet_style_qualification_for_property = true:suggestion
+dotnet_style_qualification_for_method = true:suggestion
+dotnet_style_qualification_for_event = true:suggestion
 
 # var preferences
 csharp_style_var_elsewhere = true:suggestion
 csharp_style_var_for_built_in_types = true:suggestion
 csharp_style_var_when_type_is_apparent = true:suggestion
 
-[*.cs]
+# Enforce naming rules for private fields without underscore
+dotnet_naming_rule.private_members_with_underscore.severity = none
+dotnet_naming_rule.private_members_camel_case.symbols  = private_fields
+dotnet_naming_rule.private_members_camel_case.style    = camel_case
+dotnet_naming_rule.private_members_camel_case.severity = suggestion
+
+dotnet_naming_style.camel_case.capitalization = camel_case
+dotnet_naming_style.camel_case.required_prefix =
+
 dotnet_naming_rule.private_members_with_underscore.symbols  = private_fields
 dotnet_naming_rule.private_members_with_underscore.style    = prefix_underscore
-dotnet_naming_rule.private_members_with_underscore.severity = none
+
+dotnet_naming_style.prefix_underscore.capitalization = camel_case
+dotnet_naming_style.prefix_underscore.required_prefix =
 
 dotnet_naming_symbols.private_fields.applicable_kinds           = field
 dotnet_naming_symbols.private_fields.applicable_accessibilities = private
 dotnet_naming_symbols.private_fields.required_modifiers         = readonly
-
-dotnet_naming_style.prefix_underscore.capitalization = camel_case
-dotnet_naming_style.prefix_underscore.required_prefix =

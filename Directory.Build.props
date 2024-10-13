@@ -47,7 +47,8 @@
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(IsTestProject)' == 'true' And '$(UseSpecflow)' == ''">
+  <!-- rednroll -->
+  <ItemGroup Condition="'$(IsTestProject)' == 'true' And '$(UseReqnroll)' == 'true'">
     <PackageReference Include="Reqnroll" />
     <PackageReference Include="Reqnroll.CustomPlugin" />
     <PackageReference Include="Reqnroll.ExternalData" />
@@ -57,7 +58,8 @@
     <PackageReference Include="Reqnroll.xUnit" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(IsTestProject)' == 'true' And '$(UseSpecflow)' == 'true'">
+  <!-- specflow -->
+  <ItemGroup Condition="'$(IsTestProject)' == 'true' And '$(UseReqnroll)' == ''">
     <PackageReference Include="Specflow" />
     <PackageReference Include="Specflow.Tools.MsBuild.Generation" />
     <PackageReference Include="Specflow.xUnit" />

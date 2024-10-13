@@ -8,16 +8,16 @@ namespace Common.Kusto.Tests.Steps
 {
     using System.Collections.Generic;
     using FluentAssertions;
-    using Reqnroll;
-    using Reqnroll.Infrastructure;
+    using TechTalk.SpecFlow;
+    using TechTalk.SpecFlow.Infrastructure;
 
     [Binding]
     public class EtwIngestSteps
     {
         private readonly ScenarioContext context;
-        private readonly IReqnrollOutputHelper outputWriter;
+        private readonly ISpecFlowOutputHelper outputWriter;
 
-        public EtwIngestSteps(ScenarioContext context, IReqnrollOutputHelper outputWriter)
+        public EtwIngestSteps(ScenarioContext context, ISpecFlowOutputHelper outputWriter)
         {
             this.context = context;
             this.outputWriter = outputWriter;

@@ -12,7 +12,7 @@ namespace Common.Config.Tests.Hooks
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using Reqnroll;
+    using TechTalk.SpecFlow;
 
     internal static class ScenarioContextExtension
     {

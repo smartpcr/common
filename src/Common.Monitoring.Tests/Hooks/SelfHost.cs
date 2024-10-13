@@ -7,22 +7,15 @@
 namespace Common.Monitoring.Tests.Hooks;
 
 using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
-using System.Security.Authentication;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 using System.Threading.Tasks;
-using Common.Config;
-using Common.Settings;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Server.Kestrel.Https;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Reqnroll;
+using Config.Tests.Hooks;
+using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Infrastructure;
 
 /// <summary>
 /// Start and stop a self-hosted web api for testing, make sure IServiceProvider is registered in ScenarioContext
@@ -30,137 +23,147 @@ using Reqnroll;
 [Binding]
 internal class SelfHost
 {
-    private readonly ScenarioContext _scenarioContext;
-    private readonly WebApiHostSettings _hostSettings;
-    private IHost? _host;
-    private X509Certificate2? _sslCert;
+    private readonly ScenarioContext scenarioContext;
+    private readonly FeatureContext featureContext;
+    private readonly ISpecFlowOutputHelper outputWriter;
+    private readonly HttpListener listener;
+    private bool running;
 
-    public SelfHost(ScenarioContext scenarioContext)
+    public SelfHost(ScenarioContext scenarioContext, FeatureContext featureContext, ISpecFlowOutputHelper outputWriter)
     {
-        _scenarioContext = scenarioContext;
-        var configuration = _scenarioContext.Get<IConfiguration>();
-        _hostSettings = configuration.GetConfiguredSettings<WebApiHostSettings>();
+        this.scenarioContext = scenarioContext;
+        this.featureContext = featureContext;
+        this.outputWriter = outputWriter;
+        this.listener = new HttpListener()
+        {
+            IgnoreWriteExceptions = true,
+            AuthenticationSchemes = AuthenticationSchemes.Anonymous,
+        };
     }
 
     [BeforeScenario]
     public void StartHost()
     {
-        // allow enough time to debug into DI setup
-        CancellationTokenSource cancelSource = new(TimeSpan.FromMinutes(5));
-        _ = StartHostAsync(cancelSource.Token);
-        bool isConnected = false;
-        while (!cancelSource.IsCancellationRequested && !isConnected)
+        if (!this.featureContext.TryGetValue("UsedPorts", out List<int> usedPorts))
         {
-            Thread.Sleep(TimeSpan.FromSeconds(5));
-            isConnected = TestConnectionAsync(_hostSettings.Port, cancelSource.Token)
-                .ConfigureAwait(false).GetAwaiter().GetResult();
+            usedPorts = new List<int>();
+            this.featureContext.Set(usedPorts, "UsedPorts");
         }
+        var uri = $"http://{Dns.GetHostName()}:{GetUnusedPort(usedPorts)}/";
 
-        if (cancelSource.IsCancellationRequested)
+        this.listener.Prefixes.Add(uri);
+        this.listener.Start();
+        this.running = true;
+        this.outputWriter.WriteLine($"started web api at {uri}");
+        this.scenarioContext.Set(uri, "WebApiUri");
+
+        // start processing requests
+        _ = this.ProcessRequests();
+        this.outputWriter.WriteInfo($"web api started listening at {uri}");
+
+        var timeoutSeconds = Debugger.IsAttached
+            ? 120
+            : 1;
+        var httpClient = new HttpClient
         {
-            throw new TimeoutException("Failed to connect to self-hosted web api");
-        }
-
-        if (!isConnected)
-        {
-            throw new InvalidOperationException("Failed to connect to self-hosted web api");
-        }
-
-        cancelSource.Dispose();
+            BaseAddress = new Uri($"{uri}"),
+            Timeout = TimeSpan.FromSeconds(timeoutSeconds)
+        };
+        this.scenarioContext.Set(httpClient); // automatically disposed after test
     }
 
     [AfterScenario]
     public void StopHost()
     {
-        CancellationTokenSource cancelSource = new(TimeSpan.FromSeconds(10));
-        _ = StopHostAsync(cancelSource.Token);
-        bool isConnected = true;
-        while (!cancelSource.IsCancellationRequested && isConnected)
-        {
-            Thread.Sleep(TimeSpan.FromSeconds(5));
-            isConnected = TestConnectionAsync(_hostSettings.Port, cancelSource.Token)
-                .ConfigureAwait(false).GetAwaiter().GetResult();
-        }
-
-        if (cancelSource.IsCancellationRequested)
-        {
-            throw new TimeoutException("Failed to terminate self-hosted web api");
-        }
-
-        if (isConnected)
-        {
-            throw new InvalidOperationException("Failed to terminate self-hosted web api");
-        }
-
-        cancelSource.Dispose();
+        this.listener.Stop();
+        this.listener.Close();
+        this.running = false;
     }
 
-    private async Task StartHostAsync(CancellationToken cancel)
+    private async Task ProcessRequests()
     {
-        _host = Host.CreateDefaultBuilder()
-            .ConfigureWebHostDefaults(builder =>
+        while (this.running)
+        {
+            HttpListenerContext? context = null;
+            try
             {
-                builder.UseStartup<Startup>(context => new Startup(_scenarioContext, context.HostingEnvironment.EnvironmentName))
-                    .ConfigureKestrel(options =>
-                    {
-                        var serviceProvider = options.ApplicationServices;
-                        var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                        var hostSettings = configuration.GetConfiguredSettings<WebApiHostSettings>();
-                        var hostIpAddresses = Dns.GetHostAddresses(_hostSettings.Host);
-                        if (!hostIpAddresses.Any())
-                        {
-                            throw new InvalidOperationException($"Failed to resolve host {_hostSettings.Host}");
-                        }
+                context = await this.listener.GetContextAsync();
+            }
+            catch (ObjectDisposedException) { }
+            catch (HttpListenerException) { }
 
-                        if (hostSettings.UseSsl)
-                        {
-                            options.Listen(hostIpAddresses.First(), _hostSettings.Port, listenOptions =>
-                            {
-                                listenOptions.UseHttps();
-                            });
-                            options.ConfigureHttpsDefaults(httpOptions =>
-                            {
-                                using var rsa = RSA.Create();
-                                var req = new CertificateRequest($"cn={_hostSettings.Host}", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-                                _sslCert = req.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddDays(1));
-
-                                httpOptions.SslProtocols = SslProtocols.Tls12;
-                                httpOptions.ServerCertificate = _sslCert;
-                                httpOptions.ClientCertificateMode = ClientCertificateMode.AllowCertificate;
-                            });
-                        }
-                        else
-                        {
-                            options.Listen(hostIpAddresses.First(), hostSettings.Port);
-                        }
-                    });
-            }).Build();
-
-        await _host.RunAsync(token: cancel);
+            if (context != null)
+            {
+                await this.RespondToRequest(context);
+            }
+        }
     }
 
-    private async Task StopHostAsync(CancellationToken cancel)
+    private async Task RespondToRequest(HttpListenerContext context)
     {
-        if (_host != null)
+        var requestPath = context.Request.Url?.LocalPath;
+        if (string.IsNullOrEmpty(requestPath))
         {
-            await _host.StopAsync(cancel);
-            _host.Dispose();
+            this.outputWriter.WriteError($"[{this.GetType().Name}] Request path is empty");
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return;
         }
 
-        _sslCert?.Dispose();
+        if (this.scenarioContext.TryGetValue($"{context.Request.HttpMethod} {requestPath}", out Func<HttpListenerContext, Task> handler))
+        {
+            try
+            {
+                await handler(context);
+                context.Response.StatusCode = (int)HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                this.outputWriter.WriteError($"[{this.GetType().Name}] Error handling request: {ex}");
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                // set the response content to the exception message
+                context.Response.ContentType = "text/plain";
+                await context.Response.OutputStream.WriteAsync(System.Text.Encoding.UTF8.GetBytes(ex.Message));
+            }
+        }
+        else
+        {
+            this.outputWriter.WriteError($"[{this.GetType().Name}] No handler found for {context.Request.HttpMethod} {requestPath}");
+            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+        }
+
+        await context.Response.OutputStream.FlushAsync();
+        context.Response.Close();
     }
 
-    private async Task<bool> TestConnectionAsync(int port, CancellationToken cancel)
+    private static int GetUnusedPort(List<int> usedPorts)
     {
-        try
+        var random = new Random();
+        TcpListener? tcpListener = null;
+
+        while (true)
         {
-            using var client = new TcpClient();
-            await client.ConnectAsync(_hostSettings.Host, port, cancel);
-            return true;
-        }
-        catch
-        {
-            return false;
+            // note: all listener requires admin privilege to bind to port other than 80
+            var port = random.Next(49152, 65535);
+            if (usedPorts.Contains(port))
+            {
+                continue;
+            }
+
+            try
+            {
+                tcpListener = new TcpListener(IPAddress.Any, port);
+                tcpListener.Start();
+                usedPorts.Add(port);
+                return port;
+            }
+            catch (SocketException)
+            {
+                // Port is in use, try another one
+            }
+            finally
+            {
+                tcpListener?.Stop();
+            }
         }
     }
 }

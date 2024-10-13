@@ -10,8 +10,8 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Mocks;
-using Reqnroll;
-using Reqnroll.Infrastructure;
+using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Infrastructure;
 
 /// <summary>
 /// Make sure IConfiguration and ILoggerFactory are registered in ScenarioContext
@@ -20,38 +20,53 @@ using Reqnroll.Infrastructure;
 public class EnvironmentHook
 {
     private readonly ScenarioContext context;
-    private readonly IReqnrollOutputHelper outputHelper;
+    private readonly ISpecFlowOutputHelper outputHelper;
 
-    public EnvironmentHook(ScenarioContext scenarioContext, IReqnrollOutputHelper outputHelper)
+    public EnvironmentHook(ScenarioContext scenarioContext, ISpecFlowOutputHelper outputHelper)
     {
         this.context = scenarioContext;
         this.outputHelper = outputHelper;
     }
 
-    [BeforeScenario("dev")]
+    [BeforeScenario("dev", Order = 1)]
     public void SetupDevEnv()
     {
-        SetupEnv("Development");
+        this.SetupEnv("Development");
     }
 
-    [BeforeScenario("prod")]
+    [BeforeScenario("prod", Order = 1)]
     public void SetupProdEnv()
     {
-        SetupEnv("Production");
+        this.SetupEnv("Production");
+    }
+
+    [AfterScenario(Order = int.MaxValue)]
+    public void AfterScenario(ScenarioContext scenarioContext)
+    {
+        foreach (var item in scenarioContext)
+        {
+            // other disposable items
+            if (item.Value is IDisposable disposableItem)
+            {
+                this.outputHelper.WriteLine($"Disposing {item.Key}...");
+                disposableItem.Dispose();
+            }
+        }
     }
 
     private void SetupEnv(string envName)
     {
-        outputHelper.WriteLine($"Use {envName} environment");
+        this.outputHelper.WriteLine($"Use {envName} environment");
         Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", envName, EnvironmentVariableTarget.Process);
-        ConfigureServices();
+        this.ConfigureServices(envName);
     }
 
-    private void ConfigureServices()
+    private void ConfigureServices(string envName)
     {
         var services = this.context.GetServices();
         services.AddSingleton<ILoggerFactory, MockedLoggerFactory>();
         var configuration = services.AddConfiguration();
         this.context.Set(configuration);
+        this.context.Set(envName, "envName");
     }
 }
