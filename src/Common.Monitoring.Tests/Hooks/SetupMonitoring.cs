@@ -43,6 +43,7 @@ namespace Common.Monitoring.Tests.Hooks
             this.context.Set<IServiceProvider>(serviceProvider);
             var logger = serviceProvider.GetRequiredService<ILogger<EnvironmentHook>>();
             logger.StartingInitializer(envName);
+            this.outputHelper.WriteInfo($"Monitoring setup for env: {envName}");
         }
     }
 }
