@@ -8,6 +8,7 @@ namespace Common.Monitoring.Tests.Steps;
 
 using System.Diagnostics.Metrics;
 using Microsoft.Extensions.AmbientMetadata;
+using OpenTelemetry.Metrics;
 
 public class ApiRequestMetric
 {
