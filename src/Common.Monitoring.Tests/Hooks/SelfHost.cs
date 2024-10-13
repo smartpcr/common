@@ -13,7 +13,14 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Config;
 using Config.Tests.Hooks;
+using Microsoft.Extensions.AmbientMetadata;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using OpenTelemetry.Trace;
+using Steps;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 
@@ -29,11 +36,25 @@ internal class SelfHost
     private readonly HttpListener listener;
     private bool running;
 
+    private readonly ILogger<SelfHost> logger;
+    private readonly ApiRequestMetric apiRequestMetric;
+    private readonly Tracer tracer;
+
     public SelfHost(ScenarioContext scenarioContext, FeatureContext featureContext, ISpecFlowOutputHelper outputWriter)
     {
         this.scenarioContext = scenarioContext;
         this.featureContext = featureContext;
         this.outputWriter = outputWriter;
+
+        var serviceProvider = this.scenarioContext.Get<IServiceProvider>();
+        var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
+        this.logger = loggerFactory.CreateLogger<SelfHost>();
+        var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+        var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
+        this.apiRequestMetric = ApiRequestMetric.Instance(metadata);
+        var traceProvider = serviceProvider.GetRequiredService<TracerProvider>();
+        this.tracer = traceProvider.GetTracer(metadata.ApplicationName + $".{nameof(SelfHost)}", metadata.BuildVersion);
+
         this.listener = new HttpListener()
         {
             IgnoreWriteExceptions = true,
@@ -41,7 +62,7 @@ internal class SelfHost
         };
     }
 
-    [BeforeScenario]
+    [BeforeScenario(Order = 3)]
     public void StartHost()
     {
         if (!this.featureContext.TryGetValue("UsedPorts", out List<int> usedPorts))
@@ -60,6 +81,7 @@ internal class SelfHost
         // start processing requests
         _ = this.ProcessRequests();
         this.outputWriter.WriteInfo($"web api started listening at {uri}");
+        this.logger.Log(LogLevel.Information, $"web api started listening at {uri}");
 
         var timeoutSeconds = Debugger.IsAttached
             ? 120
@@ -78,6 +100,8 @@ internal class SelfHost
         this.listener.Stop();
         this.listener.Close();
         this.running = false;
+        this.outputWriter.WriteInfo("web api stopped");
+        this.logger.Log(LogLevel.Information, "web api stopped");
     }
 
     private async Task ProcessRequests()
@@ -102,10 +126,16 @@ internal class SelfHost
     private async Task RespondToRequest(HttpListenerContext context)
     {
         var requestPath = context.Request.Url?.LocalPath;
+        this.logger.StartingApiCall(DateTime.Now, requestPath ?? string.Empty);
+        this.apiRequestMetric.IncrementTotalRequests();
+        using var span = this.tracer.StartActiveSpan(nameof(this.RespondToRequest));
+        var watch = Stopwatch.StartNew();
+
         if (string.IsNullOrEmpty(requestPath))
         {
             this.outputWriter.WriteError($"[{this.GetType().Name}] Request path is empty");
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            this.apiRequestMetric.IncrementFailedRequests();
             return;
         }
 
@@ -114,15 +144,25 @@ internal class SelfHost
             try
             {
                 await handler(context);
+                this.apiRequestMetric.IncrementSuccessfulRequests();
                 context.Response.StatusCode = (int)HttpStatusCode.OK;
             }
             catch (Exception ex)
             {
+                this.apiRequestMetric.IncrementFailedRequests();
                 this.outputWriter.WriteError($"[{this.GetType().Name}] Error handling request: {ex}");
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 // set the response content to the exception message
                 context.Response.ContentType = "text/plain";
                 await context.Response.OutputStream.WriteAsync(System.Text.Encoding.UTF8.GetBytes(ex.Message));
+                this.logger.ApiCallFailed(DateTime.Now, requestPath, watch.ElapsedMilliseconds, ex.Message);
+                span.SetStatus(Status.Error);
+                span.RecordException(ex);
+            }
+            finally
+            {
+                this.apiRequestMetric.RecordRequestLatency(watch.ElapsedMilliseconds);
+                this.logger.ApiCallCompleted(DateTime.Now, requestPath, watch.ElapsedMilliseconds);
             }
         }
         else

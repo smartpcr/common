@@ -17,8 +17,7 @@ public class FileSinkSettings
     /// <summary>
     /// Gets or sets log file name prefix, in the format of {prefix}_{date}_001.log
     /// </summary>
-    [Required]
-    public string FilePrefix { get; set; }
+    public string? FilePrefix { get; set; }
 
     public string? FileExtension { get; set; } = "log";
 
@@ -26,6 +25,11 @@ public class FileSinkSettings
     /// Gets or sets max file size in MB, when exceeded, a new file is created
     /// </summary>
     public int MaxFileSizeMb { get; set; } = 10;
+
+    /// <summary>
+    /// Gets or sets max entries in a file, when exceeded, a new file is created
+    /// </summary>
+    public int MaxEntriesInFile { get; set; } = 5000;
 
     /// <summary>
     /// Gets or sets max file retention in days, when exceeded, files are deleted

@@ -36,7 +36,8 @@ namespace Common.Monitoring.Tests.Hooks
             var configuration = services.AddConfiguration();
             this.context.Set(configuration);
 
-            services.ConfigureSettings<MonitorSettings>().AddMonitoring(configuration);
+            services.ConfigureSettings<MonitorSettings>()
+                .AddMonitoring(configuration);
 
             var serviceProvider = services.BuildServiceProvider();
             this.context.Set<IServiceProvider>(serviceProvider);

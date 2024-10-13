@@ -14,25 +14,16 @@ using Sinks;
 
 public class TraceFileProcessor : BaseProcessor<Activity>
 {
-    private readonly RollingFileLogger _fileLogger;
+    private readonly RollingFileLogger fileLogger;
 
     public TraceFileProcessor(FileSinkSettings fileSink)
     {
-        _fileLogger = new RollingFileLogger(fileSink);
+        this.fileLogger = new RollingFileLogger(fileSink, "trace");
     }
 
     public override void OnEnd(Activity data)
     {
         var traceData = $"{DateTime.UtcNow:o} Id: {data.Id}, Trace: \n\t{JsonConvert.SerializeObject(data)}\n";
-        _fileLogger.Log(traceData);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        base.Dispose(disposing);
-        if (disposing)
-        {
-            _fileLogger.Dispose();
-        }
+        this.fileLogger.Log(traceData);
     }
 }

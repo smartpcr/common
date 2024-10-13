@@ -19,6 +19,14 @@ using Sinks;
 
 public static class TraceBuilder
 {
+    /// <summary>
+    /// AddOpenTelemetry: This method initializes the OpenTelemetry SDK and registers the TracerProvider and
+    /// other related services into the IServiceCollection.
+    /// WithTracing: This method configures the TracerProvider with the specified settings and instrumentation.
+    /// </summary>
+    /// <param name="services">The service collection <see cref="IServiceCollection"/>.</param>
+    /// <param name="configuration">The configuration, <see cref="IConfiguration"/></param>
+    /// <returns><see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddTracing(this IServiceCollection services, IConfiguration configuration)
     {
         var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();

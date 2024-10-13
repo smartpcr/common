@@ -31,10 +31,11 @@ public static class MetricsBuilder
                 builder
                     .ConfigureResource(r => r.AddService(metadata.ApplicationName, serviceVersion: metadata.BuildVersion, serviceInstanceId: Environment.MachineName))
                     .AddMeter(metadata.ApplicationName)
+                    .AddMeter($"{metadata.ApplicationName}.*")
                     .AddRuntimeInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddAspNetCoreInstrumentation();
-                Console.WriteLine("OpenTelemetry instrumentation enabled for Runtime, HttpClient and AspNetCore");
+                Console.WriteLine($"OpenTelemetry metrics enabled for Runtime, HttpClient, AspNetCore and {metadata.ApplicationName}");
 
                 if (metricsSettings.SinkTypes.HasFlag(MetricSinkTypes.Console))
                 {
@@ -79,7 +80,9 @@ public static class MetricsBuilder
                 if (metricsSettings.SinkTypes.HasFlag(MetricSinkTypes.File))
                 {
                     var fileSink = configuration.GetConfiguredSettings<FileSinkSettings>(FileSinkSettings.MetricsSettingName);
-                    builder.AddReader(new PeriodicExportingMetricReader(new MetricFileProcessor(fileSink)));
+                    builder.AddReader(new PeriodicExportingMetricReader(
+                        new MetricFileExporter(fileSink),
+                        exportIntervalMilliseconds: metricsSettings.ExportIntervalMilliseconds));
                     Console.WriteLine("File metrics enabled");
                 }
             });

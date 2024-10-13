@@ -44,12 +44,12 @@ public class KustoClient : IKustoClient
 
     public KustoClient(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, KustoSettings? kustoSettings = null)
     {
-        logger = loggerFactory.CreateLogger<KustoClient>();
+        this.logger = loggerFactory.CreateLogger<KustoClient>();
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
         this.kustoSettings = kustoSettings ?? configuration.GetConfiguredSettings<KustoSettings>();
         var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
         var traceProvider = serviceProvider.GetRequiredService<TracerProvider>();
-        tracer = traceProvider.GetTracer(metadata.ApplicationName + $".{nameof(KustoClient)}", metadata.BuildVersion);
+        this.tracer = traceProvider.GetTracer(metadata.ApplicationName + $".{nameof(KustoClient)}", metadata.BuildVersion);
         var kustoAuthHelper = new KustoAuthHelper(serviceProvider, kustoSettings);
         this.queryClient = kustoAuthHelper.QueryQueryClient;
         this.adminClient = kustoAuthHelper.AdminClient;
@@ -59,17 +59,16 @@ public class KustoClient : IKustoClient
 
     public async Task<IEnumerable<T>> ExecuteQuery<T>(string query, TimeSpan timeout = default, CancellationToken cancellationToken = default)
     {
-        using var _ = tracer.StartActiveSpan(nameof(ExecuteQuery));
-        logger.ExecuteQueryStart(query);
+        using var _ = this.tracer.StartActiveSpan(nameof(ExecuteQuery));
+        this.logger.ExecuteQueryStart(query);
         var stopWatch = Stopwatch.StartNew();
-        var reader = await this.queryClient.ExecuteQueryAsync(
-            kustoSettings.DbName,
+        var reader = await this.queryClient.ExecuteQueryAsync(this.kustoSettings.DbName,
             query,
-            GetClientRequestProps(timeout),
+            this.GetClientRequestProps(timeout),
             cancellationToken);
-        var records = Read<T>(reader, cancellationToken).ToList();
+        var records = this.Read<T>(reader, cancellationToken).ToList();
         stopWatch.Stop();
-        logger.ExecuteQueryStop(query, records.Count, stopWatch.ElapsedMilliseconds);
+        this.logger.ExecuteQueryStop(query, records.Count, stopWatch.ElapsedMilliseconds);
         return records;
     }
 
@@ -79,13 +78,12 @@ public class KustoClient : IKustoClient
         CancellationToken cancellationToken = default,
         int batchSize = 100)
     {
-        using var _ = tracer.StartActiveSpan(nameof(ExecuteQuery));
-        var reader = await queryClient.ExecuteQueryAsync(
-            kustoSettings.DbName,
+        using var _ = this.tracer.StartActiveSpan(nameof(ExecuteQuery));
+        var reader = await this.queryClient.ExecuteQueryAsync(this.kustoSettings.DbName,
             query,
-            GetClientRequestProps(),
+            this.GetClientRequestProps(),
             cancellationToken);
-        return await Read(reader, onBatchReceived, cancellationToken, batchSize);
+        return await this.Read(reader, onBatchReceived, cancellationToken, batchSize);
     }
 
     public async Task<(int Total, object? LastRecord)> ExecuteQuery(
@@ -95,13 +93,12 @@ public class KustoClient : IKustoClient
         CancellationToken cancellationToken = default,
         int batchSize = 100)
     {
-        using var _ = tracer.StartActiveSpan(nameof(ExecuteQuery));
-        var reader = await queryClient.ExecuteQueryAsync(
-            kustoSettings.DbName,
+        using var _ = this.tracer.StartActiveSpan(nameof(ExecuteQuery));
+        var reader = await this.queryClient.ExecuteQueryAsync(this.kustoSettings.DbName,
             query,
-            GetClientRequestProps(),
+            this.GetClientRequestProps(),
             cancellationToken);
-        return await Read(entityType, reader, onBatchReceived, cancellationToken, batchSize);
+        return await this.Read(entityType, reader, onBatchReceived, cancellationToken, batchSize);
     }
 
     public async Task<IEnumerable<T>> ExecuteFunction<T>(
@@ -109,13 +106,12 @@ public class KustoClient : IKustoClient
         CancellationToken cancellationToken,
         params (string name, string value)[] parameters)
     {
-        using var _ = tracer.StartActiveSpan(nameof(ExecuteFunction));
-        var reader = await queryClient.ExecuteQueryAsync(
-            kustoSettings.DbName,
+        using var _ = this.tracer.StartActiveSpan(nameof(ExecuteFunction));
+        var reader = await this.queryClient.ExecuteQueryAsync(this.kustoSettings.DbName,
             functionName,
-            GetClientRequestProps(),
+            this.GetClientRequestProps(),
             cancellationToken);
-        return Read<T>(reader, cancellationToken);
+        return this.Read<T>(reader, cancellationToken);
     }
 
     public async Task ExecuteFunction<T>(
@@ -125,13 +121,12 @@ public class KustoClient : IKustoClient
         CancellationToken cancellationToken = default,
         int batchSize = 100)
     {
-        using var _ = tracer.StartActiveSpan(nameof(ExecuteFunction));
-        var reader = await queryClient.ExecuteQueryAsync(
-            kustoSettings.DbName,
+        using var _ = this.tracer.StartActiveSpan(nameof(ExecuteFunction));
+        var reader = await this.queryClient.ExecuteQueryAsync(this.kustoSettings.DbName,
             functionName,
-            GetClientRequestProps(),
+            this.GetClientRequestProps(),
             cancellationToken);
-        await Read(reader, onBatchReceived, cancellationToken, batchSize);
+        await this.Read(reader, onBatchReceived, cancellationToken, batchSize);
     }
 
     public async Task<int> BulkInsert<T>(

@@ -64,7 +64,6 @@ public class EnvironmentHook
     private void ConfigureServices(string envName)
     {
         var services = this.context.GetServices();
-        services.AddSingleton<ILoggerFactory, MockedLoggerFactory>();
         var configuration = services.AddConfiguration();
         this.context.Set(configuration);
         this.context.Set(envName, "envName");

@@ -11,18 +11,23 @@ using Microsoft.Extensions.AmbientMetadata;
 
 public class ApiRequestMetric
 {
-    private readonly Counter<long> _totalRequests;
-    private readonly Counter<long> _totalSuccesses;
-    private readonly Counter<long> _totalFailures;
-    private readonly Histogram<double> _requestLatency;
+    public const string TotalRequests = "total_requests";
+    public const string SuccessfulRequests = "successful_requests";
+    public const string FailedRequests = "failed_requests";
+    public const string RequestLatency = "request_latency";
+
+    private readonly Counter<long> totalRequests;
+    private readonly Counter<long> totalSuccesses;
+    private readonly Counter<long> totalFailures;
+    private readonly Histogram<double> requestLatency;
 
     private ApiRequestMetric(ApplicationMetadata metadata)
     {
-        Meter meter = new Meter($"{metadata.ApplicationName}.ApiRequestMetric");
-        _totalRequests = meter.CreateCounter<long>("TotalRequests", "Total number of requests");
-        _totalSuccesses = meter.CreateCounter<long>("SuccessfulRequests", "Total number of successful requests");
-        _totalFailures = meter.CreateCounter<long>("FailedRequests", "Total number of failed requests");
-        _requestLatency = meter.CreateHistogram<double>("RequestLatency", "Request latency in milliseconds");
+        var meter = new Meter($"{metadata.ApplicationName}.{nameof(ApiRequestMetric)}");
+        this.totalRequests = meter.CreateCounter<long>(TotalRequests, "Total number of requests");
+        this.totalSuccesses = meter.CreateCounter<long>(SuccessfulRequests, "Total number of successful requests");
+        this.totalFailures = meter.CreateCounter<long>(FailedRequests, "Total number of failed requests");
+        this.requestLatency = meter.CreateHistogram<double>(RequestLatency, "Request latency in milliseconds");
     }
 
     public static ApiRequestMetric Instance(ApplicationMetadata metadata)
@@ -32,21 +37,21 @@ public class ApiRequestMetric
 
     public void IncrementTotalRequests()
     {
-        _totalRequests.Add(1);
+        this.totalRequests.Add(1);
     }
 
     public void IncrementSuccessfulRequests()
     {
-        _totalSuccesses.Add(1);
+        this.totalSuccesses.Add(1);
     }
 
     public void IncrementFailedRequests()
     {
-        _totalFailures.Add(1);
+        this.totalFailures.Add(1);
     }
 
     public void RecordRequestLatency(double callLatencyInMs)
     {
-        _requestLatency.Record(callLatencyInMs);
+        this.requestLatency.Record(callLatencyInMs);
     }
 }

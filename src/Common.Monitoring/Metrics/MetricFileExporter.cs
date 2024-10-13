@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="MetricFileProcessor.cs" company="Microsoft Corp.">
+// <copyright file="MetricFileExporter.cs" company="Microsoft Corp.">
 //     Copyright (c) Microsoft Corp. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -12,19 +12,23 @@ using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using Sinks;
 
-public class MetricFileProcessor : BaseExporter<Metric>
+public class MetricFileExporter : BaseExporter<Metric>
 {
-    private readonly RollingFileLogger _fileLogger;
+    private readonly RollingFileLogger fileLogger;
 
-    public MetricFileProcessor(FileSinkSettings fileSink)
+    public MetricFileExporter(FileSinkSettings fileSink)
     {
-        _fileLogger = new RollingFileLogger(fileSink);
+        this.fileLogger = new RollingFileLogger(fileSink, "metric");
     }
 
     public override ExportResult Export(in Batch<Metric> batch)
     {
-        using var scope = SuppressInstrumentationScope.Begin();
+        if (batch.Count == 0)
+        {
+            return ExportResult.Success;
+        }
 
+        using var scope = SuppressInstrumentationScope.Begin();
         var sb = new StringBuilder();
         foreach (var metric in batch)
         {
@@ -46,16 +50,7 @@ public class MetricFileProcessor : BaseExporter<Metric>
         }
 
         Console.WriteLine($"Metrics: \n{sb}");
-        _fileLogger.Log(sb.ToString());
+        this.fileLogger.Log(sb.ToString());
         return ExportResult.Success;
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        base.Dispose(disposing);
-        if (disposing)
-        {
-            _fileLogger.Dispose();
-        }
     }
 }

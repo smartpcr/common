@@ -12,6 +12,7 @@ using Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OpenTelemetry;
 using OpenTelemetry.Logs;
 using Sinks;
 
@@ -60,7 +61,17 @@ public static class LogBuilder
                 if (logSettings.SinkTypes.HasFlag(LogSinkTypes.File))
                 {
                     var fileSink = configuration.GetConfiguredSettings<FileSinkSettings>(FileSinkSettings.LogSettingName);
-                    loggerOptions.AddProcessor(new LogFileProcessor(fileSink));
+                    var fileExporter = new LogFileExporter(fileSink, logSettings.LogLevel);
+                    if (logSettings.UseBatch)
+                    {
+                        loggerOptions.AddProcessor(new BatchLogRecordExportProcessor(
+                            fileExporter,
+                            exporterTimeoutMilliseconds: logSettings.ExporterTimeoutMilliseconds));
+                    }
+                    else
+                    {
+                        loggerOptions.AddProcessor(new SimpleLogRecordExportProcessor(fileExporter));
+                    }
                     Console.WriteLine("File logging enabled");
                 }
             });

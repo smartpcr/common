@@ -27,7 +27,7 @@ namespace Common.Kusto.Tests.Hooks
             var kustoSettings = configuration.GetConfiguredSettings<KustoSettings>();
             featureContext.Set(kustoSettings);
 
-            ILoggerFactory loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
+            var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
             IKustoClient kustoClient = new KustoClient(serviceProvider, loggerFactory, kustoSettings);
             featureContext.Set(kustoClient);
         }

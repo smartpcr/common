@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Common.Monitoring;
+namespace Common.Monitoring.ETW;
 
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -71,14 +71,14 @@ public abstract class BaseEventSource : EventSource
             logger.Log(level, messageTemplate, tags);
         }
 
-        Tracer tracer = this.TraceProvider.GetTracer(this.Name);
-        TelemetrySpan scope = tracer.StartActiveSpan(memberName);
+        var tracer = this.TraceProvider.GetTracer(this.Name);
+        var scope = tracer.StartActiveSpan(memberName);
         if (tags == null)
         {
             tags = new List<KeyValuePair<string, string>>();
         }
 
-        foreach (KeyValuePair<string, string> tag in tags)
+        foreach (var tag in tags)
         {
             scope.SetAttribute(tag.Key, tag.Value);
         }

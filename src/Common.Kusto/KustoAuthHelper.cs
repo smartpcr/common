@@ -27,17 +27,17 @@ public class KustoAuthHelper
     public KustoAuthHelper(IServiceProvider serviceProvider, KustoSettings? kustoSettings = null)
     {
         this.serviceProvider = serviceProvider;
-        configuration = serviceProvider.GetRequiredService<IConfiguration>();
-        this.kustoSettings = kustoSettings ?? configuration.GetConfiguredSettings<KustoSettings>();
-        kustoConnectionStringBuilder = GetConnStringBuilder();
+        this.configuration = serviceProvider.GetRequiredService<IConfiguration>();
+        this.kustoSettings = kustoSettings ?? this.configuration.GetConfiguredSettings<KustoSettings>();
+        this.kustoConnectionStringBuilder = this.GetConnStringBuilder();
     }
 
     public ICslQueryProvider QueryQueryClient
     {
         get
         {
-            var queryClient = global::Kusto.Data.Net.Client.KustoClientFactory.CreateCslQueryProvider(kustoConnectionStringBuilder);
-            queryClient.DefaultDatabaseName = kustoSettings.DbName;
+            var queryClient = global::Kusto.Data.Net.Client.KustoClientFactory.CreateCslQueryProvider(this.kustoConnectionStringBuilder);
+            queryClient.DefaultDatabaseName = this.kustoSettings.DbName;
             return queryClient;
         }
     }
@@ -46,34 +46,34 @@ public class KustoAuthHelper
     {
         get
         {
-            var adminClient = global::Kusto.Data.Net.Client.KustoClientFactory.CreateCslAdminProvider(kustoConnectionStringBuilder);
-            adminClient.DefaultDatabaseName = kustoSettings.DbName;
+            var adminClient = global::Kusto.Data.Net.Client.KustoClientFactory.CreateCslAdminProvider(this.kustoConnectionStringBuilder);
+            adminClient.DefaultDatabaseName = this.kustoSettings.DbName;
             return adminClient;
         }
     }
 
-    public IKustoIngestClient DirectIngestClient => KustoIngestFactory.CreateDirectIngestClient(kustoConnectionStringBuilder);
+    public IKustoIngestClient DirectIngestClient => KustoIngestFactory.CreateDirectIngestClient(this.kustoConnectionStringBuilder);
 
-    public IKustoIngestClient StreamingIngestClient => KustoIngestFactory.CreateStreamingIngestClient(kustoConnectionStringBuilder);
+    public IKustoIngestClient StreamingIngestClient => KustoIngestFactory.CreateStreamingIngestClient(this.kustoConnectionStringBuilder);
 
-    public IKustoQueuedIngestClient QueuedIngestClient => KustoIngestFactory.CreateQueuedIngestClient(kustoConnectionStringBuilder);
+    public IKustoQueuedIngestClient QueuedIngestClient => KustoIngestFactory.CreateQueuedIngestClient(this.kustoConnectionStringBuilder);
 
     private KustoConnectionStringBuilder GetConnStringBuilder()
     {
         if (this.kustoSettings.AuthMode == KustoAuthMode.None)
         {
-            return new KustoConnectionStringBuilder($"{kustoSettings.ClusterUrl}") { InitialCatalog = kustoSettings.DbName };
+            return new KustoConnectionStringBuilder($"{this.kustoSettings.ClusterUrl}") { InitialCatalog = this.kustoSettings.DbName };
         }
 
-        var aadSettings = kustoSettings.Aad ?? configuration.GetConfiguredSettings<AadSettings>();
-        var tokenProvider = new AadTokenProvider(serviceProvider);
+        var aadSettings = this.kustoSettings.Aad ?? this.configuration.GetConfiguredSettings<AadSettings>();
+        var tokenProvider = new AadTokenProvider(this.serviceProvider);
 
-        switch (kustoSettings.AuthMode)
+        switch (this.kustoSettings.AuthMode)
         {
             case KustoAuthMode.Msi:
-                return new KustoConnectionStringBuilder($"{kustoSettings.ClusterUrl}")
+                return new KustoConnectionStringBuilder($"{this.kustoSettings.ClusterUrl}")
                 {
-                    InitialCatalog = kustoSettings.DbName,
+                    InitialCatalog = this.kustoSettings.DbName,
                     FederatedSecurity = true,
                     EmbeddedManagedIdentity = "system"
                 };
@@ -81,26 +81,26 @@ public class KustoAuthHelper
                 var (clientSecret, clientCert) = tokenProvider.GetClientSecretOrCert(aadSettings, CancellationToken.None);
                 if (clientSecret != null)
                 {
-                    return new KustoConnectionStringBuilder($"{kustoSettings.ClusterUrl}") { InitialCatalog = kustoSettings.DbName }
+                    return new KustoConnectionStringBuilder($"{this.kustoSettings.ClusterUrl}") { InitialCatalog = this.kustoSettings.DbName }
                         .WithAadApplicationKeyAuthentication(
                             aadSettings.ClientId,
                             clientSecret,
                             aadSettings.Authority);
                 }
 
-                return new KustoConnectionStringBuilder($"{kustoSettings.ClusterUrl}") { InitialCatalog = kustoSettings.DbName }
+                return new KustoConnectionStringBuilder($"{this.kustoSettings.ClusterUrl}") { InitialCatalog = this.kustoSettings.DbName }
                     .WithAadApplicationCertificateAuthentication(
                         aadSettings.ClientId,
                         clientCert,
                         aadSettings.Authority);
             case KustoAuthMode.User:
                 aadSettings.Scenarios = AadAuthScenarios.InteractiveUser;
-                return new KustoConnectionStringBuilder($"{kustoSettings.ClusterUrl}") { InitialCatalog = kustoSettings.DbName }
+                return new KustoConnectionStringBuilder($"{this.kustoSettings.ClusterUrl}") { InitialCatalog = this.kustoSettings.DbName }
                     .WithAadUserPromptAuthentication(
                         aadSettings.ClientId,
                         aadSettings.Authority);
             default:
-                throw new NotSupportedException($"Kusto auth mode {kustoSettings.AuthMode} is not supported");
+                throw new NotSupportedException($"Kusto auth mode {this.kustoSettings.AuthMode} is not supported");
         }
     }
 }
