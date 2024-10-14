@@ -6,6 +6,7 @@
 
 namespace Common.Monitoring.ETW;
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Tracing;
@@ -36,27 +37,27 @@ public abstract class BaseEventSource : EventSource
     protected TracerProvider TraceProvider { get; }
 
     /// <summary>
-    /// Write event and trace.
+    /// Write log, event and trace, associate event with current span.
     /// </summary>
     /// <param name="eventId">Event id</param>
     /// <param name="logger">ILogger instance</param>
     /// <param name="level">Log level</param>
-    /// <param name="callerFile">Call from file name</param>
-    /// <param name="memberName">Call from method name</param>
-    /// <param name="lineNumber">Line number of caller</param>
     /// <param name="messageTemplate">Log message template</param>
+    /// <param name="args">Values passed to format message.</param>
+    /// <param name="callerFile">Call from file name</param>
+    /// <param name="lineNumber">Line number of caller</param>
     /// <param name="tags">Event tags</param>
     /// <param name="logMethodName">Log method name</param>
     public TelemetrySpan UsingTraceEvent(
         int eventId,
         ILogger logger,
         LogLevel level,
-        string callerFile,
-        string memberName,
-        int lineNumber,
         string messageTemplate = "",
+        object[]? args = null,
         List<KeyValuePair<string, string>>? tags = null,
-        [CallerMemberName] string logMethodName = "")
+        [CallerFilePath] string callerFile = "",
+        [CallerMemberName] string logMethodName = "",
+        [CallerLineNumber] int lineNumber = 0)
     {
         using (logger.BeginScope(new Dictionary<string, object>
                {
@@ -64,15 +65,15 @@ public abstract class BaseEventSource : EventSource
                    ["TraceId"] = Activity.Current?.TraceId.ToString() ?? string.Empty,
                    ["ParentId"] = Activity.Current?.ParentSpanId.ToString() ?? string.Empty,
                    ["CallerFile"] = callerFile,
-                   ["MemberName"] = memberName,
+                   ["MemberName"] = logMethodName,
                    ["LineNumber"] = lineNumber
                }))
         {
-            logger.Log(level, messageTemplate, tags);
+            logger.Log(level, messageTemplate, args ?? Array.Empty<object>());
         }
 
         var tracer = this.TraceProvider.GetTracer(this.Name);
-        var scope = tracer.StartActiveSpan(memberName);
+        var span = tracer.StartActiveSpan(logMethodName);
         if (tags == null)
         {
             tags = new List<KeyValuePair<string, string>>();
@@ -80,12 +81,14 @@ public abstract class BaseEventSource : EventSource
 
         foreach (var tag in tags)
         {
-            scope.SetAttribute(tag.Key, tag.Value);
+            span.SetAttribute(tag.Key, tag.Value);
         }
 
         tags.Add(new KeyValuePair<string, string>("EventName", logMethodName));
         this.WriteEvent(eventId, tags);
 
-        return scope;
+        span.AddEvent(logMethodName);
+
+        return span;
     }
 }
