@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Common.Monitoring.Tests.Steps;
+namespace Common.Monitoring.Tests.Utils;
 
 using System.Diagnostics.Metrics;
 using Microsoft.Extensions.AmbientMetadata;

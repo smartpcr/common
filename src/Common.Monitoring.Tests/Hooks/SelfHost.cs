@@ -13,7 +13,8 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Config;
+using Common.Config;
+using Common.Monitoring.Tests.Utils;
 using Config.Tests.Hooks;
 using Microsoft.Extensions.AmbientMetadata;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +22,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
-using Steps;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 

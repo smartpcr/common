@@ -1,10 +1,10 @@
-// -----------------------------------------------------------------------
+﻿// -----------------------------------------------------------------------
 // <copyright file="MetricsTestStepsLogger.cs" company="Microsoft Corp.">
 //     Copyright (c) Microsoft Corp. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Common.Monitoring.Tests.Steps;
+namespace Common.Monitoring.Tests.Utils;
 
 using System;
 using System.Runtime.CompilerServices;

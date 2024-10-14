@@ -31,7 +31,6 @@ public static class KustoExtension
             { typeof(Guid), "guid" },
             { typeof(Guid?), "guid" },
             { typeof(int), "int" },
-            { typeof(byte), "int" },
             { typeof(int?), "int" },
             { typeof(long), "long" },
             { typeof(long?), "long" },
@@ -41,7 +40,11 @@ public static class KustoExtension
             { typeof(float?), "real" },
             { typeof(double), "real" },
             { typeof(double?), "real" },
-            { typeof(TimeSpan), "timespan" }
+            { typeof(TimeSpan), "timespan" },
+            { typeof(byte), "int" },
+            { typeof(byte?), "int" },
+            { typeof(short), "int" },
+            { typeof(short?), "int" }
         };
 
         if (type.IsEnum)
