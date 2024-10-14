@@ -87,6 +87,6 @@ public class MetricsTestSteps
             .Where(m => m.TimeStamp == lastWriteTime)
             .OrderByDescending(m => m.LongValue).First();
         lastMetricByName.Should().NotBeNull();
-        lastMetricByName!.LongValue.Should().Be(count);
+        lastMetricByName.LongValue.Should().Be(count);
     }
 }
