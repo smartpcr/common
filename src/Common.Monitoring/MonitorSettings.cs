@@ -25,6 +25,6 @@ public class MonitorSettings
 
     public bool UseOpenTelemetry()
     {
-        return Logs.SinkTypes.HasFlag(LogSinkTypes.OTLP) || Traces.SinkTypes.HasFlag(TraceSinkTypes.OTLP) || Metrics.SinkTypes.HasFlag(MetricSinkTypes.OTLP);
+        return this.Logs.SinkTypes.HasFlag(LogSinkTypes.OTLP) || this.Traces.SinkTypes.HasFlag(TraceSinkTypes.OTLP) || this.Metrics.SinkTypes.HasFlag(MetricSinkTypes.OTLP);
     }
 }

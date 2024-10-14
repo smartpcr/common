@@ -77,7 +77,7 @@ public class MetricsTestSteps
         var metricFiles = Directory.GetFiles(logsFolder, "metrics_*.log", SearchOption.AllDirectories);
         metricFiles.Should().NotBeNullOrEmpty();
         var lastMetricFile = metricFiles.Select(f => new FileInfo(f))
-            .OrderByDescending(f => f.LastWriteTime).Single();
+            .OrderByDescending(f => f.LastWriteTime).First();
         var metridFileParser = new MetricFileParser(lastMetricFile.FullName);
         var metrics = metridFileParser.Parse();
         var metricsByName = metrics.Where(m => m.Name == metricName).ToList();

@@ -1,6 +1,8 @@
 ﻿@integration_test
 Feature: MetricsTest
-Should be able to create counter, histogram and gauge metrics
+  As a developer,
+  I want to be able to create counter, histogram and gauge metrics,
+  So that I can monitor the system.
 
   @prod
   @counter

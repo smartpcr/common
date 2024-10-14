@@ -140,60 +140,60 @@ namespace Common.Monitoring.Tests.Features
 #line 15
     testRunner.When("I extract \"etl\" files from zip file to folder \"%HOME%\\\\Downloads\\\\hci\\\\etw\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
                             "FileName"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.2024-10-09.1.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.1.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.2.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.3.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.4.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.5.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.6.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.7.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.8.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.ECE.2024-10-09.1.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.ECE.2024-10-09.2.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.ECE.2024-10-09.3.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.ECEAgentCommonInfra.2024-10-09.1.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.Roles.VirtualMachines.2024-10-09.1.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.Roles.VirtualMachines.2024-10-09.2.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "V-HOST1_AzureStack.Update.Admin.2024-10-09.1.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "v-Host1_AzureStackAgentLifecycleAgent.etl"});
-                table7.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "v-Host1_lcmControllerLogmanTraces.etl"});
 #line 16
-    testRunner.Then("I should see the following \"etl\" files in folder \"%HOME%\\\\Downloads\\\\hci\\\\etw\"", ((string)(null)), table7, "Then ");
+    testRunner.Then("I should see the following \"etl\" files in folder \"%HOME%\\\\Downloads\\\\hci\\\\etw\"", ((string)(null)), table8, "Then ");
 #line hidden
 #line 36
     testRunner.When("I extract \"evtx\" files from zip file to folder \"%HOME%\\\\Downloads\\\\hci\\\\evtx\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
                             "FileName"});
-                table8.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Event_Microsoft.AzureStack.LCMController.EventSource-Admin.evtx"});
-                table8.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Event_Microsoft-Windows-WinRM-Operational.EVTX"});
-                table8.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Event_Microsoft-Windows-WMI-Activity-Operational.EVTX"});
 #line 37
-    testRunner.Then("I should see the following \"evtx\" files in folder \"%HOME%\\\\Downloads\\\\hci\\\\evtx\"", ((string)(null)), table8, "Then ");
+    testRunner.Then("I should see the following \"evtx\" files in folder \"%HOME%\\\\Downloads\\\\hci\\\\evtx\"", ((string)(null)), table9, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

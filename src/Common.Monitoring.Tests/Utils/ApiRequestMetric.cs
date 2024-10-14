@@ -6,12 +6,12 @@
 
 namespace Common.Monitoring.Tests.Utils;
 
+using System;
 using System.Diagnostics.Metrics;
-using Microsoft.Extensions.AmbientMetadata;
+using Microsoft.Extensions.DependencyInjection;
 
 public class ApiRequestMetric
 {
-    private static Meter meter;
     private static ApiRequestMetric? instance;
     public const string TotalRequests = "total_requests";
     public const string SuccessfulRequests = "successful_requests";
@@ -23,20 +23,20 @@ public class ApiRequestMetric
     private readonly Counter<long> totalFailures;
     private readonly Histogram<double> requestLatency;
 
-    private ApiRequestMetric(ApplicationMetadata metadata)
+    private ApiRequestMetric(IServiceProvider serviceProvider)
     {
-        meter = new Meter($"{metadata.ApplicationName}"); // meter is added with configured name, it doesn't allow prefix
-        this.totalRequests = meter.CreateCounter<long>(TotalRequests, "Total number of requests");
-        this.totalSuccesses = meter.CreateCounter<long>(SuccessfulRequests, "Total number of successful requests");
-        this.totalFailures = meter.CreateCounter<long>(FailedRequests, "Total number of failed requests");
-        this.requestLatency = meter.CreateHistogram<double>(RequestLatency, unit: "ms", description: "Request latency in milliseconds");
+        var diagnosticsConfig = serviceProvider.GetRequiredService<DiagnosticsConfig>();
+        this.totalRequests = diagnosticsConfig.Meter.CreateCounter<long>(TotalRequests, "Total number of requests");
+        this.totalSuccesses = diagnosticsConfig.Meter.CreateCounter<long>(SuccessfulRequests, "Total number of successful requests");
+        this.totalFailures = diagnosticsConfig.Meter.CreateCounter<long>(FailedRequests, "Total number of failed requests");
+        this.requestLatency = diagnosticsConfig.Meter.CreateHistogram<double>(RequestLatency, unit: "ms", description: "Request latency in milliseconds");
     }
 
-    public static ApiRequestMetric Instance(ApplicationMetadata metadata)
+    public static ApiRequestMetric Instance(IServiceProvider serviceProvider)
     {
         if (ApiRequestMetric.instance == null)
         {
-            ApiRequestMetric.instance = new ApiRequestMetric(metadata);
+            ApiRequestMetric.instance = new ApiRequestMetric(serviceProvider);
         }
 
         return ApiRequestMetric.instance;

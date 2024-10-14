@@ -30,7 +30,7 @@ namespace Common.Monitoring.Tests.Features
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "MetricsTest.feature"
+#line 1 "Metrics.feature"
 #line hidden
         
         public MetricsTestFeature(MetricsTestFeature.FixtureData fixtureData, Common_Monitoring_Tests_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
@@ -42,7 +42,8 @@ namespace Common.Monitoring.Tests.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "MetricsTest", "Should be able to create counter, histogram and gauge metrics", ProgrammingLanguage.CSharp, featureTags);
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "MetricsTest", "  As a developer,\r\n  I want to be able to create counter, histogram and gauge met" +
+                    "rics,\r\n  So that I can monitor the system.", ProgrammingLanguage.CSharp, featureTags);
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -94,7 +95,7 @@ namespace Common.Monitoring.Tests.Features
                     "counter"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a counter for total requests", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 7
+#line 9
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -104,16 +105,16 @@ namespace Common.Monitoring.Tests.Features
             else
             {
                 this.ScenarioStart();
-#line 8
+#line 10
     testRunner.Given("monitoring settings are configured with metrics capability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 9
+#line 11
     testRunner.And("setup api handler for request \"/health\" to return \"I\'m healthy\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 10
+#line 12
     testRunner.When("I call api endpoint \"/health\" 3 times", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 11
+#line 13
     testRunner.Then("the metric \"total_requests\" should be 3", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

@@ -53,7 +53,7 @@ internal class SelfHost
         this.logger = loggerFactory.CreateLogger<SelfHost>();
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
         var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
-        this.apiRequestMetric = ApiRequestMetric.Instance(metadata);
+        this.apiRequestMetric = ApiRequestMetric.Instance(serviceProvider);
         var traceProvider = serviceProvider.GetRequiredService<TracerProvider>();
         this.tracer = traceProvider.GetTracer(metadata.ApplicationName + $".{nameof(SelfHost)}", metadata.BuildVersion);
         this.meterProvider = serviceProvider.GetRequiredService<MeterProvider>();
@@ -132,6 +132,7 @@ internal class SelfHost
         this.logger.StartingApiCall(DateTime.Now, requestPath ?? string.Empty);
         this.apiRequestMetric.IncrementTotalRequests();
         using var span = this.tracer.StartActiveSpan(nameof(this.RespondToRequest));
+        span.SetAttribute("request.path", requestPath);
         var watch = Stopwatch.StartNew();
 
         if (string.IsNullOrEmpty(requestPath))
