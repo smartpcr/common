@@ -9,7 +9,7 @@
     <RepositoryUrl>https://github.com/smartpcr/common</RepositoryUrl>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>$(MSBuildProjectName)</RootNamespace>
-    <AssemblyName>Microsoft.AzS.$(RootNamespace)</AssemblyName>
+    <AssemblyName>CRP.$(RootNamespace)</AssemblyName>
     <DebugType>Full</DebugType>
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
