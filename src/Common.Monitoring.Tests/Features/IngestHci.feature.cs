@@ -80,7 +80,7 @@ namespace Common.Monitoring.Tests.Features
 #line 2
   #line hidden
 #line 3
-    testRunner.Given("kusto cluster uri \"http://172.20.102.248:8080\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("kusto cluster uri \"http://192.168.23.191:8080\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 4
     testRunner.And("kusto database name \"hci\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -122,22 +122,22 @@ namespace Common.Monitoring.Tests.Features
 #line 9
     testRunner.When("I extract \"etl\" files from zip file to folder \"%HOME%\\\\Downloads\\\\hci\\\\etw\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
                             "FileName"});
-                table1.AddRow(new string[] {
+                table3.AddRow(new string[] {
                             "V-HOST1_AzureStack.Update.Admin.2024-10-09.1.etl"});
 #line 10
-    testRunner.Then("I should see the following \"etl\" files in folder \"%HOME%\\\\Downloads\\\\hci\\\\etw\"", ((string)(null)), table1, "Then ");
+    testRunner.Then("I should see the following \"etl\" files in folder \"%HOME%\\\\Downloads\\\\hci\\\\etw\"", ((string)(null)), table3, "Then ");
 #line hidden
 #line 13
     testRunner.When("I extract \"evtx\" files from zip file to folder \"%HOME%\\\\Downloads\\\\hci\\\\evtx\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
                             "FileName"});
-                table2.AddRow(new string[] {
+                table4.AddRow(new string[] {
                             "Event_Microsoft.AzureStack.LCMController.EventSource-Admin.evtx"});
 #line 14
-    testRunner.Then("I should see the following \"evtx\" files in folder \"%HOME%\\\\Downloads\\\\hci\\\\evtx\"", ((string)(null)), table2, "Then ");
+    testRunner.Then("I should see the following \"evtx\" files in folder \"%HOME%\\\\Downloads\\\\hci\\\\evtx\"", ((string)(null)), table4, "Then ");
 #line hidden
 #line 17
     testRunner.When("I parse etl files in folder \"%HOME%\\\\Downloads\\\\hci\\\\etw\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -148,32 +148,32 @@ namespace Common.Monitoring.Tests.Features
 #line 19
     testRunner.When("I create tables based on etl event schemas", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
                             "TableName"});
-                table3.AddRow(new string[] {
+                table5.AddRow(new string[] {
                             "ETL-Microsoft-URP-InfraEventSource.HealthCheckResultDirectoryIsEmptyOrDoesNotExis" +
                                 "t"});
-                table3.AddRow(new string[] {
+                table5.AddRow(new string[] {
                             "ETL-Microsoft-URP-InfraEventSource.ResolverGetAll"});
-                table3.AddRow(new string[] {
+                table5.AddRow(new string[] {
                             "ETL-Microsoft-URP-InfraEventSource.StopService"});
 #line 20
-    testRunner.Then("I should see following etl kusto tables", ((string)(null)), table3, "Then ");
+    testRunner.Then("I should see following etl kusto tables", ((string)(null)), table5, "Then ");
 #line hidden
 #line 25
     testRunner.When("I extract etl files in folder \"%HOME%\\\\Downloads\\\\hci\\\\etw\" to csv files in folde" +
                         "r \"%HOME%\\\\Downloads\\\\hci\\\\csv\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
                             "FileName"});
-                table4.AddRow(new string[] {
+                table6.AddRow(new string[] {
                             "ETL-Microsoft-URP-InfraEventSource.ResolverGetAll.csv"});
-                table4.AddRow(new string[] {
+                table6.AddRow(new string[] {
                             "ETL-Microsoft-URP-InfraEventSource.StartService.csv"});
-                table4.AddRow(new string[] {
+                table6.AddRow(new string[] {
                             "ETL-Microsoft-URP-InfraEventSource.StopService.csv"});
 #line 26
-    testRunner.Then("I should see following csv files in folder \"%HOME%\\\\Downloads\\\\hci\\\\csv\"", ((string)(null)), table4, "Then ");
+    testRunner.Then("I should see following csv files in folder \"%HOME%\\\\Downloads\\\\hci\\\\csv\"", ((string)(null)), table6, "Then ");
 #line hidden
 #line 31
     testRunner.When("I parse evtx files in folder \"%HOME%\\\\Downloads\\\\hci\\\\evtx\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -184,12 +184,12 @@ namespace Common.Monitoring.Tests.Features
 #line 33
     testRunner.When("I create table based on evtx record schema", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
                             "TableName"});
-                table5.AddRow(new string[] {
+                table7.AddRow(new string[] {
                             "WindowsEvents"});
 #line 34
-    testRunner.Then("I should see following evtx kusto table", ((string)(null)), table5, "Then ");
+    testRunner.Then("I should see following evtx kusto table", ((string)(null)), table7, "Then ");
 #line hidden
 #line 37
     testRunner.When("I extract evtx records to csv files in folder \"%HOME%\\\\Downloads\\\\hci\\\\csv\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -201,14 +201,14 @@ namespace Common.Monitoring.Tests.Features
 #line 39
     testRunner.When("I ingest csv files in folder \"%HOME%\\\\Downloads\\\\hci\\\\csv\" to kusto", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
                             "TableName",
                             "RecordCount"});
-                table6.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "WindowsEvents",
                             "4475"});
 #line 40
-    testRunner.Then("the following kusto tables should have added records with expected counts", ((string)(null)), table6, "Then ");
+    testRunner.Then("the following kusto tables should have added records with expected counts", ((string)(null)), table8, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

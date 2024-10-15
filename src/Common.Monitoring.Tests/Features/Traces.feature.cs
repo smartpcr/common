@@ -112,44 +112,44 @@ namespace Common.Monitoring.Tests.Features
 #line 11
     testRunner.Then("the result should be 3", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-                TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
                             "OperationName",
                             "ParentOperationName",
                             "Attributes"});
-                table7.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "GivenANumber",
                             "",
                             "input.number: 4"});
-                table7.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Fibonacci",
                             "",
                             "input.n: 0, result: 0"});
-                table7.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Fibonacci",
                             "",
                             "input.n: 1, result: 1"});
-                table7.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Fibonacci",
                             "Fibonacci",
                             "input.n: 2, result 1"});
-                table7.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Fibonacci",
                             "Fibonacci",
                             "input.n: 3, result 2"});
-                table7.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Fibonacci",
                             "WhenICalculateFibonacciOfTheNumber",
                             "input.n: 4, result 3"});
-                table7.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "WhenICalculateFibonacciOfTheNumber",
                             "",
                             "result: 3"});
-                table7.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "ThenTheResultShouldBe",
                             "",
                             "expected: 3, actual: 3"});
 #line 12
-    testRunner.And("I should have the following traces", ((string)(null)), table7, "And ");
+    testRunner.And("I should have the following traces", ((string)(null)), table9, "And ");
 #line hidden
             }
             this.ScenarioCleanup();

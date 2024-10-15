@@ -29,6 +29,7 @@ namespace Common.Monitoring.Tests.Steps
         private readonly Tracer tracer;
         private readonly string tracerSourceName;
         private readonly DateTimeOffset testStartTime = DateTimeOffset.UtcNow;
+        private readonly TelemetrySpan rootSpan;
 
         public TracesTestSteps(ScenarioContext context, ISpecFlowOutputHelper outputWriter)
         {
@@ -44,8 +45,8 @@ namespace Common.Monitoring.Tests.Steps
             this.tracer = traceProvider.GetTracer(this.tracerSourceName, metadata.BuildVersion);
 
             // this force other created spans to be children of this span, so that we have same traceId
-            var span = this.tracer.StartActiveSpan(nameof(TracesTestSteps));
-            this.context.Set(span, "test_span"); // this got disposed when the test ends
+            this.rootSpan = this.tracer.StartActiveSpan(nameof(TracesTestSteps));
+            this.context.Set(this.rootSpan, nameof(TracesTestSteps)); // this got disposed when the test ends
         }
 
         [Given(@"^a number (\d+)$")]
@@ -79,6 +80,8 @@ namespace Common.Monitoring.Tests.Steps
         [Then(@"^I should have the following traces$")]
         public void ThenIShouldHaveTheFollowingTraces(Table table)
         {
+            this.rootSpan.Dispose(); // this will end the trace
+
             var logsFolder = Path.Combine(Directory.GetCurrentDirectory(), "logs");
             var metricFiles = Directory.GetFiles(logsFolder, "trace_*.log", SearchOption.AllDirectories);
             metricFiles.Should().NotBeNullOrEmpty();

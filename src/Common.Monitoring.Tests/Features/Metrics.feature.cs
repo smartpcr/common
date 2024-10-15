@@ -88,14 +88,16 @@ namespace Common.Monitoring.Tests.Features
         [Xunit.TraitAttribute("Description", "Create a counter for total requests")]
         [Xunit.TraitAttribute("Category", "prod")]
         [Xunit.TraitAttribute("Category", "counter")]
+        [Xunit.TraitAttribute("Category", "require_api_mock")]
         public void CreateACounterForTotalRequests()
         {
             string[] tagsOfScenario = new string[] {
                     "prod",
-                    "counter"};
+                    "counter",
+                    "require_api_mock"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a counter for total requests", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 9
+#line 8
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -105,16 +107,16 @@ namespace Common.Monitoring.Tests.Features
             else
             {
                 this.ScenarioStart();
-#line 10
+#line 9
     testRunner.Given("monitoring settings are configured with metrics capability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 11
+#line 10
     testRunner.And("setup api handler for request \"/health\" to return \"I\'m healthy\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 12
+#line 11
     testRunner.When("I call api endpoint \"/health\" 3 times", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 13
+#line 12
     testRunner.Then("the metric \"total_requests\" should be 3", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

@@ -10,21 +10,24 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Tracing;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using OpenTelemetry;
 using OpenTelemetry.Trace;
 
 /// <summary>
 /// Base event source class.
 /// </summary>
-public abstract class BaseEventSource : EventSource
+public class DynamicEventSource : EventSource
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="BaseEventSource"/> class.
+    /// Initializes a new instance of the <see cref="DynamicEventSource"/> class.
     /// </summary>
     /// <param name="eventSourceName">ETW provider name</param>
-    protected BaseEventSource(string eventSourceName) : base(eventSourceName)
+    public DynamicEventSource(string eventSourceName) : base(eventSourceName)
     {
         this.TraceProvider = Sdk.CreateTracerProviderBuilder()
             .AddSource(eventSourceName)
@@ -48,13 +51,13 @@ public abstract class BaseEventSource : EventSource
     /// <param name="lineNumber">Line number of caller</param>
     /// <param name="tags">Event tags</param>
     /// <param name="logMethodName">Log method name</param>
-    public TelemetrySpan UsingTraceEvent(
+    public TelemetrySpan StartTraceEvent(
         int eventId,
         ILogger logger,
         LogLevel level,
         string messageTemplate = "",
         object[]? args = null,
-        List<KeyValuePair<string, string>>? tags = null,
+        List<KeyValuePair<string, string?>>? tags = null,
         [CallerFilePath] string callerFile = "",
         [CallerMemberName] string logMethodName = "",
         [CallerLineNumber] int lineNumber = 0)
@@ -76,7 +79,7 @@ public abstract class BaseEventSource : EventSource
         var span = tracer.StartActiveSpan(logMethodName);
         if (tags == null)
         {
-            tags = new List<KeyValuePair<string, string>>();
+            tags = new List<KeyValuePair<string, string?>>();
         }
 
         foreach (var tag in tags)
@@ -84,11 +87,40 @@ public abstract class BaseEventSource : EventSource
             span.SetAttribute(tag.Key, tag.Value);
         }
 
-        tags.Add(new KeyValuePair<string, string>("EventName", logMethodName));
-        this.WriteEvent(eventId, tags);
+        tags.Add(new KeyValuePair<string, string?>("EventName", logMethodName));
+        this.WriteDynamicEvent(eventId, level, logMethodName, tags);
+        // this.WriteEvent(eventId, tags);
 
         span.AddEvent(logMethodName);
 
         return span;
+    }
+
+    private void WriteDynamicEvent(int eventId, LogLevel level, string eventName, params object[] args)
+    {
+        var options = new EventSourceOptions
+        {
+            Level = DynamicEventSource.ToTracingLevel(level)
+        };
+        this.WriteEvent(eventId, args);
+    }
+
+    private static System.Diagnostics.Tracing.EventLevel ToTracingLevel(LogLevel logLevel)
+    {
+        switch (logLevel)
+        {
+            case LogLevel.Critical:
+                return System.Diagnostics.Tracing.EventLevel.Critical;
+            case LogLevel.Error:
+                return EventLevel.Error;
+            case LogLevel.Warning:
+                return EventLevel.Warning;
+            case LogLevel.Information:
+                return EventLevel.Informational;
+            case LogLevel.Debug:
+                return EventLevel.Verbose;
+            default:
+                return EventLevel.Informational;
+        }
     }
 }

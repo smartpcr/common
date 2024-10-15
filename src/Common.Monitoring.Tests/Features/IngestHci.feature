@@ -1,6 +1,6 @@
 ﻿Feature: ingest HCI etw and evtx events
   Background:
-    Given kusto cluster uri "http://172.20.102.248:8080"
+    Given kusto cluster uri "http://192.168.23.191:8080"
     And kusto database name "hci"
     And kustainer volume mount from "E:\\kustodata" to "/kustodata"
 
