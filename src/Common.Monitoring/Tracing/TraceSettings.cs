@@ -15,4 +15,5 @@ public class TraceSettings
     public TraceSinkTypes SinkTypes { get; set; } = TraceSinkTypes.Default;
     public TraceSamplerTypes SamplerTypes { get; set; } = TraceSamplerTypes.AlwaysOn;
     public double SamplerRatio { get; set; } = 0.2;
+    public bool IncludeAspNetCoreTrace { get; set; } = true;
 }

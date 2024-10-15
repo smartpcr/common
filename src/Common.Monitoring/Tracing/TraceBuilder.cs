@@ -48,11 +48,14 @@ public static class TraceBuilder
                 builder
                     .AddSource(metadata.ApplicationName)
                     .AddSource(metadata.ApplicationName + ".*") // make sure all traces starts with ApplicationName
-                    .SetSampler(_ => CreateSampler(traceSettings))
-                    .AddAspNetCoreInstrumentation(options =>
+                    .SetSampler(_ => CreateSampler(traceSettings));
+                if (traceSettings.IncludeAspNetCoreTrace)
+                {
+                    builder.AddAspNetCoreInstrumentation(options =>
                     {
                         options.RecordException = true;
                     });
+                }
                 Console.WriteLine($"Added tracing source {metadata.ApplicationName}.*");
                 Console.WriteLine("Tracing instrumentation enabled for HttpClient and AspNetCore");
 

@@ -47,3 +47,10 @@ docker run -d --name jaeger \
        }
      }
      ```
+
+## Test with MLTP (Metrics, Logs, Traces and Profiles) stack
+
+```bash
+git clone git@github.com:grafana/intro-to-mltp.git
+docker compose -f docker-compose.yml up
+```
