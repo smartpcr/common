@@ -1,0 +1,94 @@
+﻿name: mltp
+volumes:
+  grafana:
+services:
+  # Grafana Alloy batches and processes traces sent to it, generating
+  # auto-logs from those traces.
+  # Includes Metrics, Logs, Traces and Profiles.
+  alloy:
+    image: grafana/alloy:v1.3.1
+    ports:
+      - "12347:12345"     # alloy UI
+      - "12348:12348"
+      - "6832:6832"
+      - "55679:55679"
+    volumes:
+      - "./alloy/config.alloy:/etc/alloy/config.alloy"
+      - "./alloy/endpoints.json:/etc/alloy/endpoints.json"
+    command: [
+      "run",
+      "--server.http.listen-addr=0.0.0.0:12345",
+      "--stability.level=public-preview",
+      "/etc/alloy/config.alloy",
+    ]
+
+  # The opentelemetry-collector batches and processes traces sent to it.
+  opentelemetry-collector:
+    image: otel/opentelemetry-collector-contrib
+    ports:
+      - 1888:1888 # pprof extension
+      - 8888:8888 # Prometheus metrics exposed by the Collector
+      - 8889:8889 # Prometheus exporter metrics
+      - 13133:13133 # health_check extension
+      - 4320:4317 # OTLP gRPC receiver
+      - 4321:4318 # OTLP http receiver
+      - 6832:6832 # Thrift compact protocol over UDP.
+      - 55679:55679 # zpages extension
+    volumes:
+      - ./otel/config.yml:/etc/otelcol-contrib/config.yml
+    command: [ "--config=/etc/otelcol-contrib/config.yml" ]
+
+  # The Grafana dashboarding server.
+  grafana:
+    image: grafana/grafana:11.2.0
+    volumes:
+      - "./grafana/definitions:/var/lib/grafana/dashboards"
+      - "./grafana/provisioning:/etc/grafana/provisioning"
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_FEATURE_TOGGLES_ENABLE=flameGraph traceqlSearch traceQLStreaming correlations metricsSummary traceqlEditor traceToMetrics traceToProfiles datatrails
+      - GF_INSTALL_PLUGINS=grafana-lokiexplore-app,grafana-exploretraces-app,grafana-pyroscope-app
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+
+  # The Tempo service stores traces send to it by Grafana Alloy, and takes
+  # queries from Grafana to visualise those traces.
+  tempo:
+    image: grafana/tempo:2.6.0
+    ports:
+      - "3200:3200"     # tempo query frontend
+      - "4317:4317"     # otel grpc receiver
+      - "4318:4318"     # otel http receiver
+      - "9411:9411"     # zipkin receiver
+      - "55680:55680"   # jaeger receiver
+      - "55681:55681"   # jaeger compact receiver
+      - "14250:14250"   # jaeger grpc receiver
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - "./tempo/tempo.yaml:/etc/tempo.yaml"
+
+  # The Loki service stores logs sent to it, and takes queries from Grafana
+  # to visualise those logs.
+  loki:
+    image: grafana/loki:3.2.0
+    command: ["--pattern-ingester.enabled=true", "-config.file=/etc/loki/loki.yaml"]
+    ports:
+      - "3100:3100"
+    volumes:
+      - "./loki/loki.yaml:/etc/loki/loki.yaml"
+
+  mimir:
+    image: grafana/mimir:2.13.0
+    command: ["-ingester.native-histograms-ingestion-enabled=true", "-config.file=/etc/mimir.yaml"]
+    ports:
+      - "9009:9009"
+    volumes:
+      - "./mimir/mimir.yaml:/etc/mimir.yaml"
+
+  pyroscope:
+    image: grafana/pyroscope:1.8.0
+    ports:
+      - "4040:4040"
+    command: ["server"]
