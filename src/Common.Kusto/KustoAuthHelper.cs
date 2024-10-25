@@ -15,7 +15,6 @@ using global::Kusto.Data.Common;
 using global::Kusto.Ingest;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Settings;
 
 public class KustoAuthHelper
 {

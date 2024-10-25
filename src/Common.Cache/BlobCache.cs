@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Storage;
 using Config;
 using Microsoft.Extensions.AmbientMetadata;
 using Microsoft.Extensions.Caching.Distributed;
@@ -19,7 +20,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenTelemetry.Trace;
-using Settings;
 using Storage.Blobs;
 
 public class BlobCache : IDistributedCache

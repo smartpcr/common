@@ -12,7 +12,6 @@
     <ProjectReference Include="..\Common.Auth\Common.Auth.csproj" />
     <ProjectReference Include="..\Common.Config\Common.Config.csproj" />
     <ProjectReference Include="..\Common.KeyVault\Common.KeyVault.csproj" />
-    <ProjectReference Include="..\Common.Settings\Common.Settings.csproj" />
     <ProjectReference Include="..\Common.Shared\Common.Shared.csproj" />
   </ItemGroup>
 </Project>

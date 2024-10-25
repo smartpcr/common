@@ -16,7 +16,6 @@ using KeyVault;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Settings;
 using StackExchange.Redis;
 
 public class RedisConnectionFactory : IRedisConnectionFactory

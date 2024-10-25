@@ -8,7 +8,6 @@ namespace Common.Storage.Queues;
 
 using Azure.Storage.Queues;
 using Common.Config;
-using Common.Settings;
 using Microsoft.Extensions.AmbientMetadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

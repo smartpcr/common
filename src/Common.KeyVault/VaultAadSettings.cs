@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Common.Settings;
+namespace Common.KeyVault;
 
 using System.ComponentModel.DataAnnotations;
 

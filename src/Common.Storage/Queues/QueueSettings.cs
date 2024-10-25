@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Common.Settings;
+namespace Common.Storage.Queues;
 
 using System;
 using System.ComponentModel.DataAnnotations;

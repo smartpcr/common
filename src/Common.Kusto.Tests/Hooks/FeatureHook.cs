@@ -10,7 +10,6 @@ namespace Common.Kusto.Tests.Hooks
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Monitoring;
-    using Settings;
     using TechTalk.SpecFlow;
 
     [Binding]

@@ -6,7 +6,6 @@
 
 namespace Common.KeyVault;
 
-using Settings;
 
 internal class SecretProviderDimension
 {

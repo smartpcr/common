@@ -17,7 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.Configuration;
 using Newtonsoft.Json;
-using Settings;
+using AadSettings = Common.Auth.AadSettings;
 
 public class BlobClientAuthHelper
 {

@@ -13,12 +13,11 @@ using System.Net.Http.Headers;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using Auth;
+using Common.Auth;
 using EnsureThat;
 using OpenTelemetry.Context.Propagation;
 using Polly;
 using Polly.Retry;
-using Settings;
 
 public abstract class AadAuthenticationHandler : DelegatingHandler
 {

@@ -1,13 +1,15 @@
 // -----------------------------------------------------------------------
-// <copyright file="HttpClientAuthMode.cs" company="Microsoft Corp.">
+// <copyright file="ProxySettings.cs" company="Microsoft Corp.">
 //     Copyright (c) Microsoft Corp. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Common.Settings;
+namespace Common.Http;
 
-public enum HttpClientAuthMode
+using System;
+
+public class ProxySettings
 {
-    None,
-    Aad
+    public Uri ProxyUri { get; set; }
+    public bool BypassProxyOnLocal { get; set; } = true;
 }

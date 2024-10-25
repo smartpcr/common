@@ -28,7 +28,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenTelemetry.Trace;
-using Settings;
 using Shared;
 using Status = OpenTelemetry.Trace.Status;
 

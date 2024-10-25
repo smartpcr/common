@@ -4,7 +4,6 @@ using Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Monitoring;
-using Settings;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 

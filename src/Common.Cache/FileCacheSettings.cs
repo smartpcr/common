@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Common.Settings;
+namespace Common.Cache;
 
 using System.ComponentModel.DataAnnotations;
 

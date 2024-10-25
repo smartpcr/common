@@ -9,7 +9,6 @@ namespace Common.Auth.Logger;
 using System;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
-using Settings;
 
 internal static partial class Log
 {

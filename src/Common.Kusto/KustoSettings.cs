@@ -4,10 +4,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Common.Settings;
+namespace Common.Kusto;
 
-using System;
 using System.ComponentModel.DataAnnotations;
+using Common.Auth;
 
 public class KustoSettings
 {

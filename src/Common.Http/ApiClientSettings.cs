@@ -4,9 +4,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Common.Settings;
+namespace Common.Http;
 
 using System;
+using Common.Auth;
 
 public class ApiClientSettings
 {

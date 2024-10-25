@@ -1,13 +1,13 @@
 // -----------------------------------------------------------------------
-// <copyright file="RedisGroup.cs" company="Microsoft Corp.">
+// <copyright file="HttpClientAuthMode.cs" company="Microsoft Corp.">
 //     Copyright (c) Microsoft Corp. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Common.Settings;
+namespace Common.Http;
 
-using System.Collections.Generic;
-
-public class RedisGroup : Dictionary<string, RedisConnectionSettings>
+public enum HttpClientAuthMode
 {
+    None,
+    Aad
 }

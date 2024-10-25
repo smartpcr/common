@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Storage;
 using Config;
 using Microsoft.Extensions.AmbientMetadata;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +22,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using OpenTelemetry.Trace;
-using Settings;
 using Storage.Blobs;
 using DistributedCacheEntryOptions = Microsoft.Extensions.Caching.Distributed.DistributedCacheEntryOptions;
 

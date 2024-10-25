@@ -14,6 +14,5 @@
     <ProjectReference Include="..\Common.Config\Common.Config.csproj" />
     <ProjectReference Include="..\Common.KeyVault\Common.KeyVault.csproj" />
     <ProjectReference Include="..\Common.Monitoring\Common.Monitoring.csproj" />
-    <ProjectReference Include="..\Common.Settings\Common.Settings.csproj" />
   </ItemGroup>
 </Project>

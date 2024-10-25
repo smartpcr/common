@@ -16,7 +16,6 @@ using Hooks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Monitoring;
-using Settings;
 using TechTalk.SpecFlow;
 
 [Binding]

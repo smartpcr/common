@@ -14,7 +14,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Common.Auth\Common.Auth.csproj" />
     <ProjectReference Include="..\Common.Config\Common.Config.csproj" />
-    <ProjectReference Include="..\Common.Settings\Common.Settings.csproj" />
     <ProjectReference Include="..\Common.Storage\Common.Storage.csproj" />
   </ItemGroup>
 </Project>

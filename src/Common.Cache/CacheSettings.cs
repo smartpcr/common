@@ -4,9 +4,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Common.Settings;
+namespace Common.Cache;
 
 using System;
+using Common.Storage;
 
 public class CacheSettings
 {
