@@ -47,7 +47,7 @@
     ```json
     {
         "VaultSettings": {
-           "VaultName": "azs-lh17",
+           "VaultName": "akshci-kv-xiaodong",
            "AuthType": "Msi",
            "Aad": {
                "TenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47"
