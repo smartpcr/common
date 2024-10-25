@@ -13,7 +13,7 @@
   <ItemGroup Label="Extensions">
     <PackageReference Update="Microsoft.Extensions.AmbientMetadata.Application" Version="$(ExtensionVersion)" />
     <PackageReference Update="Microsoft.Extensions.Caching.Abstractions" Version="$(ExtensionVersion)" />
-    <PackageReference Update="Microsoft.Extensions.Caching.Memory" Version="$(ExtensionVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
     <PackageReference Update="Microsoft.Extensions.Compliance.Redaction" Version="$(ExtensionVersion)" />
     <PackageReference Update="Microsoft.Extensions.Compliance.Testing" Version="$(ExtensionVersion)" />
     <PackageReference Update="Microsoft.Extensions.Configuration" Version="$(ExtensionVersion)" />
