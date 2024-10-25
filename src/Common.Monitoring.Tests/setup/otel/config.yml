@@ -80,7 +80,7 @@ connectors:
   # The servicegraph connector is used to output service node metrics based on received trace spans.
   servicegraph:
     # Defines which exporter the processor will write metrics to.
-    metrics_exporter: otlp/mimir
+    metrics_exporter: prometheusremotewrite
     # Defines additional label dimensions of the metrics from trace span attributes present.
     store:                      # Configuration for the in-memory store.
       ttl: 2s                   # Time to wait for an edge to be completed.
@@ -98,17 +98,13 @@ connectors:
 # See https://opentelemetry.io/docs/collector/configuration/#exporters
 # Also see https://github.com/open-telemetry/opentelemetry-collector/tree/main/processor#recommended-processors
 exporters:
-  # Exporter for sending all data to file.
-  file:
-    path: ./otel.json
-
   # Exporter for sending trace data to Tempo.
   otlp/tempo:
     endpoint: tempo:4317
     tls:
       insecure: true
 
-  otlp/mimir:
+  prometheusremotewrite:
     endpoint: http://mimir:9009/api/v1/push
     tls:
       insecure: true
@@ -129,14 +125,14 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp/tempo, file]
+      exporters: [otlp/tempo]
 
     metrics:
       receivers: [prometheus, otlp]
       processors: [batch]
-      exporters: [otlp/mimir, file]
+      exporters: [prometheusremotewrite]
 
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp/loki, file]
+      exporters: [otlp/loki]

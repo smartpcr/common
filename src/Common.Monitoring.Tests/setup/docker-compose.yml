@@ -32,8 +32,8 @@ services:
       - 13133:13133 # health_check extension
       - 4320:4317 # OTLP gRPC receiver
       - 4321:4318 # OTLP http receiver
-      - 6832:6832 # Thrift compact protocol over UDP.
-      - 55679:55679 # zpages extension
+      - 6833:6832 # Thrift compact protocol over UDP.
+      - 55689:55679 # zpages extension
     volumes:
       - ./otel/config.yml:/etc/otelcol-contrib/config.yml
     command: [ "--config=/etc/otelcol-contrib/config.yml" ]
