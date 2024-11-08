@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
@@ -6,6 +6,34 @@
     <ProjectReference Include="..\Common.Cache\Common.Cache.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="System.Management.Automation" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Features\CircularBuffer.feature" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Common.Config.Tests\Hooks\EnvironmentHook.cs">
+      <Link>Hooks\EnvironmentHook.cs</Link>
+    </Compile>
+    <Compile Include="..\Common.Config.Tests\Hooks\ScenarioContextExtension.cs">
+      <Link>Hooks\ScenarioContextExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Common.Config.Tests\Mocks\MockedLogger.cs">
+      <Link>Mocks\MockedLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\Common.Config.Tests\Mocks\MockedLoggerFactory.cs">
+      <Link>Mocks\MockedLoggerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Common.Config.Tests\Mocks\MockedLogger_T.cs">
+      <Link>Mocks\MockedLogger_T.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Hooks\Blobs\StartStorageEmulator.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Hooks\Blobs\StopStorageEmulator.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

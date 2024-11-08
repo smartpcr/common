@@ -7,9 +7,6 @@
 namespace Common.Config.Tests.Hooks;
 
 using System;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Mocks;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 

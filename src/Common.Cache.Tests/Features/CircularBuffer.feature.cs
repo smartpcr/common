@@ -144,78 +144,78 @@ namespace Common.Cache.Tests.Features
 #line 13
     testRunner.Given("capacity of 100", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                             "Step",
                             "ProducerRate",
                             "ConsumerRate",
                             "Message"});
-                table1.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "1",
                             "50",
                             "30",
                             "one"});
-                table1.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "2",
                             "50",
                             "30",
                             "two"});
-                table1.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "3",
                             "50",
                             "30",
                             "three"});
-                table1.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "4",
                             "50",
                             "30",
                             "four"});
-                table1.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "5",
                             "50",
                             "30",
                             "five"});
-                table1.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "6",
                             "50",
                             "30",
                             "six"});
-                table1.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "7",
                             "50",
                             "30",
                             "seven"});
-                table1.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "8",
                             "50",
                             "30",
                             "eight"});
-                table1.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "9",
                             "50",
                             "30",
                             "nine"});
-                table1.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "10",
                             "50",
                             "30",
                             "ten"});
 #line 14
-    testRunner.When("perform the following iterations", ((string)(null)), table1, "When ");
+    testRunner.When("perform the following iterations", ((string)(null)), table2, "When ");
 #line hidden
 #line 26
     testRunner.Then("buffer count should be 100", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
                             "Message",
                             "Count"});
-                table2.AddRow(new string[] {
+                table3.AddRow(new string[] {
                             "ten",
                             "50"});
-                table2.AddRow(new string[] {
+                table3.AddRow(new string[] {
                             "nine",
                             "50"});
 #line 27
-    testRunner.And("the messages in buffer should be", ((string)(null)), table2, "And ");
+    testRunner.And("the messages in buffer should be", ((string)(null)), table3, "And ");
 #line hidden
             }
             this.ScenarioCleanup();
