@@ -22,7 +22,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenTelemetry.Trace;
 
-public class SpillableMemoryCache : IDistributedCache
+public class SpillableMemoryCache : ICacheLayer
 {
     private readonly string cacheFolder;
     private readonly CacheSettings cacheSettings;
@@ -33,16 +33,16 @@ public class SpillableMemoryCache : IDistributedCache
 
     public SpillableMemoryCache(IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
     {
-        logger = loggerFactory.CreateLogger<SpillableMemoryCache>();
+        this.logger = loggerFactory.CreateLogger<SpillableMemoryCache>();
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
         var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
         var traceProvider = serviceProvider.GetRequiredService<TracerProvider>();
-        tracer = traceProvider.GetTracer(metadata.ApplicationName + $".{nameof(SpillableMemoryCache)}", metadata.BuildVersion);
-        meter = CacheMeter.Instance(metadata);
+        this.tracer = traceProvider.GetTracer(metadata.ApplicationName + $".{nameof(SpillableMemoryCache)}", metadata.BuildVersion);
+        this.meter = CacheMeter.Instance(metadata);
 
-        cacheSettings = configuration.GetConfiguredSettings<CacheSettings>();
-        cacheFolder = cacheSettings.FileCache!.CacheFolder;
-        if (string.IsNullOrEmpty(cacheFolder) || !Directory.Exists(cacheFolder))
+        this.cacheSettings = configuration.GetConfiguredSettings<CacheSettings>();
+        this.cacheFolder = this.cacheSettings.Local.FileCache.CacheFolder;
+        if (string.IsNullOrEmpty(this.cacheFolder) || !Directory.Exists(this.cacheFolder))
         {
             var binFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             if (binFolder == null)
@@ -50,35 +50,37 @@ public class SpillableMemoryCache : IDistributedCache
                 throw new InvalidOperationException("invalid bin folder");
             }
 
-            cacheFolder = Path.Combine(binFolder, cacheSettings.FileCache.CacheFolder);
-            if (!Directory.Exists(cacheFolder))
+            this.cacheFolder = Path.Combine(binFolder, this.cacheSettings.Local.FileCache.CacheFolder);
+            if (!Directory.Exists(this.cacheFolder))
             {
-                logger.CreateCacheFolder(cacheFolder);
-                Directory.CreateDirectory(cacheFolder);
+                this.logger.CreateCacheFolder(this.cacheFolder);
+                Directory.CreateDirectory(this.cacheFolder);
             }
         }
 
-        logger.SetCacheFolder(cacheFolder);
+        this.logger.SetCacheFolder(this.cacheFolder);
 
         var cacheOptions = new MemoryCacheOptions
         {
-            CompactionPercentage = cacheSettings.MemoryCache!.CompactionPercentage,
-            SizeLimit = cacheSettings.MemoryCache.SizeLimit,
-            ExpirationScanFrequency = cacheSettings.TimeToLive
+            CompactionPercentage = this.cacheSettings.Local.MemoryCache.CompactionPercentage,
+            SizeLimit = this.cacheSettings.Local.MemoryCache.SizeLimit,
+            ExpirationScanFrequency = this.cacheSettings.TimeToLive
         };
-        memoryCache = new MemoryCache(new OptionsWrapper<MemoryCacheOptions>(cacheOptions));
+        this.memoryCache = new MemoryCache(new OptionsWrapper<MemoryCacheOptions>(cacheOptions));
     }
+
+    public CacheLayerType LayerType => CacheLayerType.Local;
 
     public byte[]? Get(string key)
     {
-        using var _ = tracer.StartActiveSpan(nameof(Get));
-        return GetAsync(key).ConfigureAwait(false).GetAwaiter().GetResult();
+        using var _ = this.tracer.StartActiveSpan(nameof(this.Get));
+        return this.GetAsync(key).ConfigureAwait(false).GetAwaiter().GetResult();
     }
 
     public async Task<byte[]?> GetAsync(string key, CancellationToken token = new CancellationToken())
     {
-        using var _ = tracer.StartActiveSpan(nameof(GetAsync));
-        logger.ReadCacheStart(key);
+        using var _ = this.tracer.StartActiveSpan(nameof(this.GetAsync));
+        this.logger.ReadCacheStart(key);
         var cacheDimensions = new[]
         {
             new KeyValuePair<string, object?>("name", nameof(SpillableMemoryCache)),
@@ -87,21 +89,21 @@ public class SpillableMemoryCache : IDistributedCache
 
         try
         {
-            if (memoryCache.TryGetValue(key, out var value) && value is byte[] cachedValue)
+            if (this.memoryCache.TryGetValue(key, out var value) && value is byte[] cachedValue)
             {
-                logger.ReadCacheStop(key);
+                this.logger.ReadCacheStop(key);
                 this.meter.IncrementCacheHits(cacheDimensions);
                 return cachedValue;
             }
 
             this.meter.IncrementCacheMisses(cacheDimensions);
 
-            var cacheFile = Path.Combine(cacheFolder, key);
+            var cacheFile = Path.Combine(this.cacheFolder, key);
             if (File.Exists(cacheFile))
             {
-                if (File.GetCreationTimeUtc(cacheFile).Add(cacheSettings.TimeToLive) < DateTimeOffset.UtcNow)
+                if (File.GetCreationTimeUtc(cacheFile).Add(this.cacheSettings.TimeToLive) < DateTimeOffset.UtcNow)
                 {
-                    logger.ReadCacheFromFileStart(key);
+                    this.logger.ReadCacheFromFileStart(key);
                     this.meter.IncrementCacheExpires(cacheDimensions);
                     return null;
                 }
@@ -117,22 +119,22 @@ public class SpillableMemoryCache : IDistributedCache
             var size = (int)Math.Ceiling((double)fileContent.Length / 1_000_000); // MB
             var entryOptions = new MemoryCacheEntryOptions()
                 .SetSize(size)
-                .SetSlidingExpiration(cacheSettings.TimeToLive);
-            memoryCache.Set(key, fileContent, entryOptions);
+                .SetSlidingExpiration(this.cacheSettings.TimeToLive);
+            this.memoryCache.Set(key, fileContent, entryOptions);
 
             return fileContent;
         }
         catch (Exception ex)
         {
-            logger.ReadCacheError(key, ex.Message);
+            this.logger.ReadCacheError(key, ex.Message);
             return null;
         }
     }
 
     public void Set(string key, byte[] value, DistributedCacheEntryOptions options)
     {
-        using var _ = tracer.StartActiveSpan(nameof(Set));
-        SetAsync(key, value, options).ConfigureAwait(false).GetAwaiter().GetResult();
+        using var _ = this.tracer.StartActiveSpan(nameof(this.Set));
+        this.SetAsync(key, value, options).ConfigureAwait(false).GetAwaiter().GetResult();
     }
 
     public async Task SetAsync(
@@ -141,28 +143,28 @@ public class SpillableMemoryCache : IDistributedCache
         DistributedCacheEntryOptions options,
         CancellationToken token = new CancellationToken())
     {
-        using var _ = tracer.StartActiveSpan(nameof(SetAsync));
-        logger.WriteCacheStart(key, value.Length);
+        using var _ = this.tracer.StartActiveSpan(nameof(this.SetAsync));
+        this.logger.WriteCacheStart(key, value.Length);
 
         try
         {
             var size = (int)Math.Ceiling((double)value.Length / 1_000_000); // MB
             var entryOptions = new MemoryCacheEntryOptions()
                 .SetSize(size)
-                .SetSlidingExpiration(cacheSettings.TimeToLive);
-            memoryCache.Set(key, value, entryOptions);
-            var cacheFile = Path.Combine(cacheFolder, key);
+                .SetSlidingExpiration(this.cacheSettings.TimeToLive);
+            this.memoryCache.Set(key, value, entryOptions);
+            var cacheFile = Path.Combine(this.cacheFolder, key);
             if (File.Exists(cacheFile))
             {
                 File.Delete(cacheFile);
             }
 
             await File.WriteAllBytesAsync(cacheFile, value, token);
-            logger.WriteCacheStop(key, value.Length);
+            this.logger.WriteCacheStop(key, value.Length);
         }
         catch (Exception ex)
         {
-            logger.WriteCacheError(key, value.Length, ex.Message);
+            this.logger.WriteCacheError(key, value.Length, ex.Message);
         }
     }
 
@@ -178,18 +180,18 @@ public class SpillableMemoryCache : IDistributedCache
 
     public void Remove(string key)
     {
-        using var _ = tracer.StartActiveSpan(nameof(Remove));
-        RemoveAsync(key).ConfigureAwait(false).GetAwaiter().GetResult();
+        using var _ = this.tracer.StartActiveSpan(nameof(this.Remove));
+        this.RemoveAsync(key).ConfigureAwait(false).GetAwaiter().GetResult();
     }
 
     public Task RemoveAsync(string key, CancellationToken token = new CancellationToken())
     {
-        using var _ = tracer.StartActiveSpan(nameof(RemoveAsync));
-        logger.RemoveCacheStart(key);
+        using var _ = this.tracer.StartActiveSpan(nameof(this.RemoveAsync));
+        this.logger.RemoveCacheStart(key);
         try
         {
-            memoryCache.Remove(key);
-            var cacheFile = Path.Combine(cacheFolder, key);
+            this.memoryCache.Remove(key);
+            var cacheFile = Path.Combine(this.cacheFolder, key);
             if (File.Exists(cacheFile))
             {
                 File.Delete(cacheFile);
@@ -197,9 +199,14 @@ public class SpillableMemoryCache : IDistributedCache
         }
         catch (Exception ex)
         {
-            logger.RemoveCacheError(key, ex.Message);
+            this.logger.RemoveCacheError(key, ex.Message);
         }
 
         return Task.CompletedTask;
+    }
+
+    public Task ClearAllAsync(CancellationToken cancel)
+    {
+        throw new NotImplementedException();
     }
 }

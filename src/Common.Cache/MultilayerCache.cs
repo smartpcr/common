@@ -13,11 +13,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 
-public class MultilayerCache : IDistributedCache
+public class MultilayerCache
 {
-    private readonly IList<(IDistributedCache Cache, DistributedCacheEntryOptions Options)> _caches;
+    private readonly IList<(ICacheLayer Cache, DistributedCacheEntryOptions Options)> caches = new List<(ICacheLayer Cache, DistributedCacheEntryOptions Options)>();
 
-    public MultilayerCache(IDistributedCache innerLayerCache, DistributedCacheEntryOptions? innerLayerCacheOptions = null)
+    public MultilayerCache(ICacheLayer innerLayerCache, DistributedCacheEntryOptions? innerLayerCacheOptions = null)
     {
         if (innerLayerCache == null)
         {
@@ -25,15 +25,14 @@ public class MultilayerCache : IDistributedCache
         }
 
         innerLayerCacheOptions ??= new DistributedCacheEntryOptions();
-        _caches = new List<(IDistributedCache Cache, DistributedCacheEntryOptions Options)>();
-        _caches.Add((innerLayerCache, innerLayerCacheOptions));
+        this.caches.Add((innerLayerCache, innerLayerCacheOptions));
     }
 
     public bool PopulateLayersOnGet { get; set; }
 
-    public IEnumerable<IDistributedCache> Caches => _caches.Select(c => c.Cache);
+    public IEnumerable<ICacheLayer> Caches => this.caches.Select(c => c.Cache);
 
-    public MultilayerCache AppendLayer(IDistributedCache cache, DistributedCacheEntryOptions? cacheOptions = null)
+    public MultilayerCache AppendLayer(ICacheLayer cache, DistributedCacheEntryOptions? cacheOptions = null)
     {
         if (cache == null)
         {
@@ -42,25 +41,25 @@ public class MultilayerCache : IDistributedCache
 
         cacheOptions ??= new DistributedCacheEntryOptions();
 
-        _caches.Add((cache, cacheOptions));
+        this.caches.Add((cache, cacheOptions));
         return this;
     }
 
     public byte[]? Get(string key)
     {
-        return GetAsync(key).ConfigureAwait(false).GetAwaiter().GetResult();
+        return this.GetAsync(key).ConfigureAwait(false).GetAwaiter().GetResult();
     }
 
     public async Task<byte[]?> GetAsync(string key, CancellationToken token = new CancellationToken())
     {
         // TODO: Optimize by using ObjectPool
         var emptyCaches = new List<(IDistributedCache Cache, DistributedCacheEntryOptions Options)>();
-        foreach (var layer in _caches)
+        foreach (var layer in this.caches)
         {
             var value = await layer.Cache.GetAsync(key, token);
             if (value != null)
             {
-                if (PopulateLayersOnGet && emptyCaches.Any())
+                if (this.PopulateLayersOnGet && emptyCaches.Any())
                 {
                     await Task.WhenAll(emptyCaches.Select(l => l.Cache.SetAsync(key, value, l.Options, token)));
                 }
@@ -76,7 +75,7 @@ public class MultilayerCache : IDistributedCache
 
     public void Set(string key, byte[] value, DistributedCacheEntryOptions options)
     {
-        foreach (var layer in _caches)
+        foreach (var layer in this.caches)
         {
             layer.Cache.Set(key, value, layer.Options.PatchOptions(options));
         }
@@ -84,12 +83,12 @@ public class MultilayerCache : IDistributedCache
 
     public Task SetAsync(string key, byte[] value, DistributedCacheEntryOptions options, CancellationToken token = new CancellationToken())
     {
-        return Task.WhenAll(_caches.Select(l => l.Cache.SetAsync(key, value, l.Options.PatchOptions(options), token)));
+        return Task.WhenAll(this.caches.Select(l => l.Cache.SetAsync(key, value, l.Options.PatchOptions(options), token)));
     }
 
     public void Refresh(string key)
     {
-        foreach (var layer in _caches)
+        foreach (var layer in this.caches)
         {
             layer.Cache.Refresh(key);
         }
@@ -97,12 +96,12 @@ public class MultilayerCache : IDistributedCache
 
     public Task RefreshAsync(string key, CancellationToken token = new CancellationToken())
     {
-        return Task.WhenAll(_caches.Select(l => l.Cache.RefreshAsync(key, token)));
+        return Task.WhenAll(this.caches.Select(l => l.Cache.RefreshAsync(key, token)));
     }
 
     public void Remove(string key)
     {
-        foreach (var layer in _caches)
+        foreach (var layer in this.caches)
         {
             layer.Cache.Remove(key);
         }
@@ -110,6 +109,14 @@ public class MultilayerCache : IDistributedCache
 
     public Task RemoveAsync(string key, CancellationToken token = new CancellationToken())
     {
-        return Task.WhenAll(_caches.Select(l => l.Cache.RemoveAsync(key, token)));
+        return Task.WhenAll(this.caches.Select(l => l.Cache.RemoveAsync(key, token)));
+    }
+
+    public async Task ClearAll(CancellationToken cancel)
+    {
+        foreach (var layer in this.caches)
+        {
+            await layer.Cache.ClearAllAsync(cancel);
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace Common.Cache;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Storage;
@@ -22,7 +23,7 @@ using Microsoft.Extensions.Options;
 using OpenTelemetry.Trace;
 using Storage.Blobs;
 
-public class BlobCache : IDistributedCache
+public class BlobCache : ICacheLayer
 {
     private readonly IBlobStorageClient blobStorageClient;
     private readonly CacheSettings cacheSettings;
@@ -31,52 +32,53 @@ public class BlobCache : IDistributedCache
     private readonly CacheMeter meter;
     private readonly string tempFolder = Path.GetTempPath();
 
-    public BlobCache(IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
+    public BlobCache(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, BlobStorageSettings blobStorageSettings)
     {
-        logger = loggerFactory.CreateLogger<BlobCache>();
+        this.logger = loggerFactory.CreateLogger<BlobCache>();
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
         var metadata = configuration.GetConfiguredSettings<ApplicationMetadata>();
         var traceProvider = serviceProvider.GetRequiredService<TracerProvider>();
-        tracer = traceProvider.GetTracer(metadata.ApplicationName + $".{nameof(BlobCache)}", metadata.BuildVersion);
-        meter = CacheMeter.Instance(metadata);
-        cacheSettings = configuration.GetConfiguredSettings<CacheSettings>();
-        blobStorageClient = new BlobStorageClient(serviceProvider,
-            loggerFactory,
-            new OptionsWrapper<BlobStorageSettings>(cacheSettings.BlobCache!));
+        this.tracer = traceProvider.GetTracer(metadata.ApplicationName + $".{nameof(BlobCache)}", metadata.BuildVersion);
+        this.meter = CacheMeter.Instance(metadata);
+        this.cacheSettings = configuration.GetConfiguredSettings<CacheSettings>();
+        this.blobStorageClient = new BlobStorageClient(serviceProvider,
+            loggerFactory, new OptionsWrapper<BlobStorageSettings>(blobStorageSettings));
     }
+
+    public CacheLayerType LayerType => CacheLayerType.Blob;
 
     public byte[]? Get(string key)
     {
-        return GetAsync(key).ConfigureAwait(false).GetAwaiter().GetResult();
+        return this.GetAsync(key).ConfigureAwait(false).GetAwaiter().GetResult();
     }
 
-    public async Task<byte[]?> GetAsync(string key, CancellationToken token = new CancellationToken())
+    public async Task<byte[]?> GetAsync(string key, CancellationToken token = new())
     {
-        using var _ = tracer.StartActiveSpan(nameof(GetAsync));
-        logger.ReadCacheStart(key);
+        using var _ = this.tracer.StartActiveSpan(nameof(this.GetAsync));
+        this.logger.ReadCacheStart(key);
         var cacheDimensions = new[]
         {
             new KeyValuePair<string, object?>("name", nameof(BlobCache)),
             new KeyValuePair<string, object?>("key", key)
         };
 
-        var tokenInfo = await blobStorageClient.GetBlobInfoAsync(key, token);
+        var tokenInfo = await this.blobStorageClient.GetBlobInfoAsync(key, token);
         if (tokenInfo == null)
         {
-            logger.BlobCacheMiss(key);
+            this.logger.BlobCacheMiss(key);
             this.meter.IncrementCacheMisses(cacheDimensions);
             return null;
         }
 
-        if (tokenInfo.CreatedOn.Add(cacheSettings.TimeToLive) < DateTimeOffset.UtcNow)
+        if (tokenInfo.CreatedOn.Add(this.cacheSettings.TimeToLive) < DateTimeOffset.UtcNow)
         {
-            logger.BlobCacheExpired(key);
+            this.logger.BlobCacheExpired(key);
             this.meter.IncrementCacheExpires(cacheDimensions);
             return null;
         }
 
-        await blobStorageClient.DownloadAsync(null, key, tempFolder, token);
-        var downloadedBlogFile = Path.Combine(tempFolder, key);
+        await this.blobStorageClient.DownloadAsync(null, key, this.tempFolder, token);
+        var downloadedBlogFile = Path.Combine(this.tempFolder, key);
         if (!File.Exists(downloadedBlogFile))
         {
             throw new InvalidOperationException($"blob download file not found: {downloadedBlogFile}");
@@ -84,20 +86,20 @@ public class BlobCache : IDistributedCache
 
         var bytes = await File.ReadAllBytesAsync(downloadedBlogFile, token);
         File.Delete(downloadedBlogFile);
-        logger.BlobCacheDownloaded(key);
+        this.logger.BlobCacheDownloaded(key);
         this.meter.IncrementCacheHits(cacheDimensions);
         return bytes;
     }
 
     public void Set(string key, byte[] value, DistributedCacheEntryOptions options)
     {
-        using var _ = tracer.StartActiveSpan(nameof(Set));
-        SetAsync(key, value, options).ConfigureAwait(false).GetAwaiter().GetResult();
+        using var _ = this.tracer.StartActiveSpan(nameof(this.Set));
+        this.SetAsync(key, value, options).ConfigureAwait(false).GetAwaiter().GetResult();
     }
 
-    public async Task SetAsync(string key, byte[] value, DistributedCacheEntryOptions options, CancellationToken token = new CancellationToken())
+    public async Task SetAsync(string key, byte[] value, DistributedCacheEntryOptions options, CancellationToken token = new())
     {
-        using var _ = tracer.StartActiveSpan(nameof(SetAsync));
+        using var _ = this.tracer.StartActiveSpan(nameof(this.SetAsync));
         var cacheDimensions = new[]
         {
             new KeyValuePair<string, object?>("name", nameof(BlobCache)),
@@ -113,28 +115,55 @@ public class BlobCache : IDistributedCache
         throw new NotSupportedException();
     }
 
-    public Task RefreshAsync(string key, CancellationToken token = new CancellationToken())
+    public Task RefreshAsync(string key, CancellationToken token = new())
     {
-        using var _ = tracer.StartActiveSpan(nameof(RefreshAsync));
+        using var _ = this.tracer.StartActiveSpan(nameof(this.RefreshAsync));
         return Task.CompletedTask;
     }
 
     public void Remove(string key)
     {
-        using var _ = tracer.StartActiveSpan(nameof(Remove));
-        RemoveAsync(key).ConfigureAwait(false).GetAwaiter().GetResult();
+        using var _ = this.tracer.StartActiveSpan(nameof(this.Remove));
+        this.RemoveAsync(key).ConfigureAwait(false).GetAwaiter().GetResult();
     }
 
-    public async Task RemoveAsync(string key, CancellationToken token = new CancellationToken())
+    public async Task RemoveAsync(string key, CancellationToken token = new())
     {
-        using var _ = tracer.StartActiveSpan(nameof(RemoveAsync));
+        using var _ = this.tracer.StartActiveSpan(nameof(this.RemoveAsync));
         try
         {
-            await blobStorageClient.DeleteAsync(key, token);
+            await this.blobStorageClient.DeleteAsync(key, token);
         }
         catch (Exception ex)
         {
-            logger.RemoveCacheError(key, ex.Message);
+            this.logger.RemoveCacheError(key, ex.Message);
         }
+    }
+
+    public async Task ClearAllAsync(CancellationToken cancel)
+    {
+        using var _ = this.tracer.StartActiveSpan(nameof(this.ClearAllAsync));
+
+        var cachedItems = (await this.blobStorageClient.ListBlobNamesAsync(null, cancel)).ToList();
+        var clearCacheTasks = new List<Task>();
+        var totalToClear = cachedItems.Count;
+        var totalCleared = 0;
+
+        async Task ClearCacheItemTask(string key)
+        {
+            await this.RemoveAsync(key, cancel);
+            Interlocked.Increment(ref totalCleared);
+            if (totalCleared % 100 == 0)
+            {
+                this.logger.ClearCache(totalCleared, totalToClear);
+            }
+        }
+
+        foreach (var key in cachedItems)
+        {
+            clearCacheTasks.Add(ClearCacheItemTask(key));
+        }
+
+        await Task.WhenAll(clearCacheTasks.ToArray());
     }
 }

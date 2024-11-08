@@ -11,9 +11,9 @@ using Common.Storage;
 
 public class CacheSettings
 {
-    public BlobStorageSettings? BlobCache { get; set; }
-    public FileCacheSettings? FileCache { get; set; }
-    public MemoryCacheSettings? MemoryCache { get; set; }
+    public LocalCacheSettings Local { get; set; }
+
+    public DistributedCacheSettings Distributed { get; set; }
 
     /// <summary>
     /// Gets or sets updated item still triggers cache invalidation within TTL
