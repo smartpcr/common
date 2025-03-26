@@ -48,7 +48,7 @@
   </ItemGroup>
 
   <!-- rednroll -->
-  <ItemGroup Condition="'$(IsTestProject)' == 'true' And '$(UseReqnroll)' == 'true'">
+  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
     <PackageReference Include="Reqnroll" />
     <PackageReference Include="Reqnroll.CustomPlugin" />
     <PackageReference Include="Reqnroll.ExternalData" />
@@ -56,14 +56,6 @@
     <PackageReference Include="Reqnroll.SpecFlowCompatibility" />
     <PackageReference Include="Reqnroll.Tools.MsBuild.Generation" />
     <PackageReference Include="Reqnroll.xUnit" />
-  </ItemGroup>
-
-  <!-- specflow -->
-  <ItemGroup Condition="'$(IsTestProject)' == 'true' And '$(UseReqnroll)' == ''">
-    <PackageReference Include="Specflow" />
-    <PackageReference Include="Specflow.Tools.MsBuild.Generation" />
-    <PackageReference Include="Specflow.xUnit" />
-    <PackageReference Include="Specflow.Plus.LivingDocPlugin" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(IsPackable)' == 'true'">

@@ -6,8 +6,9 @@
 
 namespace Common.Cache.Tests.Hooks
 {
-    using System.Collections.ObjectModel;
     using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
     using System.Management.Automation;
@@ -15,10 +16,8 @@ namespace Common.Cache.Tests.Hooks
     using System.Security.Principal;
     using Microsoft.Azure.Storage;
     using Microsoft.Azure.Storage.Blob;
-    using TechTalk.SpecFlow;
-    using TechTalk.SpecFlow.Infrastructure;
+    using Reqnroll;
     using Xunit;
-    using System.Collections.Generic;
 
     [Binding]
     public class BlobStorageHook

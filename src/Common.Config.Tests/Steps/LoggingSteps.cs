@@ -12,29 +12,27 @@ using Common.Config.Tests.Mocks;
 using FluentAssertions;
 using Hooks;
 using Microsoft.Extensions.Logging;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
-using TechTalk.SpecFlow.Infrastructure;
+using Reqnroll;
 
 [Binding]
 public class LoggingSteps
 {
     private readonly ScenarioContext scenarioContext;
-    private readonly ISpecFlowOutputHelper outputHelper;
+    private readonly IReqnrollOutputHelper outputHelper;
 
-    public LoggingSteps(ScenarioContext scenarioContext, ISpecFlowOutputHelper outputHelper)
+    public LoggingSteps(ScenarioContext scenarioContext, IReqnrollOutputHelper outputHelper)
     {
         this.scenarioContext = scenarioContext;
         this.outputHelper = outputHelper;
     }
 
-    [Given(@"logger is configured")]
+    [TechTalk.SpecFlow.Given(@"logger is configured")]
     public void GivenLoggerIsConfigured()
     {
         outputHelper.WriteLine("logger is configured");
     }
 
-    [When(@"I create several logs")]
+    [TechTalk.SpecFlow.When(@"I create several logs")]
     public void WhenICreateSeveralLogs(Table table)
     {
         var logMessages = table.CreateSet<LogMessage>().ToList();
@@ -45,7 +43,7 @@ public class LoggingSteps
         }
     }
 
-    [Then(@"the following messages should be logged")]
+    [TechTalk.SpecFlow.Then(@"the following messages should be logged")]
     public void ThenTheFollowingMessagesShouldBeLogged(Table table)
     {
         var logger = scenarioContext.GetLogger<LoggingSteps>();

@@ -8,12 +8,13 @@ namespace Common.Config.Tests.Hooks
 {
     using System;
     using System.Runtime.CompilerServices;
-    using TechTalk.SpecFlow.Infrastructure;
+    using Reqnroll;
+    using Reqnroll.Infrastructure;
 
     public static class TestOutputHelper
     {
         public static void WriteError(
-            this ISpecFlowOutputHelper outputHelper,
+            this IReqnrollOutputHelper outputHelper,
             string message,
             [CallerFilePath] string filePath = "",
             [CallerMemberName] string memberName = "",
@@ -25,7 +26,7 @@ namespace Common.Config.Tests.Hooks
         }
 
         public static void WriteWarning(
-            this ISpecFlowOutputHelper outputHelper,
+            this IReqnrollOutputHelper outputHelper,
             string message,
             [CallerFilePath] string filePath = "",
             [CallerMemberName] string memberName = "",
@@ -37,7 +38,7 @@ namespace Common.Config.Tests.Hooks
         }
 
         public static void WriteInfo(
-            this ISpecFlowOutputHelper outputHelper,
+            this IReqnrollOutputHelper outputHelper,
             string message,
             [CallerFilePath] string filePath = "",
             [CallerMemberName] string memberName = "",
@@ -49,7 +50,7 @@ namespace Common.Config.Tests.Hooks
         }
 
         public static void WriteVerbose(
-            this ISpecFlowOutputHelper outputHelper,
+            this IReqnrollOutputHelper outputHelper,
             string message,
             [CallerFilePath] string filePath = "",
             [CallerMemberName] string memberName = "",

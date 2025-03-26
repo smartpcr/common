@@ -11,16 +11,16 @@ namespace Common.Monitoring.Tests.Steps
     using System.Linq;
     using ETW;
     using FluentAssertions;
-    using TechTalk.SpecFlow;
-    using TechTalk.SpecFlow.Infrastructure;
+    using Reqnroll;
+    using Reqnroll.Infrastructure;
 
     [Binding]
     public class UnzipSteps
     {
         private readonly ScenarioContext context;
-        private readonly ISpecFlowOutputHelper outputWriter;
+        private readonly IReqnrollOutputHelper outputWriter;
 
-        public UnzipSteps(ScenarioContext context, ISpecFlowOutputHelper outputWriter)
+        public UnzipSteps(ScenarioContext context, IReqnrollOutputHelper outputWriter)
         {
             this.context = context;
             this.outputWriter = outputWriter;
@@ -101,7 +101,7 @@ namespace Common.Monitoring.Tests.Steps
             var files = Directory.GetFiles(outputFolder, $"*.{fileExt}", SearchOption.AllDirectories);
             files.Should().NotBeNullOrEmpty();
             var fileNames = files.Select(Path.GetFileName).ToList();
-            fileNames.Count.Should().BeGreaterOrEqualTo(table.Rows.Count);
+            fileNames.Count.Should().BeGreaterThanOrEqualTo(table.Rows.Count);
 
             foreach (var row in table.Rows)
             {

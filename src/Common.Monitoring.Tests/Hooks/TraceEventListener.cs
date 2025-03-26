@@ -14,19 +14,19 @@ namespace Common.Monitoring.Tests.Hooks
     using Common.Config.Tests.Hooks;
     using Microsoft.Diagnostics.Tracing.Session;
     using Newtonsoft.Json;
-    using TechTalk.SpecFlow;
-    using TechTalk.SpecFlow.Infrastructure;
+    using Reqnroll;
+    using Reqnroll.Infrastructure;
 
     [Binding]
     public class TraceEventListener : IDisposable
     {
         private readonly ScenarioContext context;
-        private readonly ISpecFlowOutputHelper outputHelper;
+        private readonly IReqnrollOutputHelper outputHelper;
         private readonly TraceEventSession session;
         private Thread thread;
         private readonly List<TestTraceEvent> traceEvents = new List<TestTraceEvent>();
 
-        public TraceEventListener(ScenarioContext context, ISpecFlowOutputHelper outputHelper, List<string> providerNames)
+        public TraceEventListener(ScenarioContext context, IReqnrollOutputHelper outputHelper, List<string> providerNames)
         {
             this.context = context;
             this.outputHelper = outputHelper;

@@ -12,16 +12,16 @@ namespace Common.Monitoring.Tests.Hooks
     using Config.Tests.Mocks;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using TechTalk.SpecFlow;
-    using TechTalk.SpecFlow.Infrastructure;
+    using Reqnroll;
+    using Reqnroll.Infrastructure;
 
     [Binding]
     public class SetupMonitoring
     {
         private readonly ScenarioContext context;
-        private readonly ISpecFlowOutputHelper outputHelper;
+        private readonly IReqnrollOutputHelper outputHelper;
 
-        public SetupMonitoring(ScenarioContext context, ISpecFlowOutputHelper outputHelper)
+        public SetupMonitoring(ScenarioContext context, IReqnrollOutputHelper outputHelper)
         {
             this.context = context;
             this.outputHelper = outputHelper;

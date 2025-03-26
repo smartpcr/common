@@ -8,29 +8,28 @@ namespace Common.Kusto.Tests.Steps
 {
     using System.Collections.Generic;
     using FluentAssertions;
-    using TechTalk.SpecFlow;
-    using TechTalk.SpecFlow.Infrastructure;
+    using Reqnroll;
 
     [Binding]
     public class EtwIngestSteps
     {
         private readonly ScenarioContext context;
-        private readonly ISpecFlowOutputHelper outputWriter;
+        private readonly IReqnrollOutputHelper outputWriter;
 
-        public EtwIngestSteps(ScenarioContext context, ISpecFlowOutputHelper outputWriter)
+        public EtwIngestSteps(ScenarioContext context, IReqnrollOutputHelper outputWriter)
         {
             this.context = context;
             this.outputWriter = outputWriter;
         }
 
-        [Given(@"etl file ""[^""]*""")]
+        [TechTalk.SpecFlow.Given(@"etl file ""[^""]*""")]
         public void GivenEtlFile(string etlFile)
         {
             this.outputWriter.WriteLine($"etl file: {etlFile}");
             this.context.Set(etlFile, "etlFile");
         }
 
-        [When(@"I parse etl file")]
+        [TechTalk.SpecFlow.When(@"I parse etl file")]
         public void WhenEtlFileIsExtracted()
         {
             var etlFile = this.context.Get<string>("etlFile");
@@ -39,7 +38,7 @@ namespace Common.Kusto.Tests.Steps
             this.context.Set(etwEvents, "etwEvents");
         }
 
-        [Then(@"the result have the following events")]
+        [TechTalk.SpecFlow.Then(@"the result have the following events")]
         public void ThenTheResultHaveTheFollowingEvents(Table table)
         {
             var etwEvents = this.context.Get<Dictionary<(string providerName, string eventName), EtwEvent>>("etwEvents");

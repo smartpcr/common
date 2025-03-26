@@ -16,7 +16,7 @@ using Hooks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Monitoring;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 [Binding]
 public class KeyVaultSteps

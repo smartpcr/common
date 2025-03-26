@@ -7,7 +7,7 @@
 namespace Common.XmlSchema.Tests.Steps
 {
     using FluentAssertions;
-    using TechTalk.SpecFlow;
+    using Reqnroll;
     using TestSchema;
 
     [Binding]

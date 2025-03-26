@@ -7,8 +7,9 @@
 namespace Common.Config.Tests.Hooks;
 
 using System;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using Reqnroll;
+using Reqnroll.Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
 /// Make sure IConfiguration and ILoggerFactory are registered in ScenarioContext
@@ -17,9 +18,15 @@ using TechTalk.SpecFlow.Infrastructure;
 public class EnvironmentHook
 {
     private readonly ScenarioContext context;
-    private readonly ISpecFlowOutputHelper outputHelper;
+    private readonly IReqnrollOutputHelper outputHelper;
 
-    public EnvironmentHook(ScenarioContext scenarioContext, ISpecFlowOutputHelper outputHelper)
+    [ScenarioDependencies]
+    public static IServiceCollection GetServiceCollection()
+    {
+        return new ServiceCollection();
+    }
+
+    public EnvironmentHook(ScenarioContext scenarioContext, IReqnrollOutputHelper outputHelper)
     {
         this.context = scenarioContext;
         this.outputHelper = outputHelper;

@@ -4,41 +4,46 @@ using Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Monitoring;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Infrastructure;
-
+using Reqnroll;
+using Reqnroll.Microsoft.Extensions.DependencyInjection;
 
 [Binding]
 public sealed class SetupKeyVault
 {
     private readonly ScenarioContext context;
-    private readonly ISpecFlowOutputHelper outputHelper;
+    private readonly IReqnrollOutputHelper outputHelper;
 
-    public SetupKeyVault(ScenarioContext scenarioContext, ISpecFlowOutputHelper outputHelper)
+    public SetupKeyVault(ScenarioContext scenarioContext, IReqnrollOutputHelper outputHelper)
     {
         this.context = scenarioContext;
         this.outputHelper = outputHelper;
     }
 
-    [BeforeScenario("User")]
+    [ScenarioDependencies]
+    public static IServiceCollection GetServiceCollection()
+    {
+        return new ServiceCollection();
+    }
+
+    [TechTalk.SpecFlow.BeforeScenario("User")]
     public void SetupUserAuth()
     {
         SetupVautAuthType(VaultAuthType.User);
     }
 
-    [BeforeScenario("Msi")]
+    [TechTalk.SpecFlow.BeforeScenario("Msi")]
     public void SetupMsiAuth()
     {
         SetupVautAuthType(VaultAuthType.Msi);
     }
 
-    [BeforeScenario("ClientSecret")]
+    [TechTalk.SpecFlow.BeforeScenario("ClientSecret")]
     public void SetupSpnWithClientSecretsAuth()
     {
         SetupVautAuthType(VaultAuthType.SpnWithSecretOnFile);
     }
 
-    [BeforeScenario("ClientCertificate")]
+    [TechTalk.SpecFlow.BeforeScenario("ClientCertificate")]
     public void SetupSpnWithClientCertificateAuth()
     {
         SetupVautAuthType(VaultAuthType.SpnWithCertOnFile);
@@ -64,7 +69,7 @@ public sealed class SetupKeyVault
     {
         if (!scenarioContext.TryGetValue(out IServiceCollection services))
         {
-            services = new ServiceCollection();
+            services = SetupKeyVault.GetServiceCollection();
             scenarioContext.Set(services);
         }
 

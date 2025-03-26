@@ -15,20 +15,18 @@ namespace Common.Cache.Tests.Steps
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
+    using Reqnroll;
     using Storage;
-    using TechTalk.SpecFlow;
-    using TechTalk.SpecFlow.Assist;
-    using TechTalk.SpecFlow.Infrastructure;
 
     [Binding]
     public class BlobCacheSteps
     {
         private readonly ScenarioContext context;
-        private readonly ISpecFlowOutputHelper outputHelper;
+        private readonly IReqnrollOutputHelper outputHelper;
         private readonly CloudBlobClient blobClient;
         private readonly BlobCache blobCache;
 
-        public BlobCacheSteps(ScenarioContext context, FeatureContext featureContext, ISpecFlowOutputHelper outputHelper)
+        public BlobCacheSteps(ScenarioContext context, FeatureContext featureContext, IReqnrollOutputHelper outputHelper)
         {
             this.context = context;
             this.outputHelper = outputHelper;
@@ -45,7 +43,7 @@ namespace Common.Cache.Tests.Steps
             });
         }
 
-        [Given(@"blob storage is running")]
+        [TechTalk.SpecFlow.Given(@"blob storage is running")]
         public async Task GivenBlobStorageIsRunning()
         {
             try
@@ -61,14 +59,14 @@ namespace Common.Cache.Tests.Steps
             }
         }
 
-        [Given(@"a product")]
+        [TechTalk.SpecFlow.Given(@"a product")]
         public void GivenAProduct(Table table)
         {
             var product = table.CreateInstance<Product>();
             this.context.Set(product, "product");
         }
 
-        [When(@"I store product in blob cache with key ""(\w+)""")]
+        [TechTalk.SpecFlow.When(@"I store product in blob cache with key ""(\w+)""")]
         public async Task WhenIStoreProductInBlobCacheWithKey(string key)
         {
             var product = this.context.Get<Product>("product");
@@ -78,7 +76,7 @@ namespace Common.Cache.Tests.Steps
             await this.blobCache.SetAsync(key, productBytes, new DistributedCacheEntryOptions());
         }
 
-        [Then(@"I should be able to retrieve product from blob cache with key ""(\w+)""")]
+        [TechTalk.SpecFlow.Then(@"I should be able to retrieve product from blob cache with key ""(\w+)""")]
         public async Task ThenIShouldBeAbleToRetrieveProductFromBlobCacheWithKey(string key)
         {
             var product = this.context.Get<Product>("product");

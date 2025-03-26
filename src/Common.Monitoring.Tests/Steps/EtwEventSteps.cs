@@ -22,20 +22,20 @@ namespace Common.Monitoring.Tests.Steps
     using Microsoft.Extensions.Logging;
     using OpenTelemetry;
     using OpenTelemetry.Trace;
-    using TechTalk.SpecFlow;
-    using TechTalk.SpecFlow.Assist;
-    using TechTalk.SpecFlow.Infrastructure;
+    using Reqnroll;
+    using Reqnroll.Assist;
+    using Reqnroll.Infrastructure;
 
     [Binding]
     public class EtwEventSteps
     {
         private readonly ScenarioContext context;
-        private readonly ISpecFlowOutputHelper outputWriter;
+        private readonly IReqnrollOutputHelper outputWriter;
         private readonly Tracer tracer;
         private readonly string tracerSourceName;
         private readonly TelemetrySpan rootSpan;
 
-        public EtwEventSteps(ScenarioContext context, ISpecFlowOutputHelper outputWriter)
+        public EtwEventSteps(ScenarioContext context, IReqnrollOutputHelper outputWriter)
         {
             this.context = context;
             this.outputWriter = outputWriter;

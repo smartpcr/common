@@ -12,7 +12,7 @@ namespace Common.Config.Tests.Hooks
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using TechTalk.SpecFlow;
+    using Reqnroll;
 
     internal static class ScenarioContextExtension
     {
@@ -20,7 +20,7 @@ namespace Common.Config.Tests.Hooks
         {
             if (!scenarioContext.TryGetValue(out IServiceCollection services))
             {
-                services = new ServiceCollection();
+                services = EnvironmentHook.GetServiceCollection();
                 scenarioContext.Set(services);
             }
 

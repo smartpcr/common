@@ -10,20 +10,20 @@ namespace Common.Monitoring.Tests.Steps
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using FluentAssertions;
     using global::Kusto.Data;
     using global::Kusto.Data.Common;
     using global::Kusto.Data.Net.Client;
-    using FluentAssertions;
-    using TechTalk.SpecFlow;
-    using TechTalk.SpecFlow.Infrastructure;
+    using Reqnroll;
+    using Reqnroll.Infrastructure;
 
     [Binding]
     public class KustoSteps
     {
         private readonly ScenarioContext context;
-        private readonly ISpecFlowOutputHelper outputWriter;
+        private readonly IReqnrollOutputHelper outputWriter;
 
-        public KustoSteps(ScenarioContext context, ISpecFlowOutputHelper outputWriter)
+        public KustoSteps(ScenarioContext context, IReqnrollOutputHelper outputWriter)
         {
             this.context = context;
             this.outputWriter = outputWriter;

@@ -12,17 +12,15 @@ namespace Common.Kusto.Tests.Steps
     using System.Threading.Tasks;
     using FluentAssertions;
     using Newtonsoft.Json;
-    using TechTalk.SpecFlow;
-    using TechTalk.SpecFlow.Infrastructure;
+    using Reqnroll;
 
-    [Binding]
     public class BatchIngestSteps
     {
         private readonly ScenarioContext context;
         private readonly FeatureContext featureContext;
-        private readonly ISpecFlowOutputHelper outputWriter;
+        private readonly IReqnrollOutputHelper outputWriter;
 
-        public BatchIngestSteps(ScenarioContext context, FeatureContext featureContext, ISpecFlowOutputHelper outputWriter)
+        public BatchIngestSteps(ScenarioContext context, FeatureContext featureContext, IReqnrollOutputHelper outputWriter)
         {
             this.context = context;
             this.featureContext = featureContext;
@@ -35,7 +33,7 @@ namespace Common.Kusto.Tests.Steps
             this.context.Set(inputFolder, "InputJsonFolder");
         }
 
-        [When(@"Ensure kusto table ""([^""]*)"" exists")]
+        [TechTalk.SpecFlow.When(@"Ensure kusto table ""([^""]*)"" exists")]
         public async Task WhenEnsureKustoTableExists(string tableName)
         {
             this.context.Set(tableName, "TableName");
@@ -43,7 +41,7 @@ namespace Common.Kusto.Tests.Steps
             await kustoClient.EnsureTable<Person>(tableName);
         }
 
-        [When(@"I ingest json files")]
+        [TechTalk.SpecFlow.When(@"I ingest json files")]
         public async Task WhenIIngestJsonFiles()
         {
             var inputJsonFolder = this.context.Get<string>("InputJsonFolder");
@@ -68,7 +66,7 @@ namespace Common.Kusto.Tests.Steps
             totalAdded.Should().Be(people.Count);
         }
 
-        [Then(@"kusto db should have table ""[^""]*""")]
+        [TechTalk.SpecFlow.Then(@"kusto db should have table ""[^""]*""")]
         public async Task ThenKustoDbShouldHaveTableWithData(string tableName)
         {
             var kustoClient = this.featureContext.Get<IKustoClient>();
@@ -80,7 +78,7 @@ namespace Common.Kusto.Tests.Steps
             tableNames.First().Should().Be(tableName);
         }
 
-        [Then(@"table ""([^""]*)"" should have (.+) rows")]
+        [TechTalk.SpecFlow.Then(@"table ""([^""]*)"" should have (.+) rows")]
         public async Task ThenTableShouldHaveRows(string tableName, int count)
         {
             var kustoClient = this.featureContext.Get<IKustoClient>();

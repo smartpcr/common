@@ -22,8 +22,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Infrastructure;
+using Reqnroll;
+using Reqnroll.Infrastructure;
 
 /// <summary>
 /// Start and stop a self-hosted web api for testing, make sure IServiceProvider is registered in ScenarioContext
@@ -33,7 +33,7 @@ internal class SelfHost
 {
     private readonly ScenarioContext scenarioContext;
     private readonly FeatureContext featureContext;
-    private readonly ISpecFlowOutputHelper outputWriter;
+    private readonly IReqnrollOutputHelper outputWriter;
     private readonly HttpListener listener;
     private bool running;
 
@@ -42,7 +42,7 @@ internal class SelfHost
     private readonly Tracer tracer;
     private readonly MeterProvider meterProvider;
 
-    public SelfHost(ScenarioContext scenarioContext, FeatureContext featureContext, ISpecFlowOutputHelper outputWriter)
+    public SelfHost(ScenarioContext scenarioContext, FeatureContext featureContext, IReqnrollOutputHelper outputWriter)
     {
         this.scenarioContext = scenarioContext;
         this.featureContext = featureContext;

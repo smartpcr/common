@@ -19,8 +19,8 @@ namespace Common.Monitoring.Tests.Steps
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using OpenTelemetry.Trace;
-    using TechTalk.SpecFlow;
-    using TechTalk.SpecFlow.Infrastructure;
+    using Reqnroll;
+    using Reqnroll.Infrastructure;
 
     [Binding]
     public class TracesTestSteps
@@ -31,7 +31,7 @@ namespace Common.Monitoring.Tests.Steps
         private readonly DateTimeOffset testStartTime = DateTimeOffset.UtcNow;
         private readonly TelemetrySpan rootSpan;
 
-        public TracesTestSteps(ScenarioContext context, ISpecFlowOutputHelper outputWriter)
+        public TracesTestSteps(ScenarioContext context, IReqnrollOutputHelper outputWriter)
         {
             this.context = context;
 
@@ -94,7 +94,7 @@ namespace Common.Monitoring.Tests.Steps
                 .Where(s => s.Timestamp >= this.testStartTime)
                 .OrderByDescending(s => s.Timestamp).First().TraceId;
             spans = spans.Where(s => s.TraceId == lastTraceId).ToList();
-            spans.Count.Should().BeGreaterOrEqualTo(table.Rows.Count);
+            spans.Count.Should().BeGreaterThanOrEqualTo(table.Rows.Count);
 
             foreach (var row in table.Rows)
             {

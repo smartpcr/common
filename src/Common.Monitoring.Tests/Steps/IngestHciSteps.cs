@@ -14,20 +14,20 @@ namespace Common.Monitoring.Tests.Steps
     using System.Threading;
     using System.Threading.Tasks;
     using Common.Kusto;
-    using Config.Tests.Hooks;
     using Common.Monitoring.ETW;
+    using Config.Tests.Hooks;
     using FluentAssertions;
     using global::Kusto.Data.Common;
-    using TechTalk.SpecFlow;
-    using TechTalk.SpecFlow.Infrastructure;
+    using Reqnroll;
+    using Reqnroll.Infrastructure;
 
     [Binding]
     public class IngestHciSteps
     {
         private readonly ScenarioContext context;
-        private readonly ISpecFlowOutputHelper outputWriter;
+        private readonly IReqnrollOutputHelper outputWriter;
 
-        public IngestHciSteps(ScenarioContext context, ISpecFlowOutputHelper outputWriter)
+        public IngestHciSteps(ScenarioContext context, IReqnrollOutputHelper outputWriter)
         {
             this.context = context;
             this.outputWriter = outputWriter;
@@ -142,7 +142,7 @@ namespace Common.Monitoring.Tests.Steps
         public void ThenIShouldSeeFollowingEtlKustoTables(Table table)
         {
             var etlKustoTableNames = this.context.Get<ConcurrentBag<string>>("etlKustoTableNames");
-            etlKustoTableNames.Count.Should().BeGreaterOrEqualTo(table.Rows.Count);
+            etlKustoTableNames.Count.Should().BeGreaterThanOrEqualTo(table.Rows.Count);
 
             foreach (var row in table.Rows)
             {
@@ -251,7 +251,7 @@ namespace Common.Monitoring.Tests.Steps
             var csvFiles = Directory.GetFiles(csvFolder, "*.csv", SearchOption.TopDirectoryOnly)
                 .Select(Path.GetFileName).ToList();
             csvFiles.Should().NotBeNullOrEmpty();
-            csvFiles.Count.Should().BeGreaterOrEqualTo(table.Rows.Count);
+            csvFiles.Count.Should().BeGreaterThanOrEqualTo(table.Rows.Count);
 
             foreach (var row in table.Rows)
             {
@@ -467,7 +467,7 @@ namespace Common.Monitoring.Tests.Steps
         public void ThenTheFollowingKustoTablesShouldHaveAddedRecordsWithExpectedCounts(Table table)
         {
             var tableRecordCount = this.context.Get<Dictionary<string, long>>("tableRecordCount");
-            tableRecordCount.Count.Should().BeGreaterOrEqualTo(table.Rows.Count);
+            tableRecordCount.Count.Should().BeGreaterThanOrEqualTo(table.Rows.Count);
             foreach (var row in table.Rows)
             {
                 tableRecordCount.Should().ContainKey(row[0]);

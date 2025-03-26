@@ -19,7 +19,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
 [Binding]
 public class MetricsTestSteps

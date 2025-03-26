@@ -10,8 +10,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
+using Reqnroll;
+using Reqnroll.Assist;
 
 [Binding]
 public class CircularBufferSteps
