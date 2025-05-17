@@ -152,60 +152,60 @@ namespace Common.Monitoring.Tests.Features
 #line 15
     await testRunner.WhenAsync("I extract \"etl\" files from zip file to folder \"%HOME%\\\\Downloads\\\\hci\\\\etw\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-                global::Reqnroll.Table table10 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table11 = new global::Reqnroll.Table(new string[] {
                             "FileName"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.2024-10-09.1.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.1.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.2.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.3.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.4.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.5.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.6.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.7.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.Common.Infrastructure.Middleware.2024-10-09.8.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.ECE.2024-10-09.1.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.ECE.2024-10-09.2.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.ECE.2024-10-09.3.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.ECEAgentCommonInfra.2024-10-09.1.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.Roles.VirtualMachines.2024-10-09.1.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.Roles.VirtualMachines.2024-10-09.2.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "V-HOST1_AzureStack.Update.Admin.2024-10-09.1.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "v-Host1_AzureStackAgentLifecycleAgent.etl"});
-                table10.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "v-Host1_lcmControllerLogmanTraces.etl"});
 #line 16
-    await testRunner.ThenAsync("I should see the following \"etl\" files in folder \"%HOME%\\\\Downloads\\\\hci\\\\etw\"", ((string)(null)), table10, "Then ");
+    await testRunner.ThenAsync("I should see the following \"etl\" files in folder \"%HOME%\\\\Downloads\\\\hci\\\\etw\"", ((string)(null)), table11, "Then ");
 #line hidden
 #line 36
     await testRunner.WhenAsync("I extract \"evtx\" files from zip file to folder \"%HOME%\\\\Downloads\\\\hci\\\\evtx\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-                global::Reqnroll.Table table11 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table12 = new global::Reqnroll.Table(new string[] {
                             "FileName"});
-                table11.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "Event_Microsoft.AzureStack.LCMController.EventSource-Admin.evtx"});
-                table11.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "Event_Microsoft-Windows-WinRM-Operational.EVTX"});
-                table11.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "Event_Microsoft-Windows-WMI-Activity-Operational.EVTX"});
 #line 37
-    await testRunner.ThenAsync("I should see the following \"evtx\" files in folder \"%HOME%\\\\Downloads\\\\hci\\\\evtx\"", ((string)(null)), table11, "Then ");
+    await testRunner.ThenAsync("I should see the following \"evtx\" files in folder \"%HOME%\\\\Downloads\\\\hci\\\\evtx\"", ((string)(null)), table12, "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();

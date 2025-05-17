@@ -124,44 +124,44 @@ namespace Common.Monitoring.Tests.Features
 #line 11
     await testRunner.ThenAsync("the result should be 3", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-                global::Reqnroll.Table table9 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table10 = new global::Reqnroll.Table(new string[] {
                             "OperationName",
                             "ParentOperationName",
                             "Attributes"});
-                table9.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "GivenANumber",
                             "",
                             "input.number: 4"});
-                table9.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "Fibonacci",
                             "",
                             "input.n: 0, result: 0"});
-                table9.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "Fibonacci",
                             "",
                             "input.n: 1, result: 1"});
-                table9.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "Fibonacci",
                             "Fibonacci",
                             "input.n: 2, result 1"});
-                table9.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "Fibonacci",
                             "Fibonacci",
                             "input.n: 3, result 2"});
-                table9.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "Fibonacci",
                             "WhenICalculateFibonacciOfTheNumber",
                             "input.n: 4, result 3"});
-                table9.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "WhenICalculateFibonacciOfTheNumber",
                             "",
                             "result: 3"});
-                table9.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "ThenTheResultShouldBe",
                             "",
                             "expected: 3, actual: 3"});
 #line 12
-    await testRunner.AndAsync("I should have the following traces", ((string)(null)), table9, "And ");
+    await testRunner.AndAsync("I should have the following traces", ((string)(null)), table10, "And ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();

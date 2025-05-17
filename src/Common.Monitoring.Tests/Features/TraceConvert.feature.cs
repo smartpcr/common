@@ -119,7 +119,7 @@ namespace Common.Monitoring.Tests.Features
     await testRunner.GivenAsync("otlp trace file at \"TestData/Traces/otlp-traces.json\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 11
-    await testRunner.WhenAsync("I export the trace to a temp folder \"TestData/Traces/tempo\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+    await testRunner.WhenAsync("I export the trace to a tempo folder \"TestData/Traces/tempo\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 12
     await testRunner.ThenAsync("the temp files should exist", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
@@ -150,13 +150,21 @@ namespace Common.Monitoring.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
+                global::Reqnroll.Table table9 = new global::Reqnroll.Table(new string[] {
+                            "FileName"});
+                table9.AddRow(new string[] {
+                            "traces-2025-05-17T09-41-09.304.json"});
+                table9.AddRow(new string[] {
+                            "traces-2025-05-17T12-27-08.769.json"});
+                table9.AddRow(new string[] {
+                            "traces-2025-05-17T11-47-34.451.json"});
 #line 17
-    await testRunner.GivenAsync("otlp trace file at \"TestData/Traces/traces-2025-05-17T12-27-08.769.json\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+    await testRunner.GivenAsync("the following otlp trace files at \"TestData/Traces\"", ((string)(null)), table9, "Given ");
 #line hidden
-#line 18
-    await testRunner.WhenAsync("I export the trace to a temp folder \"TestData/Traces/tempo\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line 22
+    await testRunner.WhenAsync("I export all the traces to a tempo folder \"TestData/Traces/tempo\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 19
+#line 23
     await testRunner.ThenAsync("the temp files should exist", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }

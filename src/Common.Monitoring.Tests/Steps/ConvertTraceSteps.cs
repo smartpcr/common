@@ -7,6 +7,7 @@
 namespace Common.Monitoring.Tests.Steps
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text.Json;
@@ -32,19 +33,58 @@ namespace Common.Monitoring.Tests.Steps
             this.context.Set(otlpTraceFile, "otlpTraceFile");
         }
 
-        [When("I export the trace to a temp folder \"([^\"]+)\"")]
-        public void WhenIExportTheTraceToATempFile(string tempTraceFolder)
+        [When("I export the trace to a tempo folder \"([^\"]+)\"")]
+        public void WhenIExportTheTraceToATempFile(string tempoTraceFolder)
         {
             var otlpTraceFile = this.context.Get<string>("otlpTraceFile");
+            this.ConvertOtlpTraceFile(tempoTraceFolder, otlpTraceFile);
+        }
+
+        [Then("the temp files should exist")]
+        public void ThenTheTempFileShouldExist()
+        {
+            var tempTraceFolder = this.context.Get<string>("tempoTraceFolder");
+            var tempTraceFiles = Directory.GetFiles(tempTraceFolder);
+            tempTraceFiles.Should().NotBeEmpty();
+        }
+
+        [Given("the following otlp trace files at \"([^\"]+)\"")]
+        public void GivenTheFollowingOltpTraceFilesAt(string otlpTraceFolder, Table table)
+        {
+            Directory.Exists(otlpTraceFolder).Should().BeTrue($"The folder {otlpTraceFolder} should exist");
+            var otlpTraceFiles = new List<string>();
+            foreach (var row in table.Rows)
+            {
+                var fileName = row["FileName"];
+                var filePath = Path.Combine(otlpTraceFolder, fileName);
+                File.Exists(filePath).Should().BeTrue($"The file {filePath} should exist");
+                otlpTraceFiles.Add(filePath);
+            }
+            this.context.Set(otlpTraceFiles, "otlpTraceFiles");
+        }
+
+        [When("I export all the traces to a tempo folder \"([^\"]+)\"")]
+        public void WhenIExportAllTheTracesToFolder(string tempoTraceFolder)
+        {
+            var otlpTraceFiles = this.context.Get<List<string>>("otlpTraceFiles");
+            foreach (var otlpTraceFile in otlpTraceFiles)
+            {
+                this.outputHelper.WriteLine($"converting otlp trace file {otlpTraceFile} to tempo trace file...");
+                this.ConvertOtlpTraceFile(tempoTraceFolder, otlpTraceFile);
+            }
+        }
+
+        private void ConvertOtlpTraceFile(string tempoTraceFolder, string otlpTraceFile)
+        {
             this.outputHelper.WriteLine($"reading otlp trace file {otlpTraceFile}...");
             var parser = new OtlpTraceParser();
             var parsedTempTraces = parser.TempoTraceFromOtlpJsonFile(otlpTraceFile);
             this.outputHelper.WriteLine($"parsed {parsedTempTraces.Count} traces from otlp trace file {otlpTraceFile}...");
 
-            this.context.Set(tempTraceFolder, "tempTraceFolder");
-            if (!Directory.Exists(tempTraceFolder))
+            this.context.Set(tempoTraceFolder, "tempoTraceFolder");
+            if (!Directory.Exists(tempoTraceFolder))
             {
-                Directory.CreateDirectory(tempTraceFolder);
+                Directory.CreateDirectory(tempoTraceFolder);
             }
 
             foreach (var trace in parsedTempTraces)
@@ -66,17 +106,10 @@ namespace Common.Monitoring.Tests.Steps
                 var traceFileName = $"{spanStartTime.ToLocalTime():yyyyMMdd-HHmm}-{firstSpan.Name}-{traceId.Substring(0, 6)}.json";
                 var invalidChars = Path.GetInvalidFileNameChars();
                 var sanitizedFileName = new string(traceFileName.Select(c => invalidChars.Contains(c) ? '_' : c).ToArray());
-                var tempTraceFile = Path.Combine(tempTraceFolder, sanitizedFileName);
+                var tempTraceFile = Path.Combine(tempoTraceFolder, sanitizedFileName);
                 File.WriteAllText(tempTraceFile, JsonSerializer.Serialize(root, parser.Options));
             }
         }
 
-        [Then("the temp files should exist")]
-        public void ThenTheTempFileShouldExist()
-        {
-            var tempTraceFolder = this.context.Get<string>("tempTraceFolder");
-            var tempTraceFiles = Directory.GetFiles(tempTraceFolder);
-            tempTraceFiles.Should().NotBeEmpty();
-        }
     }
 }
