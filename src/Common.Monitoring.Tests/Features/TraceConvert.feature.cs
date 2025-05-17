@@ -19,22 +19,22 @@ namespace Common.Monitoring.Tests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "2.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class TracesTestFeature : object, Xunit.IClassFixture<TracesTestFeature.FixtureData>, Xunit.IAsyncLifetime
+    public partial class TraceConvertFeature : object, Xunit.IClassFixture<TraceConvertFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private global::Reqnroll.ITestRunner testRunner;
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "TracesTest", "As a developer,\r\nI want to be able to correlate calls wihin a service, as well as" +
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "TraceConvert", "As a developer,\r\nI want to be able to correlate calls wihin a service, as well as" +
                 " across services,\r\nSo that I can monitor and troubleshoot the system.", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "Traces.feature"
+#line 1 "TraceConvert.feature"
 #line hidden
         
-        public TracesTestFeature(TracesTestFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public TraceConvertFeature(TraceConvertFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
         }
@@ -93,19 +93,19 @@ namespace Common.Monitoring.Tests.Features
             await this.TestTearDownAsync();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Trace sync parent and child calls")]
-        [Xunit.TraitAttribute("FeatureTitle", "TracesTest")]
-        [Xunit.TraitAttribute("Description", "Trace sync parent and child calls")]
+        [Xunit.SkippableFactAttribute(DisplayName="Export otel oltp trace to temp trace")]
+        [Xunit.TraitAttribute("FeatureTitle", "TraceConvert")]
+        [Xunit.TraitAttribute("Description", "Export otel oltp trace to temp trace")]
         [Xunit.TraitAttribute("Category", "trace")]
         [Xunit.TraitAttribute("Category", "prod")]
-        public async System.Threading.Tasks.Task TraceSyncParentAndChildCalls()
+        public async System.Threading.Tasks.Task ExportOtelOltpTraceToTempTrace()
         {
             string[] tagsOfScenario = new string[] {
                     "trace",
                     "prod"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Trace sync parent and child calls", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 8
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Export otel oltp trace to temp trace", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 9
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -115,53 +115,49 @@ namespace Common.Monitoring.Tests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 9
-    await testRunner.GivenAsync("a number 4", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
 #line 10
-    await testRunner.WhenAsync("I calculate fibonacci of the number", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+    await testRunner.GivenAsync("otlp trace file at \"TestData/Traces/otlp-traces.json\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 11
-    await testRunner.ThenAsync("the result should be 3", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+    await testRunner.WhenAsync("I export the trace to a temp folder \"TestData/Traces/tempo\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-                global::Reqnroll.Table table9 = new global::Reqnroll.Table(new string[] {
-                            "OperationName",
-                            "ParentOperationName",
-                            "Attributes"});
-                table9.AddRow(new string[] {
-                            "GivenANumber",
-                            "",
-                            "input.number: 4"});
-                table9.AddRow(new string[] {
-                            "Fibonacci",
-                            "",
-                            "input.n: 0, result: 0"});
-                table9.AddRow(new string[] {
-                            "Fibonacci",
-                            "",
-                            "input.n: 1, result: 1"});
-                table9.AddRow(new string[] {
-                            "Fibonacci",
-                            "Fibonacci",
-                            "input.n: 2, result 1"});
-                table9.AddRow(new string[] {
-                            "Fibonacci",
-                            "Fibonacci",
-                            "input.n: 3, result 2"});
-                table9.AddRow(new string[] {
-                            "Fibonacci",
-                            "WhenICalculateFibonacciOfTheNumber",
-                            "input.n: 4, result 3"});
-                table9.AddRow(new string[] {
-                            "WhenICalculateFibonacciOfTheNumber",
-                            "",
-                            "result: 3"});
-                table9.AddRow(new string[] {
-                            "ThenTheResultShouldBe",
-                            "",
-                            "expected: 3, actual: 3"});
 #line 12
-    await testRunner.AndAsync("I should have the following traces", ((string)(null)), table9, "And ");
+    await testRunner.ThenAsync("the temp files should exist", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Export large oltp trace to temp trace")]
+        [Xunit.TraitAttribute("FeatureTitle", "TraceConvert")]
+        [Xunit.TraitAttribute("Description", "Export large oltp trace to temp trace")]
+        [Xunit.TraitAttribute("Category", "trace")]
+        [Xunit.TraitAttribute("Category", "prod")]
+        public async System.Threading.Tasks.Task ExportLargeOltpTraceToTempTrace()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "trace",
+                    "prod"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Export large oltp trace to temp trace", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 16
+  this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 17
+    await testRunner.GivenAsync("otlp trace file at \"TestData/Traces/traces-2025-05-17T12-27-08.769.json\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 18
+    await testRunner.WhenAsync("I export the trace to a temp folder \"TestData/Traces/tempo\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 19
+    await testRunner.ThenAsync("the temp files should exist", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -174,12 +170,12 @@ namespace Common.Monitoring.Tests.Features
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.InitializeAsync()
             {
-                await TracesTestFeature.FeatureSetupAsync();
+                await TraceConvertFeature.FeatureSetupAsync();
             }
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.DisposeAsync()
             {
-                await TracesTestFeature.FeatureTearDownAsync();
+                await TraceConvertFeature.FeatureTearDownAsync();
             }
         }
     }

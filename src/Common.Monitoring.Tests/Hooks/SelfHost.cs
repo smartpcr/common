@@ -64,7 +64,7 @@ internal class SelfHost
         };
     }
 
-    [BeforeScenario(Order = 3)]
+    // [BeforeScenario(Order = 3)]
     public void StartHost()
     {
         if (!this.featureContext.TryGetValue("UsedPorts", out List<int> usedPorts))
@@ -101,7 +101,7 @@ internal class SelfHost
         this.scenarioContext.Set(httpClient); // automatically disposed after test
     }
 
-    [AfterScenario]
+    // [AfterScenario]
     public void StopHost()
     {
         this.listener?.Stop();

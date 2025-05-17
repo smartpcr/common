@@ -17,7 +17,18 @@ namespace Common.Monitoring.Utils
 
     public class OtlpTraceParser
     {
-        public List<(string traceId, Root)> TempoTraceFromOtlpJsonFile(string jsonFile)
+        public JsonSerializerOptions Options { get; set; }
+
+        public OtlpTraceParser()
+        {
+            this.Options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+        }
+
+        public List<(string traceId, Root root)> TempoTraceFromOtlpJsonFile(string jsonFile)
         {
             var output = new List<(string traceId, Root)>();
             var parser = new JsonParser(JsonParser.Settings.Default.WithIgnoreUnknownFields(true));
@@ -61,12 +72,6 @@ namespace Common.Monitoring.Utils
             // Group by traceId
             var grouped = allSpans.GroupBy(x => x.Span.TraceId);
 
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-            };
-
             foreach (var grp in grouped)
             {
                 var traceId = grp.Key;
@@ -74,7 +79,7 @@ namespace Common.Monitoring.Utils
                 {
                     Batches = grp
                         // group by identical resource
-                        .GroupBy(x => JsonSerializer.Serialize(x.Resource, options))
+                        .GroupBy(x => JsonSerializer.Serialize(x.Resource, this.Options))
                         .Select(resGroup => new Batch
                         {
                             Resource = resGroup.First().Resource,

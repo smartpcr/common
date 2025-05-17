@@ -19,10 +19,3 @@ So that I can monitor and troubleshoot the system.
       | Fibonacci                          | WhenICalculateFibonacciOfTheNumber | input.n: 4, result 3   |
       | WhenICalculateFibonacciOfTheNumber |                                    | result: 3              |
       | ThenTheResultShouldBe              |                                    | expected: 3, actual: 3 |
-
-@trace
-@prod
-Scenario: Export otel oltp trace to temp trace
-  Given otlp trace file at "TestData/Traces/otlp-traces.json"
-  When I export the trace to a temp folder "TestData/Traces/tempo"
-  Then the temp files should exist
