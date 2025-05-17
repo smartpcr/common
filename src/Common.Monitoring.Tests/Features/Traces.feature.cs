@@ -167,6 +167,41 @@ namespace Common.Monitoring.Tests.Features
             await this.ScenarioCleanupAsync();
         }
         
+        [Xunit.SkippableFactAttribute(DisplayName="Export otel oltp trace to temp trace")]
+        [Xunit.TraitAttribute("FeatureTitle", "TracesTest")]
+        [Xunit.TraitAttribute("Description", "Export otel oltp trace to temp trace")]
+        [Xunit.TraitAttribute("Category", "trace")]
+        [Xunit.TraitAttribute("Category", "prod")]
+        public async System.Threading.Tasks.Task ExportOtelOltpTraceToTempTrace()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "trace",
+                    "prod"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Export otel oltp trace to temp trace", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 25
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 26
+  await testRunner.GivenAsync("otlp trace file at \"TestData/Traces/otlp-traces.json\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 27
+  await testRunner.WhenAsync("I export the trace to a temp folder \"TestData/Traces/tempo\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 28
+  await testRunner.ThenAsync("the temp files should exist", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
         [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "2.0.0.0")]
         [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
         public class FixtureData : object, Xunit.IAsyncLifetime

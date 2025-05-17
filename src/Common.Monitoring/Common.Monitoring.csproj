@@ -9,6 +9,8 @@
     <PackageReference Include="Azure.Identity" />
     <PackageReference Include="Azure.Monitor.OpenTelemetry.Exporter" />
     <PackageReference Include="evtx" />
+    <PackageReference Include="Google.Protobuf" />
+    <PackageReference Include="Grpc.Tools" PrivateAssets="All" />
     <PackageReference Include="Microsoft.ApplicationInsights" />
     <PackageReference Include="Microsoft.Azure.Kusto.Data" />
     <PackageReference Include="Microsoft.Bcl.TimeProvider" />
@@ -35,5 +37,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Common.Config\Common.Config.csproj" />
   </ItemGroup>
-
+  
+  <ItemGroup>
+    <Protobuf Include="protos\opentelemetry\**\*.proto" ProtoRoot="protos" GrpcServices="None" OutputDir="protos\generated" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="protos\generated\" />
+  </ItemGroup>
 </Project>

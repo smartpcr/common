@@ -23,7 +23,6 @@ using Microsoft.Extensions.Logging;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Reqnroll;
-using Reqnroll.Infrastructure;
 
 /// <summary>
 /// Start and stop a self-hosted web api for testing, make sure IServiceProvider is registered in ScenarioContext
@@ -34,7 +33,7 @@ internal class SelfHost
     private readonly ScenarioContext scenarioContext;
     private readonly FeatureContext featureContext;
     private readonly IReqnrollOutputHelper outputWriter;
-    private readonly HttpListener listener;
+    private readonly HttpListener? listener;
     private bool running;
 
     private readonly ILogger<SelfHost> logger;
@@ -75,6 +74,11 @@ internal class SelfHost
         }
         var uri = $"http://{Dns.GetHostName()}:{GetUnusedPort(usedPorts)}/";
 
+        if (this.listener == null)
+        {
+            throw new InvalidOperationException("HttpListener is not initialized");
+        }
+
         this.listener.Prefixes.Add(uri);
         this.listener.Start();
         this.running = true;
@@ -100,8 +104,8 @@ internal class SelfHost
     [AfterScenario]
     public void StopHost()
     {
-        this.listener.Stop();
-        this.listener.Close();
+        this.listener?.Stop();
+        this.listener?.Close();
         this.running = false;
         this.outputWriter.WriteInfo("web api stopped");
         this.logger.Log(LogLevel.Information, "web api stopped");
