@@ -48,6 +48,12 @@ namespace Common.Monitoring.Utils
         [JsonPropertyName("intValue")] public long? IntValue { get; set; }
 
         [JsonPropertyName("boolValue")] public bool? BoolValue { get; set; }
+
+        [JsonPropertyName("doubleValue")] public double? DoubleValue { get; set; }
+
+        [JsonPropertyName("kvlistValue")] public List<KeyValue> KvlistValue { get; set; }
+
+        [JsonPropertyName("bytesValue")] public ByteString? BytesValue { get; set; }
     }
 
     public class InstrumentationLibrarySpans
@@ -97,7 +103,7 @@ namespace Common.Monitoring.Utils
 
         [JsonPropertyName("status")] public Status Status { get; set; }
 
-        [JsonPropertyName("events")] public List<EventRepresentation> Events { get; set; }
+        [JsonPropertyName("events")] public List<EventRepresentation>? Events { get; set; }
     }
 
     public class Status
@@ -142,8 +148,10 @@ namespace Common.Monitoring.Utils
                     Value = new AttributeValue
                     {
                         StringValue = a.Value.StringValue,
-                        BoolValue = a.Value.BoolValue,
-                        IntValue = a.Value.IntValue
+                        BoolValue = a.Value.HasBoolValue ? a.Value.BoolValue : null,
+                        IntValue = a.Value.HasIntValue ? a.Value.IntValue : null,
+                        DoubleValue = a.Value.HasDoubleValue ? a.Value.DoubleValue : null,
+                        BytesValue = a.Value.HasBytesValue ? a.Value.BytesValue : null,
                     }
                 }).ToList(),
                 DroppedAttributesCount = src.DroppedAttributesCount,
@@ -163,13 +171,15 @@ namespace Common.Monitoring.Utils
                         Value = new AttributeValue
                         {
                             StringValue = a.Value.StringValue,
-                            BoolValue = a.Value.BoolValue,
-                            IntValue = a.Value.IntValue
+                            BoolValue = a.Value.HasBoolValue ? a.Value.BoolValue : null,
+                            IntValue = a.Value.HasIntValue ? a.Value.IntValue : null,
+                            DoubleValue = a.Value.HasDoubleValue ? a.Value.DoubleValue : null,
+                            BytesValue = a.Value.HasBytesValue ? a.Value.BytesValue : null,
                         }
                     }).ToList(),
                     DroppedAttributesCount = e.DroppedAttributesCount,
                     Name = e.Name
-                }).ToList()
+                })?.ToList()
             };
         }
     }
