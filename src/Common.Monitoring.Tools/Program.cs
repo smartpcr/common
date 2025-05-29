@@ -7,6 +7,7 @@
 namespace Common.Monitoring.Tools
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading;
@@ -60,37 +61,59 @@ namespace Common.Monitoring.Tools
         {
             var parser = new OtlpTraceParser();
             var otlpTraceFiles = Directory.EnumerateFiles(options.InputFolder, "*.json", SearchOption.TopDirectoryOnly);
+            var tracesByTraceId = new Dictionary<string, Root>();
             foreach (var otlpTraceFile in otlpTraceFiles)
             {
+                var parsedList = parser.TempoTraceFromOtlpJsonFile(otlpTraceFile);
+                Console.WriteLine($"Parsed trace file: {otlpTraceFile}, total traces: {parsedList.Count}");
 
-                var parsedTempTraces = parser.TempoTraceFromOtlpJsonFile(otlpTraceFile);
-                Console.WriteLine($"parsed {parsedTempTraces.Count} traces from otlp trace file {otlpTraceFile}...");
-                if (!Directory.Exists(options.OutputFolder))
+                foreach (var (traceId, root) in parsedList)
                 {
-                    Directory.CreateDirectory(options.OutputFolder);
+                    if (!tracesByTraceId.TryAdd(traceId, root))
+                    {
+                        tracesByTraceId[traceId].Batches.AddRange(root.Batches);
+                    }
+                }
+            }
+
+            if (!Directory.Exists(options.OutputFolder))
+            {
+                Directory.CreateDirectory(options.OutputFolder);
+            }
+
+            foreach (var traceId in tracesByTraceId.Keys)
+            {
+                var root = tracesByTraceId[traceId];
+                var batches = root.Batches;
+                var spanCount = batches.Sum(b => b.InstrumentationLibrarySpans.Sum(s => s.Spans.Count));
+                Console.WriteLine($"parsed {spanCount} traces with traceId {traceId}...");
+
+                var firstSpan = batches
+                    .SelectMany(b => b.InstrumentationLibrarySpans)
+                    .SelectMany(s => s.Spans)
+                    .OrderBy(s => s.StartTimeUnixNano)
+                    .FirstOrDefault();
+                if (firstSpan == null)
+                {
+                    continue;
                 }
 
-                foreach (var trace in parsedTempTraces)
-                {
-                    var traceId = trace.traceId;
-                    var root = trace.root;
-                    var firstSpan = root.Batches
-                        .SelectMany(b => b.InstrumentationLibrarySpans)
-                        .SelectMany(s => s.Spans)
-                        .OrderBy(s => s.StartTimeUnixNano)
-                        .FirstOrDefault();
-                    if (firstSpan == null)
-                    {
-                        continue;
-                    }
+                var unixMilliseconds = firstSpan.StartTimeUnixNano / 1_000_000;
+                var spanStartTime = DateTimeOffset.FromUnixTimeMilliseconds((long)unixMilliseconds).UtcDateTime;
+                var traceFileName = $"{spanStartTime.ToLocalTime():yyyyMMdd-HHmm}-{firstSpan.Name}-{traceId.Substring(0, 6)}.json";
+                var invalidChars = Path.GetInvalidFileNameChars();
+                var sanitizedFileName = new string(traceFileName.Select(c => invalidChars.Contains(c) ? '_' : c).ToArray());
+                var tempTraceFile = Path.Combine(options.OutputFolder, sanitizedFileName);
+                await File.WriteAllTextAsync(tempTraceFile, System.Text.Json.JsonSerializer.Serialize(root, parser.Options));
 
-                    var unixMilliseconds = firstSpan.StartTimeUnixNano / 1_000_000;
-                    var spanStartTime = DateTimeOffset.FromUnixTimeMilliseconds((long)unixMilliseconds).UtcDateTime;
-                    var traceFileName = $"{spanStartTime.ToLocalTime():yyyyMMdd-HHmm}-{firstSpan.Name}-{traceId.Substring(0, 6)}.json";
-                    var invalidChars = Path.GetInvalidFileNameChars();
-                    var sanitizedFileName = new string(traceFileName.Select(c => invalidChars.Contains(c) ? '_' : c).ToArray());
-                    var tempTraceFile = Path.Combine(options.OutputFolder, sanitizedFileName);
-                    await File.WriteAllTextAsync(tempTraceFile, System.Text.Json.JsonSerializer.Serialize(root, parser.Options));
+                // set file last write time to the first span start time
+                try
+                {
+                    File.SetLastWriteTimeUtc(tempTraceFile, spanStartTime);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to set last write time for {tempTraceFile}: {ex.Message}");
                 }
             }
         }
