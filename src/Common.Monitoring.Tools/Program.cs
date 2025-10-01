@@ -23,8 +23,8 @@ namespace Common.Monitoring.Tools
             Parser.Default.ParseArguments<CmdOptions>(args)
                 .WithParsed(opts =>
                 {
-                    Console.WriteLine($"InputFolder: {options.InputFolder}");
-                    Console.WriteLine($"OutputFolder: {options.OutputFolder}");
+                    Console.WriteLine($"InputFolder: {opts.InputFolder}");
+                    Console.WriteLine($"OutputFolder: {opts.OutputFolder}");
                     options = opts;
                 })
                 .WithNotParsed(errors =>
@@ -60,7 +60,7 @@ namespace Common.Monitoring.Tools
         private static async Task ConvertOtlpTraceToTempoTrace(CmdOptions options, CancellationToken cancel)
         {
             var parser = new OtlpTraceParser();
-            var otlpTraceFiles = Directory.EnumerateFiles(options.InputFolder, "*.json", SearchOption.TopDirectoryOnly);
+            var otlpTraceFiles = Directory.EnumerateFiles(options.InputFolder, "*.json", SearchOption.TopDirectoryOnly).ToList();
             var tracesByTraceId = new Dictionary<string, Root>();
             foreach (var otlpTraceFile in otlpTraceFiles)
             {
@@ -75,6 +75,7 @@ namespace Common.Monitoring.Tools
                     }
                 }
             }
+            Console.WriteLine($"total of {tracesByTraceId.Count} traces found in {otlpTraceFiles.Count} files.");
 
             if (!Directory.Exists(options.OutputFolder))
             {
