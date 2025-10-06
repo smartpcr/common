@@ -87,7 +87,7 @@ Incidents
                 {
                     ServiceName = reader.GetString(0),
                     TeamName = reader.GetString(1),
-                    Count = reader.GetInt32(2),
+                    Count = reader.GetInt64(2),
                     CreateDate = reader.GetDateTime(3)
                 };
 
@@ -138,7 +138,7 @@ Incidents
     {
         public string ServiceName { get; set; }
         public string TeamName { get; set; }
-        public int Count { get; set; }
+        public long Count { get; set; }
         public DateTime CreateDate { get; set; }
     }
 }

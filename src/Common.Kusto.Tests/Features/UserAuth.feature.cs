@@ -26,8 +26,8 @@ namespace Common.Kusto.Tests.Features
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "UserAuth", "As a developer,\nI want to authenticate to Kusto using user credentials,\nSo that I" +
-                " can query production clusters interactively.", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "UserAuth", "As a developer,\r\nI want to authenticate to Kusto using user credentials,\r\nSo that" +
+                " I can query production clusters interactively.", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
