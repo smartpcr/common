@@ -20,7 +20,8 @@ publish-monitoring-tools: build
 		-r win-x64 \
 		--self-contained true \
 		-p:PublishSingleFile=true \
-		-p:PublishTrimmed=true \
+		-p:IncludeNativeLibrariesForSelfContained=true \
+		-p:PublishTrimmed=false \
 		-p:PublishReadyToRun=true \
 		-o ./publish/monitoring-tools-win-x64
 
