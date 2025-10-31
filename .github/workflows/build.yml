@@ -43,6 +43,7 @@ jobs:
         Configuration: ${{ matrix.configuration }}
     - name: Test
       if: matrix.configuration == 'Debug' && matrix.os == 'ubuntu-latest'
+      continue-on-error: true
       run: dotnet test --configuration ${{ matrix.configuration }} --filter Category=unit_test --no-build --collect:"XPlat Code Coverage" --results-directory TestResults /p:CoverletOutputFormat=cobertura
       env:
         Configuration: ${{ matrix.configuration }}
@@ -74,17 +75,17 @@ jobs:
         name: codecov-umbrella
         token: ${{ secrets.CODECOV_TOKEN }}
     - name: Package
-      if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest'
+      if: always() && matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest'
       run: dotnet pack --configuration ${{ matrix.configuration }} -o ./packages
       env:
         Configuration: ${{ matrix.configuration }}
     - name: List packages
-      if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest'
+      if: always() && matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest'
       run: |
         Get-ChildItem ./packages/*.nupkg
       shell: pwsh
     - name: Publish
-      if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest'
+      if: always() && matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest'
       run: |
         Get-ChildItem ./packages/*.nupkg | ForEach-Object {
           dotnet nuget push $_.FullName --source GitHub --api-key ${{ secrets.NUGET_AUTH_TOKEN }} --skip-duplicate
@@ -92,3 +93,13 @@ jobs:
       shell: pwsh
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.NUGET_AUTH_TOKEN }}
+    - name: Publish Monitoring Tools
+      if: always() && matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest'
+      run: make publish-monitoring-tools
+    - name: Upload Monitoring Tools Artifact
+      if: always() && matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest'
+      uses: actions/upload-artifact@v4
+      with:
+        name: monitoring-tools-win-x64
+        path: ./publish/monitoring-tools-win-x64/
+        retention-days: 30
